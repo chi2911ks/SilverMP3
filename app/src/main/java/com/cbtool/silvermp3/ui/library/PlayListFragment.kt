@@ -68,8 +68,6 @@ class PlayListFragment : Fragment() {
 
     companion object {
         const val ARG_PLAYLIST = "PLAYLIST"
-
-
         @JvmStatic
         fun newInstance(playlist: Playlist) =
             PlayListFragment().apply {
