@@ -1,0 +1,12 @@
+
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Lớp gradient nền -->
+    <item>
+        <shape>
+           <solid android:color="@color/cardview_dark_background"/>
+        </shape>
+    </item>
+    <item
+        android:drawable="@drawable/ic_music_note"
+        android:gravity="center"/>
+</layer-list>

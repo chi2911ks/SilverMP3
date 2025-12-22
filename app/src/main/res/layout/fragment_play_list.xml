@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.library.PlayListFragment">
+
+   <androidx.constraintlayout.widget.ConstraintLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:padding="10dp">
+       <ImageButton
+           android:id="@+id/backBtn"
+           android:layout_width="35dp"
+           android:layout_height="35dp"
+           android:background="@android:color/transparent"
+           android:src="@drawable/outline_arrow_back_24"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toTopOf="parent" />
+       <ImageButton
+           android:id="@+id/moreBtn"
+           android:layout_width="35dp"
+           android:layout_height="35dp"
+
+           android:background="@null"
+           android:src="@drawable/ic_more_vertical"
+           app:layout_constraintBottom_toBottomOf="@+id/backBtn"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintTop_toTopOf="@+id/backBtn" />
+       <ImageView
+           android:id="@+id/imageView"
+           android:layout_width="150dp"
+           android:layout_height="150dp"
+           android:layout_marginTop="10dp"
+           android:background="@drawable/rounded_image_bg"
+           android:src="@drawable/ic_music_note"
+           android:clipToOutline="true"
+           app:layout_constraintStart_toStartOf="@+id/backBtn"
+           app:layout_constraintTop_toBottomOf="@+id/backBtn" />
+
+       <TextView
+           android:id="@+id/textView11"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="25dp"
+           android:text="Danh sách phát"
+           android:textColor="@android:color/secondary_text_dark"
+           android:textSize="12sp"
+           app:layout_constraintStart_toStartOf="@+id/imageView"
+           app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+       <TextView
+           android:id="@+id/tvTitle"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="10dp"
+           android:text="Chill Vibes"
+           android:textSize="18sp"
+           app:layout_constraintStart_toStartOf="@+id/textView11"
+           app:layout_constraintTop_toBottomOf="@+id/textView11" />
+       <TextView
+           android:id="@+id/tvDescription"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="10dp"
+           android:text="Relax and unwind with these mellow tunes perfect for any time of day"
+           android:textColor="@android:color/secondary_text_dark"
+           android:textSize="18sp"
+           app:layout_constraintStart_toStartOf="@+id/tvTitle"
+           app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
+
+       <TextView
+           android:id="@+id/tvCount"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="10dp"
+           android:text="1 bài hát"
+           app:layout_constraintStart_toStartOf="@+id/tvDescription"
+           app:layout_constraintTop_toBottomOf="@+id/tvDescription" />
+       <ImageButton
+           android:id="@+id/playBtn"
+           android:layout_width="60dp"
+           android:layout_height="60dp"
+           android:layout_marginTop="15dp"
+           android:background="@drawable/circle_buttom"
+           android:backgroundTint="@color/blue_400"
+           android:src="@drawable/play_icon_selector"
+           app:layout_constraintStart_toStartOf="@+id/tvCount"
+           app:layout_constraintTop_toBottomOf="@+id/tvCount" />
+
+       <ImageButton
+           android:id="@+id/downloadBtn"
+           android:layout_width="60dp"
+           android:layout_height="60dp"
+           android:layout_marginStart="20dp"
+           android:background="@null"
+           android:src="@drawable/outline_download_24"
+           app:layout_constraintBottom_toBottomOf="@+id/playBtn"
+           app:layout_constraintStart_toEndOf="@+id/playBtn"
+           app:layout_constraintTop_toTopOf="@+id/playBtn"
+           app:layout_constraintVertical_bias="0.0"
+           app:tint="@color/white" />
+
+       <androidx.recyclerview.widget.RecyclerView
+           android:id="@+id/rvSongs"
+           android:layout_width="0dp"
+           android:layout_height="0dp"
+           android:layout_marginTop="10dp"
+           android:layout_marginBottom="?attr/actionBarSize"
+           app:layout_constraintBottom_toBottomOf="parent"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toBottomOf="@+id/playBtn" />
+   </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

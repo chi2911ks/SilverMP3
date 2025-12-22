@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/bg_bottom_sheet">
+
+    <LinearLayout
+        android:id="@+id/linearLayoutSong"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imageCover"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_profile" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dù Cho Tận Thế" />
+
+            <TextView
+                android:id="@+id/tvArtist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ERIK"
+                android:textColor="@android:color/darker_gray" />
+        </LinearLayout>
+
+    </LinearLayout>
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#E0E0E0" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/shareBtn"
+            style="@style/ButtonBottomSheet"
+            android:textAlignment="textStart"
+            android:stateListAnimator="@null"
+            android:text="Chia sẻ"
+            app:icon="@drawable/media3_icon_share"/>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/favouriteBtn"
+            style="@style/ButtonBottomSheet"
+            android:textAlignment="textStart"
+            android:stateListAnimator="@null"
+            android:text="Thêm vào Bài hát đã thích"
+            app:icon="@drawable/favorite_icon_selector"/>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/addPlaylistBtn"
+            style="@style/ButtonBottomSheet"
+            android:textAlignment="textStart"
+            android:stateListAnimator="@null"
+            android:text="Thêm vào danh sách phát"
+            app:icon="@drawable/media3_icon_playlist_add"/>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/artistBtn"
+            style="@style/ButtonBottomSheet"
+            android:textAlignment="textStart"
+            android:stateListAnimator="@null"
+            android:text="Chuyển đến nghệ sĩ"
+            app:icon="@drawable/media3_icon_artist"/>
+    </LinearLayout>
+</LinearLayout>

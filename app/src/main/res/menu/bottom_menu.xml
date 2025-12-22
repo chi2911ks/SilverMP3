@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/home"
+        android:title="Trang chủ"
+        android:icon="@drawable/ic_home" />
+    <item
+        android:id="@+id/search"
+        android:title="Tìm kiếm"
+        android:icon="@drawable/search" />
+    <item
+        android:id="@+id/library"
+        android:title="Thư viện"
+        android:icon="@drawable/ic_library" />
+    <item
+        android:id="@+id/now_playing"
+        android:title="Đang phát"
+        android:icon="@drawable/ic_play_circle" />
+</menu>

@@ -1,0 +1,27 @@
+package com.cbtool.silvermp3.ui.auth.register.viewmodel
+
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.cbtool.silvermp3.data.state.LoginState
+import com.cbtool.silvermp3.data.repository.auth.EmailAuthRepository
+import com.cbtool.silvermp3.data.repository.firestore.UsersRepository
+import kotlinx.coroutines.launch
+
+class EmailRegisterViewModel(private val emailAuthRepository: EmailAuthRepository, private val usersRepository: UsersRepository): ViewModel() {
+    private val _loginState = MutableLiveData<LoginState>()
+    val loginState: LiveData<LoginState> = _loginState
+
+    fun register(email: String, password: String){
+        _loginState.value = LoginState.Loading
+        viewModelScope.launch {
+            emailAuthRepository.createAccount(email, password){
+                if (it is LoginState.Success){
+                    usersRepository.add()
+                }
+                _loginState.value = it
+            }
+        }
+    }
+}

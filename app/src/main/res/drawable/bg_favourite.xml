@@ -1,0 +1,16 @@
+
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<!-- Lớp gradient nền -->
+<item>
+    <shape>
+        <gradient
+            android:angle="45"
+            android:startColor="@color/colorSecondary"
+            android:endColor="@color/white"
+            android:type="linear" />
+    </shape>
+</item>
+<item
+    android:drawable="@drawable/media3_icon_heart_filled"
+    android:gravity="center"/>
+</layer-list>

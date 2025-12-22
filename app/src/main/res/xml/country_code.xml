@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <country name="Việt Nam" code="\u002B84" iso="VN" />
+    <country name="Hoa Kỳ" code="\u002B1" iso="US" />
+    <country name="Vương quốc Anh" code="\u002B44" iso="GB" />
+    <country name="Nhật Bản" code="\u002B81" iso="JP" />
+    <country name="Hàn Quốc" code="\u002B82" iso="KR" />
+    <country name="Ấn Độ" code="\u002B91" iso="IN" />
+    <country name="Úc" code="\u002B61" iso="AU" />
+    <country name="Đức" code="\u002B49" iso="DE" />
+    <country name="Pháp" code="\u002B33" iso="FR" />
+    <country name="Canada" code="\u002B1" iso="CA" />
+    <country name="Trung Quốc" code="\u002B86" iso="CN" />
+    <country name="Thái Lan" code="\u002B66" iso="TH" />
+    <country name="Singapore" code="\u002B65" iso="SG" />
+    <country name="Malaysia" code="\u002B60" iso="MY" />
+    <country name="Indonesia" code="\u002B62" iso="ID" />
+    <country name="Philippines" code="\u002B63" iso="PH" />
+    <country name="Nga" code="\u002B7" iso="RU" />
+    <country name="Ý" code="\u002B39" iso="IT" />
+    <country name="Tây Ban Nha" code="\u002B34" iso="ES" />
+    <country name="Lào" code="\u002B856" iso="LA" />
+</resources>
