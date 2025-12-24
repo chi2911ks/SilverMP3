@@ -1,13 +1,11 @@
 package com.cbtool.silvermp3.ui.custom
 
 import android.app.Dialog
-import android.graphics.pdf.models.ListItem
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cbtool.silvermp3.R
@@ -15,15 +13,15 @@ import com.cbtool.silvermp3.adapter.AddPlaylistAdapter
 import com.cbtool.silvermp3.data.model.LibraryItem
 import com.cbtool.silvermp3.data.model.Playlist
 import com.cbtool.silvermp3.data.model.Song
-import com.cbtool.silvermp3.databinding.LayoutBottomPlaylistsBinding
+import com.cbtool.silvermp3.databinding.SheetPlaylistPickerBinding
 import com.cbtool.silvermp3.interfaces.OnClickAddPlaylist
 import com.cbtool.silvermp3.ui.library.LibraryViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
-class BottomSheetPlayLists : BottomSheetDialogFragment() {
-    private var _binding: LayoutBottomPlaylistsBinding? = null
+class PlaylistPickerSheet : BottomSheetDialogFragment() {
+    private var _binding: SheetPlaylistPickerBinding? = null
     private val binding get() = _binding!!
     private lateinit var song: Song
     private val viewModel: LibraryViewModel by activityViewModel()
@@ -54,7 +52,7 @@ class BottomSheetPlayLists : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = LayoutBottomPlaylistsBinding.inflate(inflater, container, false)
+        _binding = SheetPlaylistPickerBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -91,11 +89,11 @@ class BottomSheetPlayLists : BottomSheetDialogFragment() {
             })
     }
     companion object {
-        const val TAG = "ModalBottomSheet"
+        const val TAG = "ModalPlayList"
         const val ARG_SONG = "SONG"
 
         @JvmStatic
-        fun newInstance(song: Song) = BottomSheetPlayLists().apply {
+        fun newInstance(song: Song) = PlaylistPickerSheet().apply {
             arguments = Bundle().apply {
                 putParcelable(ARG_SONG, song)
             }

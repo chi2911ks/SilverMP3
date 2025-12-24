@@ -5,20 +5,20 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.cbtool.silvermp3.data.repository.firestore.UserPlaylistRepository
+import com.cbtool.silvermp3.databinding.LayoutCreatePlaylistBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.cbtool.silvermp3.databinding.LayoutAddPlaylistBinding
 import org.koin.android.ext.android.inject
 
 
-class AddPlayListDialog: DialogFragment() {
+class CreatePlayListDialog : DialogFragment() {
 
-    private var _binding: LayoutAddPlaylistBinding? = null
+    private var _binding: LayoutCreatePlaylistBinding? = null
     private val binding get() = _binding!!
 
     private val playlistRepo: UserPlaylistRepository by inject()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        _binding = LayoutAddPlaylistBinding.inflate(layoutInflater)
+        _binding = LayoutCreatePlaylistBinding.inflate(layoutInflater)
 
         val dialog = MaterialAlertDialogBuilder(requireContext())
             .setView(binding.root)

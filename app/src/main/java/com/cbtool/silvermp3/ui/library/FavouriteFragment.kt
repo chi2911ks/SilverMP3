@@ -10,16 +10,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.cbtool.silvermp3.MainActivity
 import com.cbtool.silvermp3.adapter.SongAdapter
 import com.cbtool.silvermp3.databinding.FragmentFavouriteBinding
-import com.cbtool.silvermp3.ui.custom.BottomSheetSong
+import com.cbtool.silvermp3.ui.custom.SongOptionsSheet
 import com.cbtool.silvermp3.ui.player.PlayerFragment
 import com.cbtool.silvermp3.ui.player.PlayerViewModel
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavouriteFragment : Fragment() {
     private var _binding: FragmentFavouriteBinding? = null
     private val binding get() = _binding!!
-    private val favouriteViewModel: FavouriteViewModel by viewModel()
+    private val favouriteViewModel: FavouriteViewModel by activityViewModel()
     private val playerViewModel: PlayerViewModel by activityViewModel()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,7 +48,7 @@ class FavouriteFragment : Fragment() {
                 (activity as MainActivity).navigateTo(PlayerFragment.newInstance())
             },
             moreClick = { song ->
-            val bottomSheet = BottomSheetSong.newInstance(song)
+            val bottomSheet = SongOptionsSheet.newInstance(song, "favourites")
             bottomSheet.show(requireActivity().supportFragmentManager, "BottomSheetSong")
         })
         binding.rvSongs.adapter = adapter

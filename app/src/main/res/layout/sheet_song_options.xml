@@ -75,6 +75,14 @@
             android:text="Thêm vào danh sách phát"
             app:icon="@drawable/media3_icon_playlist_add"/>
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/deleteInPlaylist"
+            style="@style/ButtonBottomSheet"
+            android:textAlignment="textStart"
+            android:visibility="gone"
+            android:stateListAnimator="@null"
+            android:text="Xoá khỏi danh sách phát này"
+            app:icon="@drawable/media3_icon_playlist_remove"/>
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/artistBtn"
             style="@style/ButtonBottomSheet"
             android:textAlignment="textStart"

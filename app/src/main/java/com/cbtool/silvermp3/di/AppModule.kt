@@ -14,11 +14,11 @@ import com.cbtool.silvermp3.ui.auth.login.viewmodel.GoogleLoginViewModel
 import com.cbtool.silvermp3.ui.auth.login.viewmodel.PhoneAuthViewModel
 
 import com.cbtool.silvermp3.ui.auth.register.viewmodel.EmailRegisterViewModel
-import com.cbtool.silvermp3.ui.custom.BottomSheetSongViewModel
+import com.cbtool.silvermp3.ui.custom.SongOptionsViewModel
 import com.cbtool.silvermp3.ui.home.HomeViewModel
 import com.cbtool.silvermp3.ui.library.FavouriteViewModel
 import com.cbtool.silvermp3.ui.library.LibraryViewModel
-import com.cbtool.silvermp3.ui.library.PlayListViewModel
+import com.cbtool.silvermp3.ui.library.PlaylistViewModel
 import com.cbtool.silvermp3.ui.player.PlayerViewModel
 import com.cbtool.silvermp3.ui.search.SearchViewModel
 import org.koin.android.ext.koin.androidContext
@@ -44,6 +44,6 @@ val appModule = module {
     viewModel { PlayerViewModel(get()) }
     viewModel { LibraryViewModel(get(), get()) }
     viewModel { FavouriteViewModel(get()) }
-    viewModel { BottomSheetSongViewModel(get()) }
-    viewModel { PlayListViewModel(get()) }
+    viewModel { SongOptionsViewModel(get()) }
+    viewModel { PlaylistViewModel(get()) }
 }

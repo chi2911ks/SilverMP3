@@ -9,21 +9,19 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cbtool.silvermp3.MainActivity
-import com.cbtool.silvermp3.R
 import com.cbtool.silvermp3.adapter.SongAdapter
 import com.cbtool.silvermp3.data.model.Playlist
 import com.cbtool.silvermp3.databinding.FragmentPlayListBinding
-import com.cbtool.silvermp3.ui.custom.BottomSheetSong
+import com.cbtool.silvermp3.ui.custom.SongOptionsSheet
 import com.cbtool.silvermp3.ui.player.PlayerFragment
 import com.cbtool.silvermp3.ui.player.PlayerViewModel
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class PlayListFragment : Fragment() {
+class PlaylistFragment : Fragment() {
     private var _binding: FragmentPlayListBinding?=null
     private val binding get() = _binding!!
     private lateinit var playlist: Playlist
-    private val viewModel: PlayListViewModel by viewModel()
+    private val viewModel: PlaylistViewModel by activityViewModel()
     private val playerViewModel: PlayerViewModel by activityViewModel()
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -55,7 +53,7 @@ class PlayListFragment : Fragment() {
             (activity as MainActivity).navigateTo(PlayerFragment.newInstance())
 
         }, moreClick = { song ->
-            val bottomSheet = BottomSheetSong.newInstance(song)
+            val bottomSheet = SongOptionsSheet.newInstance(song, playlist.id)
             bottomSheet.show(requireActivity().supportFragmentManager, "BottomSheetSong")
         })
         binding.rvSongs.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -72,7 +70,7 @@ class PlayListFragment : Fragment() {
         const val ARG_PLAYLIST = "PLAYLIST"
         @JvmStatic
         fun newInstance(playlist: Playlist) =
-            PlayListFragment().apply {
+            PlaylistFragment().apply {
                 arguments = Bundle().apply {
                     putParcelable(ARG_PLAYLIST, playlist)
                 }
