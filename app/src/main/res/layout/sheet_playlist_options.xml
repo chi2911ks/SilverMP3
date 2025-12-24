@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-
     android:background="@drawable/bg_bottom_sheet">
     <FrameLayout
         android:id="@+id/dragHandleArea"
@@ -43,14 +42,7 @@
                 android:id="@+id/tvTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Dù Cho Tận Thế" />
-
-            <TextView
-                android:id="@+id/tvArtist"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="ERIK"
-                android:textColor="@android:color/darker_gray" />
+                android:text="Danh sách phát thứ nhất" />
         </LinearLayout>
 
     </LinearLayout>
@@ -64,31 +56,19 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/shareBtn"
+            android:id="@+id/deleteBtn"
             style="@style/ButtonBottomSheet"
-            android:text="Chia sẻ"
-            app:icon="@drawable/media3_icon_share"/>
+            android:text="Xoá danh sách phát"
+            app:icon="@drawable/delete_svg"/>
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/favouriteBtn"
+            android:id="@+id/editBtn"
             style="@style/ButtonBottomSheet"
-            android:text="Thêm vào Bài hát đã thích"
-            app:icon="@drawable/favorite_icon_selector"/>
+            android:text="Sửa tên danh sách phát"
+            app:icon="@drawable/edit_svg"/>
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/addPlaylistBtn"
+            android:id="@+id/downloadBtn"
             style="@style/ButtonBottomSheet"
-            android:text="Thêm vào danh sách phát"
-            app:icon="@drawable/media3_icon_playlist_add"/>
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/deleteInPlaylist"
-            style="@style/ButtonBottomSheet"
-            android:textAlignment="textStart"
-            android:visibility="gone"
-            android:text="Xoá khỏi danh sách phát này"
-            app:icon="@drawable/media3_icon_playlist_remove"/>
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/artistBtn"
-            style="@style/ButtonBottomSheet"
-            android:text="Chuyển đến nghệ sĩ"
-            app:icon="@drawable/media3_icon_artist"/>
+            android:text="Tải xuống danh sách phát"
+            app:icon="@drawable/ic_download"/>
     </LinearLayout>
 </LinearLayout>

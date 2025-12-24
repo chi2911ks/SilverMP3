@@ -34,20 +34,23 @@ class LibraryFragment : Fragment() {
     fun init(){
         (activity as MainActivity).setSelectedItemId()
         binding.playListsRc.layoutManager = LinearLayoutManager(requireContext())
-        libraryViewModel.libItems.observe(viewLifecycleOwner){
-            binding.playListsRc.adapter = LibraryAdapter(it, object: OnClickPlaylist{
-                override fun onClickPlaylist(playlist: Playlist) {
-                    (activity as MainActivity).navigateTo(PlaylistFragment.newInstance(playlist))
-                }
-                override fun onClickFavourite() {
-                    (activity as MainActivity).navigateTo(FavouriteFragment.newInstance())
-                }
+        val adapter = LibraryAdapter(object: OnClickPlaylist{
+            override fun onClickPlaylist(playlist: Playlist) {
+                (activity as MainActivity).navigateTo(PlaylistFragment.newInstance(playlist))
+            }
+            override fun onClickFavourite() {
+                (activity as MainActivity).navigateTo(FavouriteFragment.newInstance())
+            }
 
-            })
+        })
+        binding.playListsRc.adapter = adapter
+        libraryViewModel.libItems.observe(viewLifecycleOwner){
+            adapter.submitList(it)
         }
         libraryViewModel.getPlaylists()
         binding.addPlayListBtn.setOnClickListener {
-            CreatePlayListDialog().show(requireActivity().supportFragmentManager, "AddPlayListDialog")
+
+            CreatePlayListDialog.newInstance(libraryViewModel.size).show(requireActivity().supportFragmentManager, "CreatePlayListDialog")
         }
     }
     companion object {

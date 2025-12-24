@@ -63,8 +63,9 @@ class UserPlaylistRepository : BaseFirestoreRepository() {
         playlistsRef.document(playlist.id).set(playlist)
     }
     suspend fun getPlaylists(): List<Playlist> {
+
         return try {
-            playlistsRef.get().await().map { it.toObject(Playlist::class.java) }
+            playlistsRef.orderBy("createdAt").get().await().map { it.toObject(Playlist::class.java) }
         } catch (e: Exception) {
             Log.w(TAG, "Error getting documents.", e)
             emptyList()

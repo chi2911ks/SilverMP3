@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cbtool.silvermp3.data.model.LibraryItem
-import com.cbtool.silvermp3.data.model.Playlist
 import com.cbtool.silvermp3.data.model.Song
 import com.cbtool.silvermp3.data.repository.firestore.UserFavouriteRepository
 import com.cbtool.silvermp3.data.repository.firestore.UserPlaylistRepository
@@ -17,6 +16,7 @@ class LibraryViewModel(
 ): ViewModel() {
     private val _libItems = MutableLiveData<List<LibraryItem>>()
     val libItems: LiveData<List<LibraryItem>> = _libItems
+    val size get()  = _libItems.value.orEmpty().size
 
     fun getPlaylists(){
         val items = mutableListOf<LibraryItem>()

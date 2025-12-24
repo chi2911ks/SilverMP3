@@ -12,6 +12,7 @@ import com.cbtool.silvermp3.MainActivity
 import com.cbtool.silvermp3.adapter.SongAdapter
 import com.cbtool.silvermp3.data.model.Playlist
 import com.cbtool.silvermp3.databinding.FragmentPlayListBinding
+import com.cbtool.silvermp3.ui.custom.PlaylistOptionsSheet
 import com.cbtool.silvermp3.ui.custom.SongOptionsSheet
 import com.cbtool.silvermp3.ui.player.PlayerFragment
 import com.cbtool.silvermp3.ui.player.PlayerViewModel
@@ -48,13 +49,16 @@ class PlaylistFragment : Fragment() {
         binding.backBtn.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
+        binding.moreBtn.setOnClickListener {
+            PlaylistOptionsSheet.newInstance(playlist.id).show(requireActivity().supportFragmentManager, "PlaylistOptionsSheet")
+        }
         val songAdapter = SongAdapter(onItemClick = { song ->
             playerViewModel.setSongs(song)
             (activity as MainActivity).navigateTo(PlayerFragment.newInstance())
 
         }, moreClick = { song ->
             val bottomSheet = SongOptionsSheet.newInstance(song, playlist.id)
-            bottomSheet.show(requireActivity().supportFragmentManager, "BottomSheetSong")
+            bottomSheet.show(requireActivity().supportFragmentManager, "SongOptionsSheet")
         })
         binding.rvSongs.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.rvSongs.adapter = songAdapter
