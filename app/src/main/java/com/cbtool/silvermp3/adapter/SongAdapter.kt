@@ -4,22 +4,37 @@ import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+
 import androidx.compose.ui.geometry.CornerRadius
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.cbtool.silvermp3.data.model.Country
+import androidx.recyclerview.widget.ListAdapter
 import com.cbtool.silvermp3.data.model.Song
-import com.cbtool.silvermp3.databinding.ItemSongBinding
+import com.cbtool.silvermp3.databinding.ItemSongBinding // Ví dụ binding của item
 
 class SongAdapter(
-    private val songs: List<Song>,
     private val onItemClick: (Song) -> Unit,
-    private val moreClick: (Song) -> Unit,
-) :
-    RecyclerView.Adapter<SongAdapter.ViewHolder>() {
+    private val moreClick: (Song) -> Unit
+) : ListAdapter<Song, SongAdapter.ViewHolder>(SongDiffCallback()) {
     private lateinit var context: Context
+
+    // DiffUtil giúp so sánh danh sách cũ và mới để chỉ update những item thay đổi
+    class SongDiffCallback : DiffUtil.ItemCallback<Song>() {
+        override fun areItemsTheSame(oldItem: Song, newItem: Song): Boolean {
+            // So sánh ID (hoặc khóa chính) để biết có phải cùng 1 bài hát không
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: Song, newItem: Song): Boolean {
+            // So sánh nội dung (tên, ca sĩ...) để biết có cần vẽ lại UI không
+            // Data class trong Kotlin tự động generate hàm equals() nên có thể dùng ==
+            return oldItem == newItem
+        }
+    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -35,17 +50,21 @@ class SongAdapter(
         )
     }
 
+
+
     override fun onBindViewHolder(
         holder: ViewHolder,
         position: Int
     ) {
-        holder.bind(songs[position])
+        val song = getItem(position) // ListAdapter có sẵn hàm getItem
+        holder.bind(song)
+//        holder.bind(songs[position])
         holder.itemView.setOnClickListener {
-            onItemClick(songs[position])
+            onItemClick(song)
         }
     }
 
-    override fun getItemCount(): Int = songs.size
+
 
     inner class ViewHolder(private val binding: ItemSongBinding) :
         RecyclerView.ViewHolder(binding.root) {

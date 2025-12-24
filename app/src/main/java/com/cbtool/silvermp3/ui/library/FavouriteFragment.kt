@@ -43,18 +43,19 @@ class FavouriteFragment : Fragment() {
         }
 
         binding.rvSongs.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-
-        favouriteViewModel.song.observe(viewLifecycleOwner){
-
-            binding.tvCount.text = "${it.size} bài hát"
-            binding.rvSongs.adapter = SongAdapter(it, onItemClick = { song ->
+        val adapter = SongAdapter(
+            onItemClick = { song ->
                 playerViewModel.setSongs(song)
                 (activity as MainActivity).navigateTo(PlayerFragment.newInstance())
-
-            }, moreClick = { song ->
-                val bottomSheet = BottomSheetSong.newInstance(song)
-                bottomSheet.show(requireActivity().supportFragmentManager, "BottomSheetSong")
-            })
+            },
+            moreClick = { song ->
+            val bottomSheet = BottomSheetSong.newInstance(song)
+            bottomSheet.show(requireActivity().supportFragmentManager, "BottomSheetSong")
+        })
+        binding.rvSongs.adapter = adapter
+        favouriteViewModel.song.observe(viewLifecycleOwner){
+            binding.tvCount.text = "${it.size} bài hát"
+            adapter.submitList(it)
         }
 
 

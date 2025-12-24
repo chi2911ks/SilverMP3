@@ -14,6 +14,7 @@ class FavouriteViewModel(private val userFavouriteRepository: UserFavouriteRepos
     private val _songs = MutableLiveData<List<Song>>()
     val song: LiveData<List<Song>> = _songs
     fun getSongs(){
+
         Log.d("FavouriteVM", "scope active = ${viewModelScope.isActive}")
         viewModelScope.launch {
             val songs = userFavouriteRepository.getSongs()

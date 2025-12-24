@@ -41,17 +41,17 @@ class HomeFragment : Fragment() {
 
     private fun init() {
         (activity as MainActivity).setSelectedItemId()
-        binding.rvSongs.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        viewModel.songs.observe(viewLifecycleOwner) {
-            binding.rvSongs.adapter = SongAdapter(it, onItemClick = { song ->
-                playerViewModel.setSongs(song)
-                (activity as MainActivity).navigateTo(PlayerFragment.newInstance())
+        val songAdapter = SongAdapter(onItemClick = { song ->
+            playerViewModel.setSongs(song)
+            (activity as MainActivity).navigateTo(PlayerFragment.newInstance())
 
-            }, moreClick = { song ->
-                val bottomSheet = BottomSheetSong.newInstance(song)
-                bottomSheet.show(requireActivity().supportFragmentManager, "BottomSheetSong")
-            })
-        }
+        }, moreClick = { song ->
+            val bottomSheet = BottomSheetSong.newInstance(song)
+            bottomSheet.show(requireActivity().supportFragmentManager, "BottomSheetSong")
+        })
+        binding.rvSongs.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.rvSongs.adapter = songAdapter
+        viewModel.songs.observe(viewLifecycleOwner) { songAdapter.submitList(it) }
         if (viewModel.songs.value.isNullOrEmpty()) {
             viewModel.loadSongs()
         }

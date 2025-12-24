@@ -50,18 +50,20 @@ class PlayListFragment : Fragment() {
         binding.backBtn.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
+        val songAdapter = SongAdapter(onItemClick = { song ->
+            playerViewModel.setSongs(song)
+            (activity as MainActivity).navigateTo(PlayerFragment.newInstance())
+
+        }, moreClick = { song ->
+            val bottomSheet = BottomSheetSong.newInstance(song)
+            bottomSheet.show(requireActivity().supportFragmentManager, "BottomSheetSong")
+        })
         binding.rvSongs.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.rvSongs.adapter = songAdapter
         viewModel.song.observe(viewLifecycleOwner){
             it.apply {
                 binding.tvCount.text = "${size} bài hát"
-                binding.rvSongs.adapter = SongAdapter(it, onItemClick = { song ->
-                    playerViewModel.setSongs(song)
-                    (activity as MainActivity).navigateTo(PlayerFragment.newInstance())
-
-                }, moreClick = { song ->
-                    val bottomSheet = BottomSheetSong.newInstance(song)
-                    bottomSheet.show(requireActivity().supportFragmentManager, "BottomSheetSong")
-                })
+                songAdapter.submitList(it)
             }
         }
     }
