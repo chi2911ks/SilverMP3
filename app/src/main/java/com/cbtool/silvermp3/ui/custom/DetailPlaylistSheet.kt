@@ -6,19 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.cbtool.silvermp3.data.model.Playlist
-import com.cbtool.silvermp3.databinding.SheetPlaylistOptionsBinding
-
+import com.cbtool.silvermp3.databinding.SheetPlaylistDetailBinding
 import com.cbtool.silvermp3.ui.library.PlaylistViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import kotlin.getValue
 
-class PlaylistOptionsSheet: BottomSheetDialogFragment() {
-    private var _binding: SheetPlaylistOptionsBinding? = null
+class DetailPlaylistSheet : BottomSheetDialogFragment()
+{
+    private var _binding: SheetPlaylistDetailBinding? = null
     private val binding get() = _binding!!
-    private val playlistViewModel: PlaylistViewModel by activityViewModel()
-
     private var playlist: Playlist? = null
+    private val playlistViewModel: PlaylistViewModel by activityViewModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -36,36 +35,35 @@ class PlaylistOptionsSheet: BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = SheetPlaylistOptionsBinding.inflate(inflater, container, false)
+        _binding = SheetPlaylistDetailBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        init()
-    }
-    private fun init(){
-        binding.tvTitle.text = playlist!!.title
-        binding.deleteBtn.setOnClickListener {
-            playlistViewModel.deletePlaylist(playlist!!.id)
-            requireActivity().onBackPressedDispatcher.onBackPressed()
+        playlist?.let {
+            binding.titleTv.setText(it.title)
+            binding.descTv.setText(it.description)
+        }
+
+        binding.discardBtn.setOnClickListener {
             dismiss()
         }
-        binding.detailBtn.setOnClickListener {
-            DetailPlaylistSheet.newInstance(playlist!!).show(requireActivity().supportFragmentManager, DetailPlaylistSheet.TAG)
-            dismiss()
-        }
-        binding.downloadBtn.setOnClickListener {
+        binding.saveBtn.setOnClickListener {
+            if (binding.titleTv.text.toString().isEmpty()) return@setOnClickListener
+            playlist?.apply {
+                playlistViewModel.updatePlaylist(id, binding.titleTv.text.toString(), binding.descTv.text.toString())
+                playlistViewModel.getPlaylist(id)
+            }
+
             dismiss()
         }
 
     }
     companion object {
-        const val TAG = "BottomSheetPlaylist"
-
+        const val TAG = "DetailPlaylistDialog"
         private const val ARG_PLAYLIST = "PLAYLIST"
-
-        fun newInstance(playlist: Playlist) = PlaylistOptionsSheet().apply {
+        fun newInstance(playlist: Playlist) = DetailPlaylistSheet().apply {
             arguments = Bundle().apply {
                 putParcelable(ARG_PLAYLIST, playlist)
             }

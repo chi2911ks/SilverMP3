@@ -62,6 +62,14 @@ class UserPlaylistRepository : BaseFirestoreRepository() {
     fun update(playlist: Playlist) {
         playlistsRef.document(playlist.id).set(playlist)
     }
+    fun update(playlistId: String, name: String, desc: String){
+        playlistsRef.document(playlistId).update(
+            mapOf(
+                "title" to name,
+                "description" to desc
+            )
+        )
+    }
     suspend fun getPlaylists(): List<Playlist> {
 
         return try {

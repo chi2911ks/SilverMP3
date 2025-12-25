@@ -11,7 +11,7 @@ import com.cbtool.silvermp3.adapter.LibraryAdapter
 import com.cbtool.silvermp3.interfaces.OnClickPlaylist
 import com.cbtool.silvermp3.data.model.Playlist
 import com.cbtool.silvermp3.databinding.FragmentLibraryBinding
-import com.cbtool.silvermp3.ui.custom.CreatePlayListDialog
+import com.cbtool.silvermp3.ui.custom.CreatePlaylistDialog
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 
@@ -50,7 +50,7 @@ class LibraryFragment : Fragment() {
         libraryViewModel.getPlaylists()
         binding.addPlayListBtn.setOnClickListener {
 
-            CreatePlayListDialog.newInstance(libraryViewModel.size).show(requireActivity().supportFragmentManager, "CreatePlayListDialog")
+            CreatePlaylistDialog.newInstance(libraryViewModel.size).show(requireActivity().supportFragmentManager, "CreatePlayListDialog")
         }
     }
     companion object {

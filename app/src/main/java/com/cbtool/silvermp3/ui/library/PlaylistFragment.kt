@@ -22,7 +22,7 @@ class PlaylistFragment : Fragment() {
     private var _binding: FragmentPlayListBinding?=null
     private val binding get() = _binding!!
     private lateinit var playlist: Playlist
-    private val viewModel: PlaylistViewModel by activityViewModel()
+    private val playlistViewModel: PlaylistViewModel by activityViewModel()
     private val playerViewModel: PlayerViewModel by activityViewModel()
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -44,13 +44,13 @@ class PlaylistFragment : Fragment() {
         playlist.apply {
             binding.tvTitle.text = title
             binding.tvDescription.text = description
-            viewModel.getSongs(id)
+            playlistViewModel.getSongs(id)
         }
         binding.backBtn.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
         binding.moreBtn.setOnClickListener {
-            PlaylistOptionsSheet.newInstance(playlist.id).show(requireActivity().supportFragmentManager, "PlaylistOptionsSheet")
+            PlaylistOptionsSheet.newInstance(playlist).show(requireActivity().supportFragmentManager, "PlaylistOptionsSheet")
         }
         val songAdapter = SongAdapter(onItemClick = { song ->
             playerViewModel.setSongs(song)
@@ -62,10 +62,16 @@ class PlaylistFragment : Fragment() {
         })
         binding.rvSongs.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.rvSongs.adapter = songAdapter
-        viewModel.song.observe(viewLifecycleOwner){
+        playlistViewModel.song.observe(viewLifecycleOwner){
             it.apply {
                 binding.tvCount.text = "${size} bài hát"
                 songAdapter.submitList(it)
+            }
+        }
+        playlistViewModel.playlist.observe(viewLifecycleOwner){
+            it.apply {
+                binding.tvTitle.text = title
+                binding.tvDescription.text = description
             }
         }
     }

@@ -11,7 +11,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 
-class CreatePlayListDialog : DialogFragment() {
+class CreatePlaylistDialog : DialogFragment() {
 
     private var _binding: LayoutCreatePlaylistBinding? = null
     private val binding get() = _binding!!
@@ -55,7 +55,7 @@ class CreatePlayListDialog : DialogFragment() {
     companion object {
         const val TAG = "CreatePlayListDialog"
         const val ARG_COUNT = "count"
-        fun newInstance(count: Int) = CreatePlayListDialog().apply {
+        fun newInstance(count: Int) = CreatePlaylistDialog().apply {
             arguments = Bundle().apply {
                 putInt(ARG_COUNT, count)
             }

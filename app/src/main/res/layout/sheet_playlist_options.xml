@@ -31,7 +31,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_profile" />
+            android:src="@drawable/ic_music_note" />
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -42,6 +42,7 @@
                 android:id="@+id/tvTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:text="Danh sách phát thứ nhất" />
         </LinearLayout>
 
@@ -61,9 +62,9 @@
             android:text="Xoá danh sách phát"
             app:icon="@drawable/delete_svg"/>
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/editBtn"
+            android:id="@+id/detailBtn"
             style="@style/ButtonBottomSheet"
-            android:text="Sửa tên danh sách phát"
+            android:text="Tên và thông tin chi tiết"
             app:icon="@drawable/edit_svg"/>
         <com.google.android.material.button.MaterialButton
             android:id="@+id/downloadBtn"

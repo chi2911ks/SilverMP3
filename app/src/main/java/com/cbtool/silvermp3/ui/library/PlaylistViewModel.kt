@@ -12,10 +12,18 @@ import kotlinx.coroutines.launch
 class PlaylistViewModel(private val playlistRepository: UserPlaylistRepository): ViewModel() {
     private val _song = MutableLiveData<List<Song>>()
     val song: LiveData<List<Song>> = _song
+    private val _playlist = MutableLiveData<Playlist>()
+    val playlist: LiveData<Playlist> = _playlist
     fun getSongs(playlistId: String){
         viewModelScope.launch {
             val songs = playlistRepository.getSongs(playlistId)
             _song.value = songs
+        }
+    }
+    fun getPlaylist(playlistId: String){
+        viewModelScope.launch {
+            val playlists = playlistRepository.getPlaylist(playlistId)
+            _playlist.value = playlists
         }
     }
     fun deletePlaylist(playlistId: String){
@@ -24,7 +32,7 @@ class PlaylistViewModel(private val playlistRepository: UserPlaylistRepository):
     fun addPlaylist(name: String){
         playlistRepository.add(name)
     }
-    fun updatePlaylist(playlist: Playlist){
-        playlistRepository.update(playlist)
+    fun updatePlaylist(playlistId: String, name: String, desc: String){
+        playlistRepository.update(playlistId, name, desc)
     }
 }
