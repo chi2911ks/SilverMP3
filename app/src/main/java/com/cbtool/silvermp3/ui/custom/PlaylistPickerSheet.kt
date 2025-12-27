@@ -69,6 +69,10 @@ class PlaylistPickerSheet : BottomSheetDialogFragment() {
         }
 
     }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
     fun setAdapter(items: List<LibraryItem>, songInPlaylists: List<String>){
         binding.recyclerPlaylists.adapter =
             AddPlaylistAdapter(items, songInPlaylists, object : OnClickAddPlaylist{

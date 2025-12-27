@@ -52,6 +52,10 @@ class CountryDialogFragment: DialogFragment() {
             adapter.filterList(text.toString())
         }
     }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
     private fun loadCountriesFromXml(): List<Country> {
         val countries = mutableListOf<Country>()
         val parser = resources.getXml(R.xml.country_code)

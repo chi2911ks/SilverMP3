@@ -33,7 +33,10 @@ class EnterCodeFragment : Fragment() {
             numberPhone = it.getString(ARG_NUMBER_PHONE).toString()
         }
     }
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

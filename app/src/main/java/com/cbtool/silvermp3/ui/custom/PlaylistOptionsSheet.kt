@@ -60,6 +60,10 @@ class PlaylistOptionsSheet: BottomSheetDialogFragment() {
         }
 
     }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
     companion object {
         const val TAG = "BottomSheetPlaylist"
 

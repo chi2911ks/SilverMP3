@@ -20,7 +20,10 @@ class ForgotPasswordFragment : Fragment() {
             email = it.getString(ARG_EMAIL)
         }
     }
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

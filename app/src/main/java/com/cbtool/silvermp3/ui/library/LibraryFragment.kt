@@ -1,6 +1,7 @@
 package com.cbtool.silvermp3.ui.library
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,6 +30,7 @@ class LibraryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d("LibraryFragment", "LibraryViewModel: $libraryViewModel")
         init()
     }
     fun init(){
@@ -47,11 +49,17 @@ class LibraryFragment : Fragment() {
         libraryViewModel.libItems.observe(viewLifecycleOwner){
             adapter.submitList(it)
         }
-        libraryViewModel.getPlaylists()
+        if (libraryViewModel.size == 0) {
+            libraryViewModel.getPlaylists()
+        }
         binding.addPlayListBtn.setOnClickListener {
 
             CreatePlaylistDialog.newInstance(libraryViewModel.size).show(requireActivity().supportFragmentManager, "CreatePlayListDialog")
         }
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
     companion object {
         @JvmStatic

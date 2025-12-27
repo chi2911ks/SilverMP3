@@ -36,7 +36,10 @@ class HomeFragment : Fragment() {
         Log.d("HomeFragment", "HomeViewModel: $viewModel")
         init()
     }
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
     private fun init() {
         (activity as MainActivity).setSelectedItemId()
         val songAdapter = SongAdapter(onItemClick = { song ->

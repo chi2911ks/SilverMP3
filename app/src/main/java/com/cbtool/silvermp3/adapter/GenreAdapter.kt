@@ -8,6 +8,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.palette.graphics.Palette
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -17,10 +19,24 @@ import com.cbtool.silvermp3.data.model.Genre
 import com.cbtool.silvermp3.databinding.ItemGenreBinding
 import com.cbtool.silvermp3.utils.loadImagePalette
 
-class GenreAdapter(
-    private val genres: List<Genre>
-): RecyclerView.Adapter<GenreAdapter.GenreViewHolder>() {
+class GenreAdapter(private val onClickListener: (Genre) -> Unit): ListAdapter<Genre, GenreAdapter.GenreViewHolder>(GenreDiffCallback()) {
     private lateinit var context: Context
+    class GenreDiffCallback : DiffUtil.ItemCallback<Genre>() {
+        override fun areItemsTheSame(
+            oldItem: Genre,
+            newItem: Genre
+        ): Boolean {
+            return oldItem.name == newItem.name
+        }
+
+        override fun areContentsTheSame(
+            oldItem: Genre,
+            newItem: Genre
+        ): Boolean {
+            return oldItem == newItem
+        }
+
+    }
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -33,11 +49,12 @@ class GenreAdapter(
         holder: GenreViewHolder,
         position: Int
     ) {
-        holder.bind(genres[position])
+        holder.bind(getItem(position))
+        holder.itemView.setOnClickListener {
+            onClickListener(getItem(position))
+        }
+
     }
-
-    override fun getItemCount(): Int = genres.size
-
     inner class GenreViewHolder(private val binding: ItemGenreBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(genre: Genre){
             binding.tvTitle.text = genre.name

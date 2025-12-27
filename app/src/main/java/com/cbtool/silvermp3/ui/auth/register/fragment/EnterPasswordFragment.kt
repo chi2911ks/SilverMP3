@@ -61,6 +61,10 @@ class EnterPasswordFragment : Fragment() {
             emailRegisterViewModel.register(email!!, binding.passwordInput.text.toString())
         }
     }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
     companion object {
         private const val EMAIL = "EMAIL"
         @JvmStatic

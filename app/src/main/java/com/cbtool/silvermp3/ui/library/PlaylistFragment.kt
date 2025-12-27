@@ -1,5 +1,6 @@
 package com.cbtool.silvermp3.ui.library
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -39,12 +40,14 @@ class PlaylistFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         playlist.apply {
             binding.tvTitle.text = title
             binding.tvDescription.text = description
             playlistViewModel.getSongs(id)
+
         }
         binding.backBtn.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
@@ -64,7 +67,7 @@ class PlaylistFragment : Fragment() {
         binding.rvSongs.adapter = songAdapter
         playlistViewModel.song.observe(viewLifecycleOwner){
             it.apply {
-                binding.tvCount.text = "${size} bài hát"
+                binding.tvCount.text = "$size bài hát"
                 songAdapter.submitList(it)
             }
         }
@@ -75,7 +78,10 @@ class PlaylistFragment : Fragment() {
             }
         }
     }
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
     companion object {
         const val ARG_PLAYLIST = "PLAYLIST"
         @JvmStatic

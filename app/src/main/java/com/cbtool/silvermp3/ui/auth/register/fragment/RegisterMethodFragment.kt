@@ -64,7 +64,10 @@ class RegisterMethodFragment : Fragment() {
 
 
     }
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
     fun navigateTo(fragment: Fragment) {
         (activity as RegisterActivity).navigateTo(fragment, true)
     }

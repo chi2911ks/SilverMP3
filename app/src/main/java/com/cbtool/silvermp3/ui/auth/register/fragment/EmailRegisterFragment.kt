@@ -31,6 +31,10 @@ class EmailRegisterFragment : Fragment() {
             navigateTo(EnterPasswordFragment.newInstance(emailStr))
         }
     }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
     fun navigateTo(fragment: Fragment){
         (activity as RegisterActivity).navigateTo(fragment, true)
 
