@@ -28,6 +28,26 @@ class LibraryViewModel(
             _libItems.value = items
         }
     }
+    /** 👉 Chỉ refresh count của Favourite */
+    fun refreshFavouriteCount() {
+        viewModelScope.launch {
+            val currentItems = _libItems.value.orEmpty()
+
+            if (currentItems.isEmpty()) return@launch
+
+            val newCount = userFavouriteRepository.getCount()
+
+            val updatedItems = currentItems.map { item ->
+                if (item is LibraryItem.FavouriteItem) {
+                    LibraryItem.FavouriteItem(newCount)
+                } else {
+                    item
+                }
+            }
+
+            _libItems.value = updatedItems
+        }
+    }
     suspend fun containsPlaylist(songId: String): List<String> {
         val playlistIds = mutableListOf<String>()
         if (userFavouriteRepository.isFavourite(songId)){

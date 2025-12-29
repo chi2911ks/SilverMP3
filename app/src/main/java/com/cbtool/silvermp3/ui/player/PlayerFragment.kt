@@ -20,6 +20,7 @@ import com.cbtool.silvermp3.MainActivity
 import com.cbtool.silvermp3.SilverApplication
 import com.cbtool.silvermp3.data.model.Song
 import com.cbtool.silvermp3.databinding.FragmentPlayerBinding
+import com.cbtool.silvermp3.ui.library.LibraryViewModel
 import com.cbtool.silvermp3.utils.TimeHelper.formatDuration
 import com.cbtool.silvermp3.utils.slideUpAndShow
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
@@ -33,6 +34,7 @@ class PlayerFragment : Fragment() {
     private val controller get() = _controller
 
     private val viewModel: PlayerViewModel by activityViewModel()
+    private val libraryViewModel: LibraryViewModel by activityViewModel()
 
     private val handler = Handler(Looper.getMainLooper())
 
@@ -65,7 +67,10 @@ class PlayerFragment : Fragment() {
 
     private val onClickListener = View.OnClickListener {
         when (it) {
-            binding.favouriteBtn -> viewModel.toggleFavourite(viewModel.currentSong.value!!)
+            binding.favouriteBtn -> {
+                viewModel.toggleFavourite(viewModel.currentSong.value!!)
+                libraryViewModel.refreshFavouriteCount()
+            }
             binding.shuffleBtn -> shuffleClick()
             binding.repeatBtn -> repeatClick()
             binding.playBtn -> playClick()

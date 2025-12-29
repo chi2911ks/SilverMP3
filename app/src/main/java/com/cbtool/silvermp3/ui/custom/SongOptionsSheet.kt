@@ -95,6 +95,7 @@ class SongOptionsSheet: BottomSheetDialogFragment() {
             playList_Id?.let {
                 if (it == "favourites"){
                     libraryViewModel.removeSongFromFavourite(song.id)
+                    libraryViewModel.refreshFavouriteCount()
                     favouriteViewModel.getSongs()
                 }
                 else{
@@ -108,6 +109,7 @@ class SongOptionsSheet: BottomSheetDialogFragment() {
         }
         binding.favouriteBtn.setOnClickListener {
             viewmodel.toggleFavourite(song)
+            libraryViewModel.refreshFavouriteCount()
             if (playList_Id == "favourites") favouriteViewModel.getSongs()
         }
         binding.addPlaylistBtn.setOnClickListener {

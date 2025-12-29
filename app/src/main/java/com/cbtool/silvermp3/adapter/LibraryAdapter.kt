@@ -27,6 +27,7 @@ class LibraryAdapter(
 
                 // Trường hợp 2: Cả 2 đều là FavouriteItem -> coi là giống nhau (vì chỉ có 1 item Favourite duy nhất)
                 oldItem is LibraryItem.FavouriteItem && newItem is LibraryItem.FavouriteItem -> {
+                    oldItem.count == newItem.count
                     true
                 }
 

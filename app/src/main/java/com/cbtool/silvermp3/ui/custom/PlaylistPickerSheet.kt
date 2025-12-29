@@ -87,6 +87,7 @@ class PlaylistPickerSheet : BottomSheetDialogFragment() {
                         viewModel.addSongToFavourite(song)
                     else
                         viewModel.removeSongFromFavourite(song.id)
+                    viewModel.refreshFavouriteCount()
 
                 }
 

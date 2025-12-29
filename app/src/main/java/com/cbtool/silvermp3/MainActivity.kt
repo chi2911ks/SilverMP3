@@ -1,8 +1,6 @@
 package com.cbtool.silvermp3
 
 import android.graphics.Bitmap
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
@@ -11,8 +9,6 @@ import android.util.Log
 import android.view.View
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.graphics.ColorUtils
-import androidx.core.os.postDelayed
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
@@ -27,15 +23,17 @@ import com.cbtool.silvermp3.databinding.ActivityMainBinding
 import com.cbtool.silvermp3.ui.OnBoardingActivity
 import com.cbtool.silvermp3.ui.home.HomeFragment
 import com.cbtool.silvermp3.ui.library.LibraryFragment
+import com.cbtool.silvermp3.ui.library.LibraryViewModel
 import com.cbtool.silvermp3.ui.player.PlayerFragment
 import com.cbtool.silvermp3.ui.player.PlayerViewModel
 import com.cbtool.silvermp3.ui.search.SearchFragment
 import com.cbtool.silvermp3.utils.createNicePaletteBackground
-import com.cbtool.silvermp3.utils.loadImagePalette
 import com.cbtool.silvermp3.utils.navigateTo
 import com.cbtool.silvermp3.utils.startNewActivity
 import com.google.firebase.auth.FirebaseAuth
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlin.getValue
 
 
 class MainActivity : AppCompatActivity() {
@@ -43,6 +41,7 @@ class MainActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private val mediaController get() = (application as SilverApplication).mediaController
     private val playerViewModel: PlayerViewModel by viewModel()
+    private val libraryViewModel: LibraryViewModel by viewModel()
     fun getController(): MediaController? = mediaController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -132,7 +131,10 @@ class MainActivity : AppCompatActivity() {
             binding.miniUIPlayer -> {
                 navigateTo(PlayerFragment.newInstance())
             }
-            binding.favouriteBtn -> playerViewModel.toggleFavourite(playerViewModel.currentSong.value!!)
+            binding.favouriteBtn -> {
+                playerViewModel.toggleFavourite(playerViewModel.currentSong.value!!)
+                libraryViewModel.refreshFavouriteCount()
+            }
             binding.miniPlayBtn -> {
                 mediaController?.apply {
                     if (isPlaying){
