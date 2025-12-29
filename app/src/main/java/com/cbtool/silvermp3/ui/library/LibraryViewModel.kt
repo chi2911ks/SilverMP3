@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cbtool.silvermp3.data.model.LibraryItem
 import com.cbtool.silvermp3.data.model.Song
-import com.cbtool.silvermp3.data.repository.firestore.UserFavouriteRepository
-import com.cbtool.silvermp3.data.repository.firestore.UserPlaylistRepository
+import com.cbtool.silvermp3.interfaces.UserFavouriteRepository
+import com.cbtool.silvermp3.interfaces.UserPlaylistRepository
 import kotlinx.coroutines.launch
 
 class LibraryViewModel(

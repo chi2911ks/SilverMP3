@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cbtool.silvermp3.data.model.Playlist
 import com.cbtool.silvermp3.data.model.Song
-import com.cbtool.silvermp3.data.repository.firestore.UserPlaylistRepository
+import com.cbtool.silvermp3.interfaces.UserPlaylistRepository
 import kotlinx.coroutines.launch
 
 class PlaylistViewModel(private val playlistRepository: UserPlaylistRepository): ViewModel() {
@@ -30,7 +30,7 @@ class PlaylistViewModel(private val playlistRepository: UserPlaylistRepository):
         playlistRepository.remove(playlistId)
     }
     fun addPlaylist(name: String){
-        playlistRepository.add(name)
+        playlistRepository.create(name)
     }
     fun updatePlaylist(playlistId: String, name: String, desc: String){
         playlistRepository.update(playlistId, name, desc)

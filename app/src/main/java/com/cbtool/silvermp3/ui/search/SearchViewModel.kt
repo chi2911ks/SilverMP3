@@ -4,7 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.cbtool.silvermp3.data.model.Genre
-import com.cbtool.silvermp3.data.repository.firestore.GenresRepository
+import com.cbtool.silvermp3.interfaces.GenresRepository
+
 
 class SearchViewModel(private val genresRepository: GenresRepository): ViewModel() {
     private val _genres = MutableLiveData<List<Genre>>()

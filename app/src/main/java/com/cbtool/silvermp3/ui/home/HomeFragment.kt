@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.cbtool.silvermp3.MainActivity
 import com.cbtool.silvermp3.R
+import com.cbtool.silvermp3.adapter.PlaylistAdapter
 import com.cbtool.silvermp3.adapter.SongAdapter
 import com.cbtool.silvermp3.databinding.FragmentHomeBinding
 import com.cbtool.silvermp3.ui.custom.SongOptionsSheet
@@ -45,16 +46,26 @@ class HomeFragment : Fragment() {
         val songAdapter = SongAdapter(onItemClick = { song ->
             playerViewModel.setSongs(song)
             (activity as MainActivity).navigateTo(PlayerFragment.newInstance())
-
         }, moreClick = { song ->
             val bottomSheet = SongOptionsSheet.newInstance(song)
             bottomSheet.show(requireActivity().supportFragmentManager, "BottomSheetSong")
         })
+        val playlistAdapter = PlaylistAdapter{
+
+        }
         binding.rvSongs.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.rvPlaylists.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.rvSongs.adapter = songAdapter
+        binding.rvPlaylists.adapter = playlistAdapter
         viewModel.songs.observe(viewLifecycleOwner) { songAdapter.submitList(it) }
+        viewModel.playlists.observe(viewLifecycleOwner){
+            playlistAdapter.submitList(it)
+        }
         if (viewModel.songs.value.isNullOrEmpty()) {
             viewModel.loadSongs()
+        }
+        if (viewModel.playlists.value.isNullOrEmpty()) {
+            viewModel.loadPlaylists()
         }
         binding.swipeRefreshLayout.apply {
             // Ẩn background trắng mờ (chỉ còn vòng xoay)
@@ -73,15 +84,16 @@ class HomeFragment : Fragment() {
 
             // Lắng nghe khi user kéo xuống
             setOnRefreshListener {
-                viewModel.loadSongs()
+                refresh()
                 isRefreshing = false
             }
         }
     }
+    private fun refresh(){
+        viewModel.loadSongs()
+        viewModel.loadPlaylists()
+    }
     companion object {
-//        @JvmStatic
-//        val instance: HomeFragment by lazy { HomeFragment() }
-
         @JvmStatic
         fun newInstance() = HomeFragment()
     }

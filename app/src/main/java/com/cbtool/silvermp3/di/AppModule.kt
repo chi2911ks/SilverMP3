@@ -4,11 +4,17 @@ package com.cbtool.silvermp3.di
 import com.cbtool.silvermp3.data.repository.auth.EmailAuthRepository
 import com.cbtool.silvermp3.data.repository.auth.GoogleAuthRepository
 import com.cbtool.silvermp3.data.repository.auth.PhoneAuthRepository
-import com.cbtool.silvermp3.data.repository.firestore.GenresRepository
-import com.cbtool.silvermp3.data.repository.firestore.SongsRepository
-import com.cbtool.silvermp3.data.repository.firestore.UserFavouriteRepository
-import com.cbtool.silvermp3.data.repository.firestore.UserPlaylistRepository
-import com.cbtool.silvermp3.data.repository.firestore.UsersRepository
+import com.cbtool.silvermp3.data.repository.firestore.GenresRepositoryImpl
+import com.cbtool.silvermp3.data.repository.firestore.PlaylistRepositoryImpl
+import com.cbtool.silvermp3.data.repository.firestore.SongsRepositoryImpl
+import com.cbtool.silvermp3.data.repository.firestore.UserFavouriteRepositoryImpl
+import com.cbtool.silvermp3.data.repository.firestore.UserPlaylistRepositoryImpl
+import com.cbtool.silvermp3.data.repository.firestore.UsersRepositoryImpl
+import com.cbtool.silvermp3.interfaces.GenresRepository
+import com.cbtool.silvermp3.interfaces.PlaylistRepository
+import com.cbtool.silvermp3.interfaces.SongRepository
+import com.cbtool.silvermp3.interfaces.UserFavouriteRepository
+import com.cbtool.silvermp3.interfaces.UserPlaylistRepository
 import com.cbtool.silvermp3.ui.auth.login.viewmodel.EmailLoginViewModel
 import com.cbtool.silvermp3.ui.auth.login.viewmodel.GoogleLoginViewModel
 import com.cbtool.silvermp3.ui.auth.login.viewmodel.PhoneAuthViewModel
@@ -22,6 +28,8 @@ import com.cbtool.silvermp3.ui.library.PlaylistViewModel
 import com.cbtool.silvermp3.ui.player.PlayerViewModel
 import com.cbtool.silvermp3.ui.search.SearchViewModel
 import org.koin.android.ext.koin.androidContext
+import org.koin.core.module.dsl.bind
+import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
@@ -30,16 +38,21 @@ val appModule = module {
     single { PhoneAuthRepository() }
     single { GoogleAuthRepository(androidContext()) }
 
-    single { UsersRepository() }
-    single { SongsRepository() }
-    single { GenresRepository() }
-    single { UserPlaylistRepository() }
-    single { UserFavouriteRepository() }
+    single { UsersRepositoryImpl() }
+
+    singleOf(::SongsRepositoryImpl) {bind<SongRepository>()}
+    singleOf(::GenresRepositoryImpl) {bind<GenresRepository>()}
+    singleOf(::UserPlaylistRepositoryImpl) {bind<UserPlaylistRepository>()}
+    singleOf(::UserFavouriteRepositoryImpl) {bind<UserFavouriteRepository>()}
+    singleOf(::PlaylistRepositoryImpl) {bind<PlaylistRepository>()}
+
+
+
     viewModel { EmailLoginViewModel(get())  }
     viewModel { EmailRegisterViewModel(get(), get()) }
     viewModel { GoogleLoginViewModel(get(), get()) }
     viewModel { PhoneAuthViewModel(get(), get()) }
-    viewModel { HomeViewModel(get()) }
+    viewModel { HomeViewModel(get(), get()) }
     viewModel { SearchViewModel(get()) }
     viewModel { PlayerViewModel(get()) }
     viewModel { LibraryViewModel(get(), get()) }

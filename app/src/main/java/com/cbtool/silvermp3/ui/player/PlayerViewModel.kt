@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.cbtool.silvermp3.data.model.Song
-import com.cbtool.silvermp3.data.repository.firestore.UserFavouriteRepository
+import com.cbtool.silvermp3.interfaces.UserFavouriteRepository
 
 class PlayerViewModel(private val userFavouriteRepository: UserFavouriteRepository): ViewModel() {
     private val _songs = MutableLiveData<List<Song>>()

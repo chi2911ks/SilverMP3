@@ -3,9 +3,9 @@ package com.cbtool.silvermp3.ui.auth.login.viewmodel
 import android.app.Activity
 import androidx.lifecycle.ViewModel
 import com.cbtool.silvermp3.data.repository.auth.PhoneAuthRepository
-import com.cbtool.silvermp3.data.repository.firestore.UsersRepository
+import com.cbtool.silvermp3.data.repository.firestore.UsersRepositoryImpl
 
-class PhoneAuthViewModel(private val phoneAuthRepository: PhoneAuthRepository, private val usersRepository: UsersRepository): ViewModel() {
+class PhoneAuthViewModel(private val phoneAuthRepository: PhoneAuthRepository, private val usersRepository: UsersRepositoryImpl): ViewModel() {
 
     val authState = phoneAuthRepository.authState
 

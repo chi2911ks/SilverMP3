@@ -3,16 +3,22 @@ package com.cbtool.silvermp3.data.repository.firestore
 import android.util.Log
 import com.cbtool.silvermp3.data.model.Playlist
 import com.cbtool.silvermp3.data.model.Song
+import com.cbtool.silvermp3.interfaces.UserPlaylistRepository
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.tasks.await
 
-class UserPlaylistRepository : BaseFirestoreRepository() {
-    private val userId get() = currentUser!!.uid
+class UserPlaylistRepositoryImpl: UserPlaylistRepository {
+    private val db = Firebase.firestore
+    private val currentUser get() = Firebase.auth.currentUser!!
+    private val userId get() = currentUser.uid
     private val userRef = db.collection("users").document(userId)
     private val playlistsRef = db.collection("users").document(userId).collection("playlists")
 
-    fun addSong(playlistId: String, song: Song) {
+    override fun addSong(playlistId: String, song: Song) {
 
         val playlistSongRef = playlistsRef.document(playlistId)
             .collection("songs").document(song.id)
@@ -29,7 +35,7 @@ class UserPlaylistRepository : BaseFirestoreRepository() {
             ), SetOptions.merge())
         }
     }
-    fun removeSong(playlistId: String, songId: String) {
+    override fun removeSong(playlistId: String, songId: String) {
         val playlistSongRef = playlistsRef.document(playlistId)
             .collection("songs").document(songId)
         val reverseIndexRef = userRef
@@ -49,20 +55,20 @@ class UserPlaylistRepository : BaseFirestoreRepository() {
     }
 
 
-    fun add(name: String) {
+    override fun create(name: String) {
         val doc = playlistsRef.document()
         doc.set(Playlist(
             id = doc.id,
             title = name
         ))
     }
-    fun remove(playlistId: String) {
+    override fun remove(playlistId: String) {
         playlistsRef.document(playlistId).delete()
     }
-    fun update(playlist: Playlist) {
+    override fun update(playlist: Playlist) {
         playlistsRef.document(playlist.id).set(playlist)
     }
-    fun update(playlistId: String, name: String, desc: String){
+    override fun update(playlistId: String, name: String, desc: String){
         playlistsRef.document(playlistId).update(
             mapOf(
                 "title" to name,
@@ -70,7 +76,7 @@ class UserPlaylistRepository : BaseFirestoreRepository() {
             )
         )
     }
-    suspend fun getPlaylists(): List<Playlist> {
+    override suspend fun getPlaylists(): List<Playlist> {
 
         return try {
             playlistsRef.orderBy("createdAt").get().await().map { it.toObject(Playlist::class.java) }
@@ -80,7 +86,7 @@ class UserPlaylistRepository : BaseFirestoreRepository() {
         }
 
     }
-    suspend fun getPlaylist(id: String): Playlist {
+    override suspend fun getPlaylist(id: String): Playlist {
         return try {
             playlistsRef.document(id).get().await()
                 .toObject(Playlist::class.java) ?: Playlist()
@@ -91,7 +97,7 @@ class UserPlaylistRepository : BaseFirestoreRepository() {
 
     }
 
-    suspend fun getSongs(playlistId: String): List<Song> {
+    override suspend fun getSongs(playlistId: String): List<Song> {
         return try {
             playlistsRef
                 .document(playlistId)
@@ -106,7 +112,7 @@ class UserPlaylistRepository : BaseFirestoreRepository() {
             emptyList()
         }
     }
-    suspend fun getPlaylistsContainingSong(songId: String): List<String> {
+    override suspend fun getPlaylistsContainingSong(songId: String): List<String> {
         val reverseIndexRef = userRef.collection("songsInPlaylists").document(songId)
         return try {
             return reverseIndexRef.get().await().get("playlists") as? List<String> ?: emptyList()

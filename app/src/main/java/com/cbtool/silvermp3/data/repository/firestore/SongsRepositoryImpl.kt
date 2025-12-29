@@ -2,11 +2,16 @@ package com.cbtool.silvermp3.data.repository.firestore
 
 import android.util.Log
 import com.cbtool.silvermp3.data.model.Song
+import com.cbtool.silvermp3.interfaces.SongRepository
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
+import kotlinx.coroutines.tasks.await
 
-class SongsRepository: BaseFirestoreRepository() {
+class SongsRepositoryImpl: SongRepository {
+    private val db = Firebase.firestore
     private val collectionName = "songs"
     private val collection = db.collection(collectionName)
-    fun add(song: Song){
+    override fun add(song: Song){
         val doc = collection.document()
         song.id = doc.id
         doc.set(song)
@@ -17,7 +22,7 @@ class SongsRepository: BaseFirestoreRepository() {
                 Log.w(TAG, "Error adding document", it)
             }
     }
-    fun getSongs(onResult: (List<Song>) -> Unit){
+    override fun getSongs(onResult: (List<Song>) -> Unit){
         collection
             .get()
             .addOnCompleteListener { snapshot->
@@ -37,21 +42,18 @@ class SongsRepository: BaseFirestoreRepository() {
                 onResult(emptyList())
             }
     }
-    fun getSongSuggest(count: Int=5, onResult: (List<Song>) -> Unit) {
-        collection.get().addOnCompleteListener { snapshot ->
-            if (snapshot.isSuccessful) {
-                val songs = snapshot.result?.documents?.mapNotNull {
-                    it.toObject(Song::class.java)
-                } ?: emptyList()
-
-                val suggestedSongs = songs.shuffled().take(count)
-
-                onResult(suggestedSongs)
+    override suspend fun getSongSuggest(count: Int): List<Song> {
+        return try {
+            val snapshot = collection.get().await()
+            val songs = snapshot.documents.mapNotNull {
+                it.toObject(Song::class.java)
             }
+            val suggestedSongs = songs.shuffled().take(count)
+            suggestedSongs
+        }catch (e: Exception) {
+            Log.w(TAG, "Error getting documents.", e)
+            emptyList()
         }
-    }
-    fun getSongByGenre(genre: String, onResult: (List<Song>) -> Unit) {
-
     }
 
     companion object {

@@ -2,18 +2,22 @@ package com.cbtool.silvermp3.data.repository.firestore
 
 import android.util.Log
 import com.cbtool.silvermp3.data.model.Artist
+import com.cbtool.silvermp3.interfaces.ArtistsRepository
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 
 
-class ArtistsRepository: BaseFirestoreRepository() {
+class ArtistsRepositoryImpl: ArtistsRepository {
+    private val db = Firebase.firestore
     private val collectionName = "artists"
     private val collectionRef = db.collection(collectionName)
 
-    fun add(artist: Artist){
+    override fun add(artist: Artist){
         val document = collectionRef.document()
         artist.id = document.id
         document.set(artist)
     }
-    fun getAll(onResult: (List<Artist>) -> Unit){
+    override fun getAll(onResult: (List<Artist>) -> Unit){
         collectionRef.get()
             .addOnCompleteListener {snapshot->
                 if (snapshot.isSuccessful){

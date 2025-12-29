@@ -3,16 +3,16 @@ package com.cbtool.silvermp3.utils
 import com.cbtool.silvermp3.data.model.Artist
 import com.cbtool.silvermp3.data.model.Genre
 import com.cbtool.silvermp3.data.model.Song
-import com.cbtool.silvermp3.data.repository.firestore.ArtistsRepository
-import com.cbtool.silvermp3.data.repository.firestore.GenresRepository
-import com.cbtool.silvermp3.data.repository.firestore.SongsRepository
+import com.cbtool.silvermp3.data.repository.firestore.ArtistsRepositoryImpl
+import com.cbtool.silvermp3.data.repository.firestore.GenresRepositoryImpl
+import com.cbtool.silvermp3.data.repository.firestore.SongsRepositoryImpl
 
 object Test {
     private const val URL =
         "https://raw.githubusercontent.com/chi2911ks/music-data/refs/heads/main/"
 
     fun addArtist() {
-        val repo = ArtistsRepository()
+        val repo = ArtistsRepositoryImpl()
         repo.add(
             Artist(
                 name = "Đen Vâu",
@@ -44,7 +44,7 @@ object Test {
     }
 
     fun addSongs() {
-        val repo = SongsRepository()
+        val repo = SongsRepositoryImpl()
         repo.add(
             Song(
                 title = "Chúng Ta Của Hiện Tại",
@@ -302,7 +302,7 @@ object Test {
     }
 
     fun addGenres() {
-        val repo = GenresRepository()
+        val repo = GenresRepositoryImpl()
         repo.add(
             Genre(
                 name = "Pop",

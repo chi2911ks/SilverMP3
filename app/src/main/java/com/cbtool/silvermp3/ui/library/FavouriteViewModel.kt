@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cbtool.silvermp3.data.model.Song
-import com.cbtool.silvermp3.data.repository.firestore.UserFavouriteRepository
+import com.cbtool.silvermp3.interfaces.UserFavouriteRepository
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 

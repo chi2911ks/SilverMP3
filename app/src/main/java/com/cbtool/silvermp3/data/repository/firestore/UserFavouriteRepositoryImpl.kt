@@ -2,24 +2,30 @@ package com.cbtool.silvermp3.data.repository.firestore
 
 import android.util.Log
 import com.cbtool.silvermp3.data.model.Song
+import com.cbtool.silvermp3.interfaces.UserFavouriteRepository
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.tasks.await
 
-class UserFavouriteRepository: BaseFirestoreRepository() {
-    private val userId get() = currentUser!!.uid
+class UserFavouriteRepositoryImpl: UserFavouriteRepository {
+    private val db = Firebase.firestore
+    private val currentUser get() = Firebase.auth.currentUser!!
+    private val userId get() = currentUser.uid
     private val collectionRef = db.collection("users").document(userId).collection("favourites")
     private var favouriteListener: ListenerRegistration? = null
     private val favouriteSongsCache = mutableSetOf<String>()
     init {
         observeFavouriteSongs()
     }
-    fun addSong(song: Song) {
+    override fun addSong(song: Song) {
         collectionRef.document(song.id).set(song)
     }
-    fun removeSong(songId: String){
+    override fun removeSong(songId: String){
         collectionRef.document(songId).delete()
     }
-    suspend fun getCount(): Int {
+    override suspend fun getCount(): Int {
         return try {
             val snapshot = collectionRef.get().await()  // chờ Firestore query hoàn thành
             snapshot.size() // trả về số lượng document
@@ -28,7 +34,7 @@ class UserFavouriteRepository: BaseFirestoreRepository() {
             0
         }
     }
-    suspend fun getSongs(): List<Song> {
+    override suspend fun getSongs(): List<Song> {
         Log.d(TAG, "getSongs() started")
         return try {
             val snapshot = collectionRef.get()
@@ -65,7 +71,7 @@ class UserFavouriteRepository: BaseFirestoreRepository() {
             }
         }
     }
-    fun toggleFavourite(song: Song) {
+    override fun toggleFavourite(song: Song) {
         song.apply {
             if (isFavourite(id)) {
                 removeSong(id)
@@ -82,7 +88,7 @@ class UserFavouriteRepository: BaseFirestoreRepository() {
         favouriteListener = null
     }
 
-    fun isFavourite(songId: String): Boolean {
+    override fun isFavourite(songId: String): Boolean {
         return favouriteSongsCache.contains(songId)
     }
     fun clearCache() {
