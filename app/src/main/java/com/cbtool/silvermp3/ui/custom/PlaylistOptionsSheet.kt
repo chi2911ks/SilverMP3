@@ -8,15 +8,15 @@ import android.view.ViewGroup
 import com.cbtool.silvermp3.data.model.Playlist
 import com.cbtool.silvermp3.databinding.SheetPlaylistOptionsBinding
 
-import com.cbtool.silvermp3.ui.library.PlaylistViewModel
+import com.cbtool.silvermp3.ui.library.UserPlaylistViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import kotlin.getValue
 
-class PlaylistOptionsSheet: BottomSheetDialogFragment() {
+class PlaylistOptionsSheet : BottomSheetDialogFragment() {
     private var _binding: SheetPlaylistOptionsBinding? = null
     private val binding get() = _binding!!
-    private val playlistViewModel: PlaylistViewModel by activityViewModel()
+    private val playlistViewModel: UserPlaylistViewModel by activityViewModel()
 
     private var playlist: Playlist? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +31,7 @@ class PlaylistOptionsSheet: BottomSheetDialogFragment() {
             }
         }
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -44,7 +45,8 @@ class PlaylistOptionsSheet: BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         init()
     }
-    private fun init(){
+
+    private fun init() {
         binding.tvTitle.text = playlist!!.title
         binding.deleteBtn.setOnClickListener {
             playlistViewModel.deletePlaylist(playlist!!.id)
@@ -52,7 +54,8 @@ class PlaylistOptionsSheet: BottomSheetDialogFragment() {
             dismiss()
         }
         binding.detailBtn.setOnClickListener {
-            DetailPlaylistSheet.newInstance(playlist!!).show(requireActivity().supportFragmentManager, DetailPlaylistSheet.TAG)
+            DetailPlaylistSheet.newInstance(playlist!!)
+                .show(requireActivity().supportFragmentManager, DetailPlaylistSheet.TAG)
             dismiss()
         }
         binding.downloadBtn.setOnClickListener {
@@ -60,10 +63,12 @@ class PlaylistOptionsSheet: BottomSheetDialogFragment() {
         }
 
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
     companion object {
         const val TAG = "BottomSheetPlaylist"
 

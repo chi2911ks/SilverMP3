@@ -15,7 +15,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class EnterPasswordFragment : Fragment() {
-    private var _binding: FragmentEnterPasswordBinding?=null
+    private var _binding: FragmentEnterPasswordBinding? = null
     private val binding get() = _binding!!
     private var email: String? = null
 
@@ -38,16 +38,18 @@ class EnterPasswordFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        emailRegisterViewModel.loginState.observe(viewLifecycleOwner){
+        emailRegisterViewModel.loginState.observe(viewLifecycleOwner) {
             when (it) {
                 is LoginState.Error -> {
                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                 }
+
                 LoginState.Idle -> {}
                 LoginState.Loading -> {}
                 is LoginState.Success -> {
 
-                    Toast.makeText(requireContext(), "Đăng ký thành công!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Đăng ký thành công!", Toast.LENGTH_SHORT)
+                        .show()
                     requireActivity().startNewActivity(MainActivity::class.java, true)
                 }
 
@@ -61,12 +63,15 @@ class EnterPasswordFragment : Fragment() {
             emailRegisterViewModel.register(email!!, binding.passwordInput.text.toString())
         }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
     companion object {
         private const val EMAIL = "EMAIL"
+
         @JvmStatic
         fun newInstance(email: String) =
             EnterPasswordFragment().apply {

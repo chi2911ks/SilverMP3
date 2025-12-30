@@ -24,8 +24,9 @@ import com.cbtool.silvermp3.ui.custom.SongOptionsViewModel
 import com.cbtool.silvermp3.ui.home.HomeViewModel
 import com.cbtool.silvermp3.ui.library.FavouriteViewModel
 import com.cbtool.silvermp3.ui.library.LibraryViewModel
-import com.cbtool.silvermp3.ui.library.PlaylistViewModel
+import com.cbtool.silvermp3.ui.library.UserPlaylistViewModel
 import com.cbtool.silvermp3.ui.player.PlayerViewModel
+import com.cbtool.silvermp3.ui.playlist.PlaylistViewModel
 import com.cbtool.silvermp3.ui.search.SearchViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.bind
@@ -58,5 +59,6 @@ val appModule = module {
     viewModel { LibraryViewModel(get(), get()) }
     viewModel { FavouriteViewModel(get()) }
     viewModel { SongOptionsViewModel(get()) }
+    viewModel { UserPlaylistViewModel(get()) }
     viewModel { PlaylistViewModel(get()) }
 }

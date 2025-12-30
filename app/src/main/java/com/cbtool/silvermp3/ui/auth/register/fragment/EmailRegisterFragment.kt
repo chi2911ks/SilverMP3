@@ -9,7 +9,7 @@ import com.cbtool.silvermp3.databinding.FragmentEmailRegisterBinding
 import com.cbtool.silvermp3.ui.auth.register.RegisterActivity
 
 class EmailRegisterFragment : Fragment() {
-    private var _binding: FragmentEmailRegisterBinding?=null
+    private var _binding: FragmentEmailRegisterBinding? = null
     private val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,11 +31,13 @@ class EmailRegisterFragment : Fragment() {
             navigateTo(EnterPasswordFragment.newInstance(emailStr))
         }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-    fun navigateTo(fragment: Fragment){
+
+    fun navigateTo(fragment: Fragment) {
         (activity as RegisterActivity).navigateTo(fragment, true)
 
     }

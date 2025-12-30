@@ -69,19 +69,22 @@ class PlaylistPickerSheet : BottomSheetDialogFragment() {
         }
 
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-    fun setAdapter(items: List<LibraryItem>, songInPlaylists: List<String>){
+
+    fun setAdapter(items: List<LibraryItem>, songInPlaylists: List<String>) {
         binding.recyclerPlaylists.adapter =
-            AddPlaylistAdapter(items, songInPlaylists, object : OnClickAddPlaylist{
+            AddPlaylistAdapter(items, songInPlaylists, object : OnClickAddPlaylist {
                 override fun playlist(playlist: Playlist, isAdd: Boolean) {
                     if (isAdd)
                         viewModel.addSongToPlaylist(playlist.id, song)
                     else
                         viewModel.removeSongFromPlaylist(playlist.id, song.id)
                 }
+
                 override fun favourite(isAdd: Boolean) {
                     if (isAdd)
                         viewModel.addSongToFavourite(song)
@@ -93,6 +96,7 @@ class PlaylistPickerSheet : BottomSheetDialogFragment() {
 
             })
     }
+
     companion object {
         const val TAG = "ModalPlayList"
         const val ARG_SONG = "SONG"

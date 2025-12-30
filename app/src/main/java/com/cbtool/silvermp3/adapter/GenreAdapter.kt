@@ -19,8 +19,10 @@ import com.cbtool.silvermp3.data.model.Genre
 import com.cbtool.silvermp3.databinding.ItemGenreBinding
 import com.cbtool.silvermp3.utils.loadImagePalette
 
-class GenreAdapter(private val onClickListener: (Genre) -> Unit): ListAdapter<Genre, GenreAdapter.GenreViewHolder>(GenreDiffCallback()) {
+class GenreAdapter(private val onClickListener: (Genre) -> Unit) :
+    ListAdapter<Genre, GenreAdapter.GenreViewHolder>(GenreDiffCallback()) {
     private lateinit var context: Context
+
     class GenreDiffCallback : DiffUtil.ItemCallback<Genre>() {
         override fun areItemsTheSame(
             oldItem: Genre,
@@ -37,12 +39,19 @@ class GenreAdapter(private val onClickListener: (Genre) -> Unit): ListAdapter<Ge
         }
 
     }
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): GenreViewHolder {
         context = parent.context
-        return GenreViewHolder(ItemGenreBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return GenreViewHolder(
+            ItemGenreBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(
@@ -55,10 +64,12 @@ class GenreAdapter(private val onClickListener: (Genre) -> Unit): ListAdapter<Ge
         }
 
     }
-    inner class GenreViewHolder(private val binding: ItemGenreBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(genre: Genre){
+
+    inner class GenreViewHolder(private val binding: ItemGenreBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(genre: Genre) {
             binding.tvTitle.text = genre.name
-            loadImagePalette(context, binding.imgCover, genre.imageURL){
+            loadImagePalette(context, binding.imgCover, genre.imageURL) {
                 binding.cardView.setCardBackgroundColor(it)
             }
 

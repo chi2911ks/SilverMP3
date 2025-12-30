@@ -10,10 +10,11 @@ import com.cbtool.silvermp3.interfaces.UserFavouriteRepository
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
-class FavouriteViewModel(private val userFavouriteRepository: UserFavouriteRepository) : ViewModel() {
+class FavouriteViewModel(private val userFavouriteRepository: UserFavouriteRepository) :
+    ViewModel() {
     private val _songs = MutableLiveData<List<Song>>()
     val song: LiveData<List<Song>> = _songs
-    fun getSongs(){
+    fun getSongs() {
 
         Log.d("FavouriteVM", "scope active = ${viewModelScope.isActive}")
         viewModelScope.launch {

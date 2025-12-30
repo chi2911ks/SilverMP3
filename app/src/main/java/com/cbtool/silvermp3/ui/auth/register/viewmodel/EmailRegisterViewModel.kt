@@ -9,15 +9,18 @@ import com.cbtool.silvermp3.data.repository.auth.EmailAuthRepository
 import com.cbtool.silvermp3.data.repository.firestore.UsersRepositoryImpl
 import kotlinx.coroutines.launch
 
-class EmailRegisterViewModel(private val emailAuthRepository: EmailAuthRepository, private val usersRepository: UsersRepositoryImpl): ViewModel() {
+class EmailRegisterViewModel(
+    private val emailAuthRepository: EmailAuthRepository,
+    private val usersRepository: UsersRepositoryImpl
+) : ViewModel() {
     private val _loginState = MutableLiveData<LoginState>()
     val loginState: LiveData<LoginState> = _loginState
 
-    fun register(email: String, password: String){
+    fun register(email: String, password: String) {
         _loginState.value = LoginState.Loading
         viewModelScope.launch {
-            emailAuthRepository.createAccount(email, password){
-                if (it is LoginState.Success){
+            emailAuthRepository.createAccount(email, password) {
+                if (it is LoginState.Success) {
                     usersRepository.add()
                 }
                 _loginState.value = it

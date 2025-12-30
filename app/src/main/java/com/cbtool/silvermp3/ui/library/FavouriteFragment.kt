@@ -32,7 +32,8 @@ class FavouriteFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         init()
     }
-    fun init(){
+
+    fun init() {
         (activity as MainActivity).setSelectedItemId()
         Log.d("FavouriteFragment", "init: getSongs")
         favouriteViewModel.getSongs()
@@ -41,28 +42,31 @@ class FavouriteFragment : Fragment() {
 
         }
 
-        binding.rvSongs.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.rvSongs.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         val adapter = SongAdapter(
             onItemClick = { song ->
                 playerViewModel.setSongs(song)
                 (activity as MainActivity).navigateTo(PlayerFragment.newInstance())
             },
             moreClick = { song ->
-            val bottomSheet = SongOptionsSheet.newInstance(song, "favourites")
-            bottomSheet.show(requireActivity().supportFragmentManager, "BottomSheetSong")
-        })
+                val bottomSheet = SongOptionsSheet.newInstance(song, "favourites")
+                bottomSheet.show(requireActivity().supportFragmentManager, "BottomSheetSong")
+            })
         binding.rvSongs.adapter = adapter
-        favouriteViewModel.song.observe(viewLifecycleOwner){
+        favouriteViewModel.song.observe(viewLifecycleOwner) {
             binding.tvCount.text = "${it.size} bài hát"
             adapter.submitList(it)
         }
 
 
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
     companion object {
         @JvmStatic
         fun newInstance() = FavouriteFragment()

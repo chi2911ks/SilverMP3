@@ -16,6 +16,8 @@ class RegisterActivity : AppCompatActivity() {
             navigateTo(RegisterMethodFragment())
         }
     }
-    fun navigateTo(fragment: Fragment, addToBackStack: Boolean = false) = supportFragmentManager.navigateTo(binding.fragmentContainer.id, fragment, addToBackStack)
+
+    fun navigateTo(fragment: Fragment, addToBackStack: Boolean = false) =
+        supportFragmentManager.navigateTo(binding.fragmentContainer.id, fragment, addToBackStack)
 
 }

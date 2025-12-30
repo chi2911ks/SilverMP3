@@ -30,8 +30,9 @@ class SearchFragment : Fragment() {
         Log.d("SearchFragment", "SearchViewModel: $searchViewModel")
         init()
     }
-    fun init(){
-        val adapter = GenreAdapter{
+
+    fun init() {
+        val adapter = GenreAdapter {
             (activity as MainActivity).navigateTo(GenreFragment.newInstance(it.name))
         }
 
@@ -41,17 +42,19 @@ class SearchFragment : Fragment() {
         if (searchViewModel.genres.value.isNullOrEmpty()) {
             searchViewModel.getGenres()
         }
-        searchViewModel.genres.observe(viewLifecycleOwner){
+        searchViewModel.genres.observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
         binding.genresRc.layoutManager = GridLayoutManager(requireContext(), 2)
 
 
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
     companion object {
         @JvmStatic
         val instance: SearchFragment by lazy { SearchFragment() }

@@ -14,7 +14,12 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.target.CustomTarget
 import com.cbtool.silvermp3.R
 
-fun loadImagePalette(context: Context, image: ImageView, imageURL: String, onResultColor: (Int) -> Unit){
+fun loadImagePalette(
+    context: Context,
+    image: ImageView,
+    imageURL: String,
+    onResultColor: (Int) -> Unit
+) {
     Glide.with(context)
         .asBitmap()
         .load(imageURL)
@@ -33,6 +38,7 @@ fun loadImagePalette(context: Context, image: ImageView, imageURL: String, onRes
                     onResultColor(finalColor)
                 }
             }
+
             override fun onLoadCleared(placeholder: Drawable?) {
             }
         })

@@ -7,17 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import com.cbtool.silvermp3.data.model.Playlist
 import com.cbtool.silvermp3.databinding.SheetPlaylistDetailBinding
-import com.cbtool.silvermp3.ui.library.PlaylistViewModel
+import com.cbtool.silvermp3.ui.library.UserPlaylistViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import kotlin.getValue
 
-class DetailPlaylistSheet : BottomSheetDialogFragment()
-{
+class DetailPlaylistSheet : BottomSheetDialogFragment() {
     private var _binding: SheetPlaylistDetailBinding? = null
     private val binding get() = _binding!!
     private var playlist: Playlist? = null
-    private val playlistViewModel: PlaylistViewModel by activityViewModel()
+    private val playlistViewModel: UserPlaylistViewModel by activityViewModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -30,6 +29,7 @@ class DetailPlaylistSheet : BottomSheetDialogFragment()
             }
         }
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -52,7 +52,11 @@ class DetailPlaylistSheet : BottomSheetDialogFragment()
         binding.saveBtn.setOnClickListener {
             if (binding.titleTv.text.toString().isEmpty()) return@setOnClickListener
             playlist?.apply {
-                playlistViewModel.updatePlaylist(id, binding.titleTv.text.toString(), binding.descTv.text.toString())
+                playlistViewModel.updatePlaylist(
+                    id,
+                    binding.titleTv.text.toString(),
+                    binding.descTv.text.toString()
+                )
                 playlistViewModel.getPlaylist(id)
             }
 
@@ -60,10 +64,12 @@ class DetailPlaylistSheet : BottomSheetDialogFragment()
         }
 
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
     companion object {
         const val TAG = "DetailPlaylistDialog"
         private const val ARG_PLAYLIST = "PLAYLIST"

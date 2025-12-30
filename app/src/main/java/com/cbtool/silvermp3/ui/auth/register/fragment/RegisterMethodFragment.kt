@@ -33,13 +33,14 @@ class RegisterMethodFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        googleLoginViewModel.loginState.observe(requireActivity()){
+        googleLoginViewModel.loginState.observe(requireActivity()) {
             when (it) {
                 is LoginState.Error -> {}
                 LoginState.Idle -> {}
                 LoginState.Loading -> {}
                 is LoginState.Success -> {
-                    Toast.makeText(requireContext(), "Đăng nhập thành công!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Đăng nhập thành công!", Toast.LENGTH_SHORT)
+                        .show()
                     requireActivity().startNewActivity(MainActivity::class.java, true)
                 }
 
@@ -64,10 +65,12 @@ class RegisterMethodFragment : Fragment() {
 
 
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
     fun navigateTo(fragment: Fragment) {
         (activity as RegisterActivity).navigateTo(fragment, true)
     }

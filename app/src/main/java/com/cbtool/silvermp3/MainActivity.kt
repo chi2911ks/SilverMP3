@@ -31,9 +31,7 @@ import com.cbtool.silvermp3.utils.createNicePaletteBackground
 import com.cbtool.silvermp3.utils.navigateTo
 import com.cbtool.silvermp3.utils.startNewActivity
 import com.google.firebase.auth.FirebaseAuth
-import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import kotlin.getValue
 
 
 class MainActivity : AppCompatActivity() {
@@ -58,7 +56,7 @@ class MainActivity : AppCompatActivity() {
             navigateTo(HomeFragment())
         }
         binding.bottomNavigationView.setOnItemSelectedListener {
-            when (it.itemId){
+            when (it.itemId) {
                 R.id.home -> navigateTo(HomeFragment())
                 R.id.search -> navigateTo(SearchFragment())
                 R.id.library -> navigateTo(LibraryFragment())
@@ -69,6 +67,13 @@ class MainActivity : AppCompatActivity() {
         }
         init()
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaController?.release()
+
+    }
+
     fun setSelectedItemId() {
         val currentFragment = getCurrentFragment()
         when (currentFragment) {
@@ -102,51 +107,56 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-    fun init(){
+
+    fun init() {
         addListener()
-        onBackPressedDispatcher.addCallback(this){
-            if (supportFragmentManager.backStackEntryCount > 0){
+        onBackPressedDispatcher.addCallback(this) {
+            if (supportFragmentManager.backStackEntryCount > 0) {
                 supportFragmentManager.popBackStack()
                 setSelectedItemId()
-            }else{
+            } else {
                 finish()
             }
         }
         binding.miniUIPlayer.setOnClickListener(onClick)
         binding.favouriteBtn.setOnClickListener(onClick)
         binding.miniPlayBtn.setOnClickListener(onClick)
-        playerViewModel.currentSong.observe(this){
+        playerViewModel.currentSong.observe(this) {
             loadUISong(song = it)
         }
-        playerViewModel.currentDuration.observe(this){
+        playerViewModel.currentDuration.observe(this) {
             binding.progressBar.progress = it
         }
-        playerViewModel.isFavourite.observe(this){
+        playerViewModel.isFavourite.observe(this) {
             binding.favouriteBtn.isSelected = it
         }
 
     }
-    private val onClick: View.OnClickListener = View.OnClickListener{
-        when(it){
+
+    private val onClick: View.OnClickListener = View.OnClickListener {
+        when (it) {
             binding.miniUIPlayer -> {
                 navigateTo(PlayerFragment.newInstance())
             }
+
             binding.favouriteBtn -> {
                 playerViewModel.toggleFavourite(playerViewModel.currentSong.value!!)
                 libraryViewModel.refreshFavouriteCount()
             }
+
             binding.miniPlayBtn -> {
                 mediaController?.apply {
-                    if (isPlaying){
+                    if (isPlaying) {
                         pause()
-                    }else{
+                    } else {
                         play()
                     }
                 }
             }
         }
     }
-    private fun loadUISong(song: Song){
+
+    private fun loadUISong(song: Song) {
         song.apply {
             binding.tvMiniArtist.text = artistName
             binding.tvMiniTitle.text = title
@@ -154,7 +164,10 @@ class MainActivity : AppCompatActivity() {
                 .asBitmap()
                 .load(song.coverUrl)
                 .into(object : CustomTarget<Bitmap>() {
-                    override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                    override fun onResourceReady(
+                        resource: Bitmap,
+                        transition: Transition<in Bitmap>?
+                    ) {
                         binding.imageMiniCover.setImageBitmap(resource)
                         val gradient = applicationContext.createNicePaletteBackground(resource)
                         binding.miniUIPlayer.background = gradient
@@ -166,6 +179,7 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
     fun addListener() {
         val controller = mediaController
         if (controller == null) {
@@ -181,6 +195,7 @@ class MainActivity : AppCompatActivity() {
                 override fun onIsPlayingChanged(isPlaying: Boolean) {
                     showMiniUi(isPlaying)
                 }
+
                 override fun onPlaybackStateChanged(playbackState: Int) {
                     when (playbackState) {
                         Player.STATE_ENDED -> {}
@@ -195,15 +210,18 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
-    fun showMiniUi(isPlaying: Boolean){
+
+    fun showMiniUi(isPlaying: Boolean) {
         binding.miniPlayBtn.isSelected = isPlaying
-        if (isPlaying && getCurrentFragment() is HomeFragment){
+        if (isPlaying && getCurrentFragment() is HomeFragment) {
             binding.miniUIPlayer.isVisible = true
         }
     }
+
     fun getCurrentFragment(): Fragment? {
         return supportFragmentManager.findFragmentById(binding.frameLayout.id)
     }
+
     fun navigateTo(fragment: Fragment, addToBackStack: Boolean = true) {
         supportFragmentManager.navigateTo(binding.frameLayout.id, fragment, addToBackStack)
     }

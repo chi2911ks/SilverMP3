@@ -50,7 +50,6 @@ class PlayerFragment : Fragment() {
     }
 
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 //        this.slideUpAndShow()
@@ -71,6 +70,7 @@ class PlayerFragment : Fragment() {
                 viewModel.toggleFavourite(viewModel.currentSong.value!!)
                 libraryViewModel.refreshFavouriteCount()
             }
+
             binding.shuffleBtn -> shuffleClick()
             binding.repeatBtn -> repeatClick()
             binding.playBtn -> playClick()
@@ -98,6 +98,7 @@ class PlayerFragment : Fragment() {
 
 
                 }
+
                 override fun onPlaybackStateChanged(playbackState: Int) {
                     when (playbackState) {
                         Player.STATE_ENDED -> {}
@@ -162,7 +163,8 @@ class PlayerFragment : Fragment() {
             }
         })
     }
-    fun setMediaItem(song: Song): MediaItem{
+
+    fun setMediaItem(song: Song): MediaItem {
         return MediaItem.Builder()
             .setMediaId(song.id)
             .setUri(song.audioUrl)
@@ -174,17 +176,20 @@ class PlayerFragment : Fragment() {
                     .build()
             ).build()
     }
-    fun loadDetailSong(song: Song){
+
+    fun loadDetailSong(song: Song) {
+        if (!isAdded || context == null) return
         binding.titleTv.text = song.title
         binding.artistTv.text = song.artistName
         Glide
-            .with(requireContext())
+            .with(this)
             .load(song.coverUrl)
             .transform(CenterCrop(), RoundedCorners(50))
             .into(binding.coverImage)
         viewModel.checkFavourite(song.id)
     }
-    fun ready(){
+
+    fun ready() {
         controller!!.apply {
             val duration = duration / 1000L
             binding.seekBar.max = duration.toInt()
@@ -192,15 +197,16 @@ class PlayerFragment : Fragment() {
         }
         updateSeekBar()
     }
+
     fun init() {
         addListener()
         initSeekBar()
-        viewModel.isFavourite.observe(viewLifecycleOwner){
+        viewModel.isFavourite.observe(viewLifecycleOwner) {
             binding.favouriteBtn.isSelected = it
         }
 
         (activity as MainActivity).setSelectedItemId()
-        viewModel.currentSong.observe(viewLifecycleOwner){ song ->
+        viewModel.currentSong.observe(viewLifecycleOwner) { song ->
             binding.playBtn.isSelected = controller?.isPlaying == true
             loadDetailSong(song)
             ready()
@@ -223,8 +229,6 @@ class PlayerFragment : Fragment() {
     }
 
 
-
-
     fun shuffleClick() {
         binding.shuffleBtn.isSelected = !binding.shuffleBtn.isSelected
         controller?.shuffleModeEnabled = binding.shuffleBtn.isSelected
@@ -245,7 +249,6 @@ class PlayerFragment : Fragment() {
             }
         }
     }
-
 
 
     override fun onDestroy() {

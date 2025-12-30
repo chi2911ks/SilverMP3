@@ -33,20 +33,21 @@ class LibraryFragment : Fragment() {
         Log.d("LibraryFragment", "LibraryViewModel: $libraryViewModel")
         init()
     }
-    fun init(){
+
+    fun init() {
         (activity as MainActivity).setSelectedItemId()
         binding.playListsRc.layoutManager = LinearLayoutManager(requireContext())
-        val adapter = LibraryAdapter(object: OnClickPlaylist{
+        val adapter = LibraryAdapter(object : OnClickPlaylist {
             override fun onClickPlaylist(playlist: Playlist) {
-                (activity as MainActivity).navigateTo(PlaylistFragment.newInstance(playlist))
+                (activity as MainActivity).navigateTo(UserPlaylistFragment.newInstance(playlist))
             }
+
             override fun onClickFavourite() {
                 (activity as MainActivity).navigateTo(FavouriteFragment.newInstance())
             }
-
         })
         binding.playListsRc.adapter = adapter
-        libraryViewModel.libItems.observe(viewLifecycleOwner){
+        libraryViewModel.libItems.observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
         if (libraryViewModel.size == 0) {
@@ -54,13 +55,16 @@ class LibraryFragment : Fragment() {
         }
         binding.addPlayListBtn.setOnClickListener {
 
-            CreatePlaylistDialog.newInstance(libraryViewModel.size).show(requireActivity().supportFragmentManager, "CreatePlayListDialog")
+            CreatePlaylistDialog.newInstance(libraryViewModel.size)
+                .show(requireActivity().supportFragmentManager, "CreatePlayListDialog")
         }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
     companion object {
         @JvmStatic
         val instance: LibraryFragment by lazy { LibraryFragment() }

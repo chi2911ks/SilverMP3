@@ -14,8 +14,8 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
-class SilverApplication: Application() {
-    private var _mediaController: MediaController?=null
+class SilverApplication : Application() {
+    private var _mediaController: MediaController? = null
     val mediaController get() = _mediaController
     private suspend fun initMediaController() {
         val sessionToken = SessionToken(this, ComponentName(this, PlayBackService::class.java))
@@ -23,6 +23,7 @@ class SilverApplication: Application() {
         _mediaController = future.await() // 👈 Đợi async hoàn tất
         Log.d("SilverApp", "MediaController đã sẵn sàng: $_mediaController")
     }
+
     override fun onCreate() {
         super.onCreate()
         CoroutineScope(Dispatchers.Default).launch {

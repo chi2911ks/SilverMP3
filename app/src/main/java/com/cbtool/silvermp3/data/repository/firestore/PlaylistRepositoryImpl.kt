@@ -24,6 +24,16 @@ class PlaylistRepositoryImpl: PlaylistRepository {
         }
     }
 
+    override suspend fun getDetailPlaylist(playlistId: String): Playlist {
+        return try {
+            val snapshot = collection.document(playlistId).get().await()
+            snapshot.toObject(Playlist::class.java) ?: Playlist()
+        } catch (e: Exception) {
+            Log.w(TAG, "Error getting documents.", e)
+            Playlist()
+        }
+    }
+
     override suspend fun getSongs(playlistId: String): List<Song> {
         return try {
             val snapshot = collection.document(playlistId).collection("songs").get().await()

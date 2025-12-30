@@ -19,11 +19,11 @@ import com.cbtool.silvermp3.ui.player.PlayerFragment
 import com.cbtool.silvermp3.ui.player.PlayerViewModel
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
-class PlaylistFragment : Fragment() {
-    private var _binding: FragmentPlayListBinding?=null
+class UserPlaylistFragment : Fragment() {
+    private var _binding: FragmentPlayListBinding? = null
     private val binding get() = _binding!!
     private lateinit var playlist: Playlist
-    private val playlistViewModel: PlaylistViewModel by activityViewModel()
+    private val playlistViewModel: UserPlaylistViewModel by activityViewModel()
     private val playerViewModel: PlayerViewModel by activityViewModel()
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -53,7 +53,8 @@ class PlaylistFragment : Fragment() {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
         binding.moreBtn.setOnClickListener {
-            PlaylistOptionsSheet.newInstance(playlist).show(requireActivity().supportFragmentManager, "PlaylistOptionsSheet")
+            PlaylistOptionsSheet.newInstance(playlist)
+                .show(requireActivity().supportFragmentManager, "PlaylistOptionsSheet")
         }
         val songAdapter = SongAdapter(onItemClick = { song ->
             playerViewModel.setSongs(song)
@@ -63,30 +64,34 @@ class PlaylistFragment : Fragment() {
             val bottomSheet = SongOptionsSheet.newInstance(song, playlist.id)
             bottomSheet.show(requireActivity().supportFragmentManager, "SongOptionsSheet")
         })
-        binding.rvSongs.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.rvSongs.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.rvSongs.adapter = songAdapter
-        playlistViewModel.song.observe(viewLifecycleOwner){
+        playlistViewModel.song.observe(viewLifecycleOwner) {
             it.apply {
                 binding.tvCount.text = "$size bài hát"
                 songAdapter.submitList(it)
             }
         }
-        playlistViewModel.playlist.observe(viewLifecycleOwner){
+        playlistViewModel.playlist.observe(viewLifecycleOwner) {
             it.apply {
                 binding.tvTitle.text = title
                 binding.tvDescription.text = description
             }
         }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
     companion object {
         const val ARG_PLAYLIST = "PLAYLIST"
+
         @JvmStatic
         fun newInstance(playlist: Playlist) =
-            PlaylistFragment().apply {
+            UserPlaylistFragment().apply {
                 arguments = Bundle().apply {
                     putParcelable(ARG_PLAYLIST, playlist)
                 }

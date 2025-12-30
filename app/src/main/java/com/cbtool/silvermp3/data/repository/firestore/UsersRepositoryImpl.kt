@@ -25,10 +25,11 @@ class UsersRepositoryImpl {
         ).addOnSuccessListener {
             Log.d(TAG, "DocumentSnapshot added")
         }
-        .addOnFailureListener {
-            Log.w(TAG, "Error adding document", it)
-        }
+            .addOnFailureListener {
+                Log.w(TAG, "Error adding document", it)
+            }
     }
+
     companion object {
         const val TAG = "UsersRepository"
     }

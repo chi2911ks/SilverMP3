@@ -7,11 +7,11 @@ import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.tasks.await
 
-class SongsRepositoryImpl: SongRepository {
+class SongsRepositoryImpl : SongRepository {
     private val db = Firebase.firestore
     private val collectionName = "songs"
     private val collection = db.collection(collectionName)
-    override fun add(song: Song){
+    override fun add(song: Song) {
         val doc = collection.document()
         song.id = doc.id
         doc.set(song)
@@ -22,17 +22,18 @@ class SongsRepositoryImpl: SongRepository {
                 Log.w(TAG, "Error adding document", it)
             }
     }
-    override fun getSongs(onResult: (List<Song>) -> Unit){
+
+    override fun getSongs(onResult: (List<Song>) -> Unit) {
         collection
             .get()
-            .addOnCompleteListener { snapshot->
-                if (snapshot.isSuccessful){
+            .addOnCompleteListener { snapshot ->
+                if (snapshot.isSuccessful) {
                     val songs = snapshot.result.documents.mapNotNull {
                         it.toObject(Song::class.java)
                     }
                     onResult(songs)
 
-                }else{
+                } else {
                     Log.w(TAG, "Error getting documents.", snapshot.exception)
                     onResult(emptyList())
                 }
@@ -42,6 +43,7 @@ class SongsRepositoryImpl: SongRepository {
                 onResult(emptyList())
             }
     }
+
     override suspend fun getSongSuggest(count: Int): List<Song> {
         return try {
             val snapshot = collection.get().await()
@@ -50,7 +52,7 @@ class SongsRepositoryImpl: SongRepository {
             }
             val suggestedSongs = songs.shuffled().take(count)
             suggestedSongs
-        }catch (e: Exception) {
+        } catch (e: Exception) {
             Log.w(TAG, "Error getting documents.", e)
             emptyList()
         }

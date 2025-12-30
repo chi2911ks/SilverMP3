@@ -17,6 +17,7 @@ class LibraryAdapter(
     private val onItemClick: OnClickPlaylist
 ) : ListAdapter<LibraryItem, LibraryAdapter.ViewHolder>(LibraryDiffCallback()) {
     private lateinit var context: Context
+
     class LibraryDiffCallback : DiffUtil.ItemCallback<LibraryItem>() {
         override fun areItemsTheSame(oldItem: LibraryItem, newItem: LibraryItem): Boolean {
             return when {
@@ -43,12 +44,19 @@ class LibraryAdapter(
             return oldItem == newItem
         }
     }
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): ViewHolder {
         context = parent.context
-        return ViewHolder(ItemPlaylistLibraryBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return ViewHolder(
+            ItemPlaylistLibraryBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(
@@ -59,16 +67,17 @@ class LibraryAdapter(
     }
 
 
-
-    inner class ViewHolder(private val binding: ItemPlaylistLibraryBinding): RecyclerView.ViewHolder(binding.root){
-        fun bindData(item: LibraryItem){
-            when (item){
+    inner class ViewHolder(private val binding: ItemPlaylistLibraryBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bindData(item: LibraryItem) {
+            when (item) {
                 is LibraryItem.PlaylistItem -> bindPlaylistItem(item.playlist)
                 is LibraryItem.FavouriteItem -> bindFavouriteItem(item.count)
             }
         }
+
         @SuppressLint("UseCompatLoadingForDrawables")
-        fun bindPlaylistItem(playlist: Playlist){
+        fun bindPlaylistItem(playlist: Playlist) {
             if (playlist.coverUrl.isEmpty())
                 binding.imageCover.background = context.getDrawable(R.drawable.bg_playlist)
 
@@ -78,8 +87,9 @@ class LibraryAdapter(
             }
 
         }
+
         @SuppressLint("UseCompatLoadingForDrawables")
-        fun bindFavouriteItem(count: Int){
+        fun bindFavouriteItem(count: Int) {
             binding.imageCover.background = context.getDrawable(R.drawable.bg_favourite)
             binding.tv.text = "Danh sách phát - $count bài hát"
             itemView.setOnClickListener {

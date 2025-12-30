@@ -17,7 +17,7 @@ class LoadingDialog(private val context: Context) {
             dialog = Dialog(context).apply {
                 val progressBar = ProgressBar(context)
                 progressBar.isIndeterminate = true
-                progressBar.indeterminateTintList  = ColorStateList.valueOf(Color.WHITE)
+                progressBar.indeterminateTintList = ColorStateList.valueOf(Color.WHITE)
                 setContentView(progressBar)     // chỉ có vòng xoay
                 setCancelable(false)                     // không cho tắt khi bấm ngoài
                 window?.setBackgroundDrawableResource(R.color.transparent) // nền trong suốt

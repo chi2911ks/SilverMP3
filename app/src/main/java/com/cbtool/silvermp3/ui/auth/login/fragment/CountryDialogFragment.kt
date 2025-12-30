@@ -16,8 +16,8 @@ import com.cbtool.silvermp3.data.model.Country
 import com.cbtool.silvermp3.databinding.FragmentCountryBinding
 import org.xmlpull.v1.XmlPullParser
 
-class CountryDialogFragment: DialogFragment() {
-    private var _binding: FragmentCountryBinding?=null
+class CountryDialogFragment : DialogFragment() {
+    private var _binding: FragmentCountryBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,7 +27,11 @@ class CountryDialogFragment: DialogFragment() {
     }
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         _binding = FragmentCountryBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -52,10 +56,12 @@ class CountryDialogFragment: DialogFragment() {
             adapter.filterList(text.toString())
         }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
     private fun loadCountriesFromXml(): List<Country> {
         val countries = mutableListOf<Country>()
         val parser = resources.getXml(R.xml.country_code)

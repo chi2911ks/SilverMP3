@@ -14,7 +14,7 @@ import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
 import java.util.concurrent.TimeUnit
 
-class PhoneAuthRepository: BaseAuthRepository() {
+class PhoneAuthRepository : BaseAuthRepository() {
     private var storedVerificationId: String? = null
     private var resendToken: PhoneAuthProvider.ForceResendingToken? = null
     private val _authState = MutableLiveData<PhoneAuthState>()

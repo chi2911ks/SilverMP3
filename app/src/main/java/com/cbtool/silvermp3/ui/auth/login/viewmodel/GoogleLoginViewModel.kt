@@ -9,14 +9,17 @@ import com.cbtool.silvermp3.data.repository.auth.GoogleAuthRepository
 import com.cbtool.silvermp3.data.repository.firestore.UsersRepositoryImpl
 import kotlinx.coroutines.launch
 
-class GoogleLoginViewModel(private val googleAuthRepository: GoogleAuthRepository, private val usersRepository: UsersRepositoryImpl): ViewModel() {
+class GoogleLoginViewModel(
+    private val googleAuthRepository: GoogleAuthRepository,
+    private val usersRepository: UsersRepositoryImpl
+) : ViewModel() {
     private val _loginState = MutableLiveData<LoginState>()
     val loginState: LiveData<LoginState> = _loginState
-    fun login(){
+    fun login() {
         _loginState.value = LoginState.Loading
         viewModelScope.launch {
-            googleAuthRepository.signInGoogle{
-                if (it is LoginState.Success){
+            googleAuthRepository.signInGoogle {
+                if (it is LoginState.Success) {
                     usersRepository.add()
                 }
                 _loginState.value = it

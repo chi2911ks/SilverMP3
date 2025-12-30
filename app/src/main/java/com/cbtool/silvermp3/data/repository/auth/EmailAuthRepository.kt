@@ -3,11 +3,11 @@ package com.cbtool.silvermp3.data.repository.auth
 import android.util.Log
 import com.cbtool.silvermp3.data.state.LoginState
 
-class EmailAuthRepository: BaseAuthRepository() {
+class EmailAuthRepository : BaseAuthRepository() {
 
-    fun createAccount(email: String, password: String, onResult: (LoginState) -> Unit){
+    fun createAccount(email: String, password: String, onResult: (LoginState) -> Unit) {
         auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener{ task ->
+            .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "createUserWithEmail:success")
                     onResult(LoginState.Success)
@@ -20,9 +20,10 @@ class EmailAuthRepository: BaseAuthRepository() {
                 onResult(LoginState.Error(it.message.toString()))
             }
     }
-    fun loginAccount(email: String, password: String, onResult: (LoginState) -> Unit){
+
+    fun loginAccount(email: String, password: String, onResult: (LoginState) -> Unit) {
         auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener{ task ->
+            .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "signInWithEmail:success")
                     onResult(LoginState.Success)

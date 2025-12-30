@@ -11,7 +11,7 @@ import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.tasks.await
 
-class UserPlaylistRepositoryImpl: UserPlaylistRepository {
+class UserPlaylistRepositoryImpl : UserPlaylistRepository {
     private val db = Firebase.firestore
     private val currentUser get() = Firebase.auth.currentUser!!
     private val userId get() = currentUser.uid
@@ -27,14 +27,21 @@ class UserPlaylistRepositoryImpl: UserPlaylistRepository {
         db.runBatch { batch ->
             // 1️⃣ Thêm bài vào playlist
             batch.set(playlistSongRef, song) // ghi dữ liệu song
-            batch.set(playlistSongRef, mapOf("addedAt" to FieldValue.serverTimestamp()), SetOptions.merge())
+            batch.set(
+                playlistSongRef,
+                mapOf("addedAt" to FieldValue.serverTimestamp()),
+                SetOptions.merge()
+            )
 
             // 2️⃣ Cập nhật chỉ mục ngược
-            batch.set(reverseIndexRef, mapOf(
-                "playlists" to FieldValue.arrayUnion(playlistId)
-            ), SetOptions.merge())
+            batch.set(
+                reverseIndexRef, mapOf(
+                    "playlists" to FieldValue.arrayUnion(playlistId)
+                ), SetOptions.merge()
+            )
         }
     }
+
     override fun removeSong(playlistId: String, songId: String) {
         val playlistSongRef = playlistsRef.document(playlistId)
             .collection("songs").document(songId)
@@ -57,18 +64,23 @@ class UserPlaylistRepositoryImpl: UserPlaylistRepository {
 
     override fun create(name: String) {
         val doc = playlistsRef.document()
-        doc.set(Playlist(
-            id = doc.id,
-            title = name
-        ))
+        doc.set(
+            Playlist(
+                id = doc.id,
+                title = name
+            )
+        )
     }
+
     override fun remove(playlistId: String) {
         playlistsRef.document(playlistId).delete()
     }
+
     override fun update(playlist: Playlist) {
         playlistsRef.document(playlist.id).set(playlist)
     }
-    override fun update(playlistId: String, name: String, desc: String){
+
+    override fun update(playlistId: String, name: String, desc: String) {
         playlistsRef.document(playlistId).update(
             mapOf(
                 "title" to name,
@@ -76,16 +88,19 @@ class UserPlaylistRepositoryImpl: UserPlaylistRepository {
             )
         )
     }
+
     override suspend fun getPlaylists(): List<Playlist> {
 
         return try {
-            playlistsRef.orderBy("createdAt").get().await().map { it.toObject(Playlist::class.java) }
+            playlistsRef.orderBy("createdAt").get().await()
+                .map { it.toObject(Playlist::class.java) }
         } catch (e: Exception) {
             Log.w(TAG, "Error getting documents.", e)
             emptyList()
         }
 
     }
+
     override suspend fun getPlaylist(id: String): Playlist {
         return try {
             playlistsRef.document(id).get().await()
@@ -106,12 +121,12 @@ class UserPlaylistRepositoryImpl: UserPlaylistRepository {
                 .get()
                 .await()
                 .documents.mapNotNull { it.toObject(Song::class.java) }
-        }
-        catch (e: Exception){
+        } catch (e: Exception) {
             Log.w(TAG, "Error getting documents.", e)
             emptyList()
         }
     }
+
     override suspend fun getPlaylistsContainingSong(songId: String): List<String> {
         val reverseIndexRef = userRef.collection("songsInPlaylists").document(songId)
         return try {
@@ -121,7 +136,6 @@ class UserPlaylistRepositoryImpl: UserPlaylistRepository {
             emptyList()
         }
     }
-
 
 
     companion object {

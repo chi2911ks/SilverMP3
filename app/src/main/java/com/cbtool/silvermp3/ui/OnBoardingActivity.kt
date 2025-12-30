@@ -8,7 +8,7 @@ import com.cbtool.silvermp3.databinding.ActivityOnBoardingBinding
 import com.cbtool.silvermp3.ui.auth.register.RegisterActivity
 
 class OnBoardingActivity : AppCompatActivity() {
-    private val binding by lazy { ActivityOnBoardingBinding.inflate(layoutInflater)}
+    private val binding by lazy { ActivityOnBoardingBinding.inflate(layoutInflater) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)

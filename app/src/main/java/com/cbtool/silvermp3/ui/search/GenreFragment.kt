@@ -15,7 +15,6 @@ class GenreFragment : Fragment() {
     private var name: String? = null
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -43,8 +42,10 @@ class GenreFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
     companion object {
         private val ARG_GENRE = "GENRE"
+
         @JvmStatic
         fun newInstance(name: String) =
             GenreFragment().apply {

@@ -20,10 +20,12 @@ class ForgotPasswordFragment : Fragment() {
             email = it.getString(ARG_EMAIL)
         }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,6 +36,7 @@ class ForgotPasswordFragment : Fragment() {
 
     companion object {
         private const val ARG_EMAIL = "email"
+
         @JvmStatic
         fun newInstance(email: String) =
             ForgotPasswordFragment().apply {

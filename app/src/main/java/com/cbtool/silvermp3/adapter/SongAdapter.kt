@@ -17,8 +17,7 @@ import com.cbtool.silvermp3.data.model.Song
 import com.cbtool.silvermp3.databinding.ItemSongBinding // Ví dụ binding của item
 
 class SongAdapter(
-    private val onItemClick: (Song) -> Unit,
-    private val moreClick: (Song) -> Unit
+    private val onItemClick: (Song) -> Unit, private val moreClick: (Song) -> Unit
 ) : ListAdapter<Song, SongAdapter.ViewHolder>(SongDiffCallback()) {
     private lateinit var context: Context
 
@@ -37,24 +36,19 @@ class SongAdapter(
     }
 
     override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
+        parent: ViewGroup, viewType: Int
     ): ViewHolder {
         context = parent.context
         return ViewHolder(
             ItemSongBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
+                LayoutInflater.from(parent.context), parent, false
             )
         )
     }
 
 
-
     override fun onBindViewHolder(
-        holder: ViewHolder,
-        position: Int
+        holder: ViewHolder, position: Int
     ) {
         val song = getItem(position) // ListAdapter có sẵn hàm getItem
         holder.bind(song)
@@ -65,17 +59,13 @@ class SongAdapter(
     }
 
 
-
     inner class ViewHolder(private val binding: ItemSongBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(song: Song) {
             song.apply {
                 binding.tvTitle.text = title
                 binding.tvArtist.text = artistName
-                Glide
-                    .with(context)
-                    .load(coverUrl)
-                    .transform(CenterCrop(), RoundedCorners(10))
+                Glide.with(context).load(coverUrl).transform(CenterCrop(), RoundedCorners(10))
                     .into(binding.imageCover)
                 binding.moreBtn.setOnClickListener {
                     moreClick(song)

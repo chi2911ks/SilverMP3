@@ -22,7 +22,7 @@ import kotlin.getValue
 import kotlin.toString
 
 class EnterPhoneFragment : Fragment() {
-    private var _binding: FragmentEnterPhoneBinding?=null
+    private var _binding: FragmentEnterPhoneBinding? = null
     private val binding get() = _binding!!
     private var countryCode: String = "+84"
     private var phoneNumber: String = ""
@@ -36,30 +36,41 @@ class EnterPhoneFragment : Fragment() {
         _binding = FragmentEnterPhoneBinding.inflate(inflater, container, false)
         return binding.root
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d("ABC", "phoneAuthViewModel: $phoneAuthViewModel")
         phoneAuthViewModel.authState.observe(viewLifecycleOwner) {
-            when(it){
+            when (it) {
                 is PhoneAuthState.CodeSent -> {
                     loadingDialog.dismiss()
                     if (isSentCode) return@observe
                     isSentCode = true
                     if (requireActivity() is LoginActivity) {
-                        (activity as LoginActivity).navigateTo(EnterCodeFragment.newInstance(phoneNumber), true)
-                    }
-                    else{
-                        (activity as RegisterActivity).navigateTo(EnterCodeFragment.newInstance(phoneNumber), true)
+                        (activity as LoginActivity).navigateTo(
+                            EnterCodeFragment.newInstance(
+                                phoneNumber
+                            ), true
+                        )
+                    } else {
+                        (activity as RegisterActivity).navigateTo(
+                            EnterCodeFragment.newInstance(
+                                phoneNumber
+                            ), true
+                        )
                     }
                 }
+
                 is PhoneAuthState.Error -> {
                     loadingDialog.dismiss()
                     binding.inputLayoutPhoneNumber.error = it.message
                 }
+
                 is PhoneAuthState.Loading -> {
                     loadingDialog.show()
                 }
@@ -72,7 +83,8 @@ class EnterPhoneFragment : Fragment() {
             isSentCode = false
             phoneNumber = binding.phoneInput.text.toString()
             if (!isValid(phoneNumber)) return@setOnClickListener
-            phoneNumber = countryCode +  if (phoneNumber.startsWith("0")) phoneNumber.substring(1) else phoneNumber
+            phoneNumber =
+                countryCode + if (phoneNumber.startsWith("0")) phoneNumber.substring(1) else phoneNumber
             phoneAuthViewModel.verifyPhoneNumber(phoneNumber, requireActivity())
 
         }
@@ -86,13 +98,15 @@ class EnterPhoneFragment : Fragment() {
             val dialog = CountryDialogFragment()
             dialog.show(parentFragmentManager, "CountryDialogFragment")
         }
-        binding.phoneInput.addTextChangedListener{
-                text -> binding.nextBtn.isEnabled = !text.toString().isEmpty()
+        binding.phoneInput.addTextChangedListener { text ->
+            binding.nextBtn.isEnabled = !text.toString().isEmpty()
         }
     }
+
     private fun isValid(phone: String): Boolean {
         if (phone.isEmpty()) {
-            Toast.makeText(requireContext(), "Vui lòng nhập số điện thoại!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Vui lòng nhập số điện thoại!", Toast.LENGTH_SHORT)
+                .show()
             return false
         }
         return true

@@ -14,19 +14,19 @@ import com.cbtool.silvermp3.data.model.Song
 import com.cbtool.silvermp3.databinding.SheetSongOptionsBinding
 import com.cbtool.silvermp3.ui.library.FavouriteViewModel
 import com.cbtool.silvermp3.ui.library.LibraryViewModel
-import com.cbtool.silvermp3.ui.library.PlaylistViewModel
+import com.cbtool.silvermp3.ui.library.UserPlaylistViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.getValue
 
-class SongOptionsSheet: BottomSheetDialogFragment() {
+class SongOptionsSheet : BottomSheetDialogFragment() {
     private var _binding: SheetSongOptionsBinding? = null
     private val binding get() = _binding!!
     private val viewmodel: SongOptionsViewModel by viewModel()
     private val libraryViewModel: LibraryViewModel by activityViewModel()
     private val favouriteViewModel: FavouriteViewModel by activityViewModel()
-    private val playListViewModel: PlaylistViewModel by activityViewModel()
+    private val playListViewModel: UserPlaylistViewModel by activityViewModel()
     private var _song: Song? = null
     private val song get() = _song!!
     private var playList_Id: String? = null
@@ -69,9 +69,11 @@ class SongOptionsSheet: BottomSheetDialogFragment() {
     }
 
     private fun init() {
-        binding.deleteInPlaylist.visibility = if (!playList_Id.isNullOrEmpty()) View.VISIBLE else View.GONE
-        binding.addPlaylistBtn.text = if (!playList_Id.isNullOrEmpty()) "Thêm vào danh sách phát khác" else "Thêm vào danh sách phát"
-        viewmodel.isFavourite.observe(viewLifecycleOwner){
+        binding.deleteInPlaylist.visibility =
+            if (!playList_Id.isNullOrEmpty()) View.VISIBLE else View.GONE
+        binding.addPlaylistBtn.text =
+            if (!playList_Id.isNullOrEmpty()) "Thêm vào danh sách phát khác" else "Thêm vào danh sách phát"
+        viewmodel.isFavourite.observe(viewLifecycleOwner) {
             binding.favouriteBtn.isSelected = it
             binding.favouriteBtn.apply {
                 text = if (isSelected) "Đã yêu thích" else "Yêu thích"
@@ -93,13 +95,12 @@ class SongOptionsSheet: BottomSheetDialogFragment() {
         }
         binding.deleteInPlaylist.setOnClickListener {
             playList_Id?.let {
-                if (it == "favourites"){
+                if (it == "favourites") {
                     libraryViewModel.removeSongFromFavourite(song.id)
                     libraryViewModel.refreshFavouriteCount()
                     favouriteViewModel.getSongs()
-                }
-                else{
-                    libraryViewModel.removeSongFromPlaylist(it,song.id)
+                } else {
+                    libraryViewModel.removeSongFromPlaylist(it, song.id)
                     playListViewModel.getSongs(it)
                 }
                 dismiss()
@@ -114,7 +115,8 @@ class SongOptionsSheet: BottomSheetDialogFragment() {
         }
         binding.addPlaylistBtn.setOnClickListener {
             dismiss()
-            PlaylistPickerSheet.newInstance(song).show(requireActivity().supportFragmentManager, PlaylistPickerSheet.TAG)
+            PlaylistPickerSheet.newInstance(song)
+                .show(requireActivity().supportFragmentManager, PlaylistPickerSheet.TAG)
         }
         binding.artistBtn.setOnClickListener {
 

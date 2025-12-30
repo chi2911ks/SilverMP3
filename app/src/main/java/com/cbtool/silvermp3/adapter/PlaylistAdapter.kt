@@ -12,9 +12,13 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.cbtool.silvermp3.data.model.Playlist
 import com.cbtool.silvermp3.databinding.ItemPlaylistBinding
 
-class PlaylistAdapter(private val onItemClick: (Playlist) -> Unit): ListAdapter<Playlist, PlaylistAdapter.PlaylistViewHolder>(PlaylistDiffCallback()) {
+class PlaylistAdapter(
+    private val onItemClick: (Playlist) -> Unit
+) :
+    ListAdapter<Playlist, PlaylistAdapter.PlaylistViewHolder>(PlaylistDiffCallback()) {
     private lateinit var context: Context
-    class PlaylistDiffCallback(): DiffUtil.ItemCallback<Playlist>() {
+
+    class PlaylistDiffCallback() : DiffUtil.ItemCallback<Playlist>() {
         override fun areItemsTheSame(
             oldItem: Playlist,
             newItem: Playlist
@@ -29,12 +33,19 @@ class PlaylistAdapter(private val onItemClick: (Playlist) -> Unit): ListAdapter<
             return oldItem == newItem
         }
     }
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): PlaylistViewHolder {
         context = parent.context
-        return PlaylistViewHolder(ItemPlaylistBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return PlaylistViewHolder(
+            ItemPlaylistBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(
@@ -47,8 +58,10 @@ class PlaylistAdapter(private val onItemClick: (Playlist) -> Unit): ListAdapter<
         }
 
     }
-    inner class PlaylistViewHolder(private val binding: ItemPlaylistBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(playlist: Playlist){
+
+    inner class PlaylistViewHolder(private val binding: ItemPlaylistBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(playlist: Playlist) {
             binding.titlePlaylist.text = playlist.title
             Glide
                 .with(context)

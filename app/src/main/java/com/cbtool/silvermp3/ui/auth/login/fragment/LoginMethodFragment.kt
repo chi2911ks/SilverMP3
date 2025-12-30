@@ -22,7 +22,7 @@ import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 
 class LoginMethodFragment : Fragment() {
-    private var _binding: FragmentLoginMethodBinding?=null
+    private var _binding: FragmentLoginMethodBinding? = null
     private val binding get() = _binding!!
     private val googleLoginViewModel: GoogleLoginViewModel by lazy { getViewModel<GoogleLoginViewModel>() }
 
@@ -33,21 +33,25 @@ class LoginMethodFragment : Fragment() {
         _binding = FragmentLoginMethodBinding.inflate(inflater, container, false)
         return binding.root
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        googleLoginViewModel.loginState.observe(requireActivity()){
+        googleLoginViewModel.loginState.observe(requireActivity()) {
             when (it) {
                 is LoginState.Error -> {
                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                 }
+
                 LoginState.Idle -> {}
                 LoginState.Loading -> {}
                 is LoginState.Success -> {
-                    Toast.makeText(requireContext(), "Đăng nhập thành công!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Đăng nhập thành công!", Toast.LENGTH_SHORT)
+                        .show()
                     requireActivity().startNewActivity(MainActivity::class.java, true)
                 }
 
@@ -72,7 +76,8 @@ class LoginMethodFragment : Fragment() {
 
 
     }
-    fun navigateTo(fragment: Fragment){
+
+    fun navigateTo(fragment: Fragment) {
         (activity as LoginActivity).navigateTo(fragment, true)
     }
 

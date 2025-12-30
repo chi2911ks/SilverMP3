@@ -2,10 +2,10 @@ package com.cbtool.silvermp3.ui.home
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.cbtool.silvermp3.MainActivity
@@ -16,6 +16,7 @@ import com.cbtool.silvermp3.databinding.FragmentHomeBinding
 import com.cbtool.silvermp3.ui.custom.SongOptionsSheet
 import com.cbtool.silvermp3.ui.player.PlayerFragment
 import com.cbtool.silvermp3.ui.player.PlayerViewModel
+import com.cbtool.silvermp3.ui.playlist.PlaylistFragment
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class HomeFragment : Fragment() {
@@ -37,10 +38,12 @@ class HomeFragment : Fragment() {
         Log.d("HomeFragment", "HomeViewModel: $viewModel")
         init()
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
     private fun init() {
         (activity as MainActivity).setSelectedItemId()
         val songAdapter = SongAdapter(onItemClick = { song ->
@@ -50,15 +53,17 @@ class HomeFragment : Fragment() {
             val bottomSheet = SongOptionsSheet.newInstance(song)
             bottomSheet.show(requireActivity().supportFragmentManager, "BottomSheetSong")
         })
-        val playlistAdapter = PlaylistAdapter{
-
+        val playlistAdapter = PlaylistAdapter {
+            (activity as MainActivity).navigateTo(PlaylistFragment.newInstance(it))
         }
-        binding.rvSongs.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        binding.rvPlaylists.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.rvSongs.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.rvPlaylists.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.rvSongs.adapter = songAdapter
         binding.rvPlaylists.adapter = playlistAdapter
         viewModel.songs.observe(viewLifecycleOwner) { songAdapter.submitList(it) }
-        viewModel.playlists.observe(viewLifecycleOwner){
+        viewModel.playlists.observe(viewLifecycleOwner) {
             playlistAdapter.submitList(it)
         }
         if (viewModel.songs.value.isNullOrEmpty()) {
@@ -89,10 +94,12 @@ class HomeFragment : Fragment() {
             }
         }
     }
-    private fun refresh(){
+
+    private fun refresh() {
         viewModel.loadSongs()
         viewModel.loadPlaylists()
     }
+
     companion object {
         @JvmStatic
         fun newInstance() = HomeFragment()

@@ -23,7 +23,7 @@ import kotlin.getValue
 
 class EmailLoginFragment : Fragment() {
 
-    private var _binding: FragmentEmailLoginBinding?=null
+    private var _binding: FragmentEmailLoginBinding? = null
     private val binding get() = _binding!!
     private val emailLoginViewModel: EmailLoginViewModel by viewModel()
 
@@ -36,10 +36,12 @@ class EmailLoginFragment : Fragment() {
         _binding = FragmentEmailLoginBinding.inflate(inflater, container, false)
         return binding.root
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -51,22 +53,25 @@ class EmailLoginFragment : Fragment() {
                     binding.inputLayoutEmail.error = "1"
                     binding.inputLayoutPassword.error = it.message
                 }
+
                 LoginState.Idle -> {}
                 LoginState.Loading -> {
                     loadingDialog.show()
                 }
+
                 is LoginState.Success -> {
                     loadingDialog.dismiss()
-                    Toast.makeText(requireContext(), "Đăng nhập thành công!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Đăng nhập thành công!", Toast.LENGTH_SHORT)
+                        .show()
                     requireActivity().startNewActivity(MainActivity::class.java, true)
                 }
 
             }
         }
-        binding.backBtn.setOnClickListener{
+        binding.backBtn.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
-        binding.loginBtn.setOnClickListener{
+        binding.loginBtn.setOnClickListener {
             val email = binding.emailInput.text.toString()
             val password = binding.passwordInput.text.toString()
             if (!isValid(email, password)) return@setOnClickListener
@@ -90,6 +95,7 @@ class EmailLoginFragment : Fragment() {
             }
         }
     }
+
     private fun isValid(email: String, password: String): Boolean {
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             binding.inputLayoutEmail.error = "Vui lòng nhập email đúng định dạng!"

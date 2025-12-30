@@ -6,7 +6,7 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.cbtool.silvermp3.databinding.LayoutCreatePlaylistBinding
 import com.cbtool.silvermp3.ui.library.LibraryViewModel
-import com.cbtool.silvermp3.ui.library.PlaylistViewModel
+import com.cbtool.silvermp3.ui.library.UserPlaylistViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
@@ -16,7 +16,7 @@ class CreatePlaylistDialog : DialogFragment() {
     private var _binding: LayoutCreatePlaylistBinding? = null
     private val binding get() = _binding!!
 
-    private val playlistViewModel: PlaylistViewModel by activityViewModel()
+    private val playlistViewModel: UserPlaylistViewModel by activityViewModel()
     private val libraryViewModel: LibraryViewModel by activityViewModel()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

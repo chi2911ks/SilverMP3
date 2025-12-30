@@ -34,12 +34,18 @@ fun Activity.startNewActivity(target: Class<out Activity>, clearStack: Boolean =
     }
     startActivity(intent)
 }
+
 fun Activity.startNewActivity(target: Class<out Activity>, extras: Bundle? = null) {
     val intent = Intent(this, target)
     extras?.let { intent.putExtras(it) }
     startActivity(intent)
 }
-fun FragmentManager.navigateTo(@IdRes containerId: Int, fragment: Fragment, addToBackStack: Boolean = false) {
+
+fun FragmentManager.navigateTo(
+    @IdRes containerId: Int,
+    fragment: Fragment,
+    addToBackStack: Boolean = false
+) {
     val transaction = beginTransaction()
     val current = findFragmentById(containerId)
     val fragmentTag = fragment::class.java.simpleName
@@ -53,6 +59,7 @@ fun FragmentManager.navigateTo(@IdRes containerId: Int, fragment: Fragment, addT
     }
     transaction.commitAllowingStateLoss()
 }
+
 fun Fragment.slideDownAndClose(duration: Long = 400L, onEnd: (() -> Unit)? = null) {
     val view = view ?: return
     view.post {
@@ -75,6 +82,7 @@ fun Fragment.slideDownAndClose(duration: Long = 400L, onEnd: (() -> Unit)? = nul
         }
     }
 }
+
 fun Fragment.slideUpAndShow(duration: Long = 400L, onEnd: (() -> Unit)? = null) {
     val view = view ?: return
     view.post {
@@ -99,6 +107,7 @@ fun Fragment.slideUpAndShow(duration: Long = 400L, onEnd: (() -> Unit)? = null) 
         }
     }
 }
+
 fun Context.createNicePaletteBackground(bitmap: Bitmap): GradientDrawable {
     val defaultColor = ContextCompat.getColor(this, android.R.color.darker_gray)
     var vibrant = defaultColor

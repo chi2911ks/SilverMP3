@@ -16,7 +16,10 @@ class LoginActivity : AppCompatActivity() {
             navigateTo(LoginMethodFragment())
         }
     }
-    fun navigateTo(fragment: Fragment, addToBackStack: Boolean = false) = supportFragmentManager.navigateTo(binding.fragmentContainer.id, fragment, addToBackStack)
+
+    fun navigateTo(fragment: Fragment, addToBackStack: Boolean = false) =
+        supportFragmentManager.navigateTo(binding.fragmentContainer.id, fragment, addToBackStack)
+
     override fun onDestroy() {
         super.onDestroy()
     }

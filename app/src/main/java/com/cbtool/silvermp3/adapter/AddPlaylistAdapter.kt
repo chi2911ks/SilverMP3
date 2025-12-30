@@ -57,7 +57,7 @@ class AddPlaylistAdapter(
                 binding.imageCover.background = context.getDrawable(R.drawable.bg_playlist)
             binding.addBtn.isSelected = songInPlaylists.contains(playlist.id)
             binding.tvName.text = playlist.title
-            fun click(){
+            fun click() {
                 binding.addBtn.isSelected = !binding.addBtn.isSelected
                 onItemClick.playlist(playlist, binding.addBtn.isSelected)
             }
@@ -71,12 +71,12 @@ class AddPlaylistAdapter(
             binding.imageCover.background = context.getDrawable(R.drawable.bg_favourite)
             binding.tvName.text = "Bài hát đã thích"
             binding.addBtn.isSelected = songInPlaylists.contains("favourites")
-            fun click(){
+            fun click() {
                 binding.addBtn.isSelected = !binding.addBtn.isSelected
                 onItemClick.favourite(binding.addBtn.isSelected)
             }
             binding.addBtn.setOnClickListener { click() }
-            itemView.setOnClickListener {click() }
+            itemView.setOnClickListener { click() }
         }
 
     }

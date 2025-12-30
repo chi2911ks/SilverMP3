@@ -9,22 +9,26 @@ import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.tasks.await
 
-class UserFavouriteRepositoryImpl: UserFavouriteRepository {
+class UserFavouriteRepositoryImpl : UserFavouriteRepository {
     private val db = Firebase.firestore
     private val currentUser get() = Firebase.auth.currentUser!!
     private val userId get() = currentUser.uid
     private val collectionRef = db.collection("users").document(userId).collection("favourites")
     private var favouriteListener: ListenerRegistration? = null
     private val favouriteSongsCache = mutableSetOf<String>()
+
     init {
         observeFavouriteSongs()
     }
+
     override fun addSong(song: Song) {
         collectionRef.document(song.id).set(song)
     }
-    override fun removeSong(songId: String){
+
+    override fun removeSong(songId: String) {
         collectionRef.document(songId).delete()
     }
+
     override suspend fun getCount(): Int {
         return try {
             val snapshot = collectionRef.get().await()  // chờ Firestore query hoàn thành
@@ -34,19 +38,21 @@ class UserFavouriteRepositoryImpl: UserFavouriteRepository {
             0
         }
     }
+
     override suspend fun getSongs(): List<Song> {
         Log.d(TAG, "getSongs() started")
         return try {
             val snapshot = collectionRef.get()
                 .await()
-                .documents.mapNotNull { it.toObject(Song::class.java)  }
+                .documents.mapNotNull { it.toObject(Song::class.java) }
             Log.w(TAG, "OK")
             snapshot
-        }catch (e: Exception){
+        } catch (e: Exception) {
             Log.w(TAG, "Error getting documents.", e)
             emptyList()
         }
     }
+
     fun getSongsRealtime(onResult: (List<Song>) -> Unit) {
         collectionRef.addSnapshotListener { snapshot, e ->
             if (e != null) {
@@ -71,6 +77,7 @@ class UserFavouriteRepositoryImpl: UserFavouriteRepository {
             }
         }
     }
+
     override fun toggleFavourite(song: Song) {
         song.apply {
             if (isFavourite(id)) {
@@ -83,6 +90,7 @@ class UserFavouriteRepositoryImpl: UserFavouriteRepository {
         }
 
     }
+
     fun stopObservingFavourites() {
         favouriteListener?.remove()
         favouriteListener = null
@@ -91,6 +99,7 @@ class UserFavouriteRepositoryImpl: UserFavouriteRepository {
     override fun isFavourite(songId: String): Boolean {
         return favouriteSongsCache.contains(songId)
     }
+
     fun clearCache() {
         favouriteSongsCache.clear()
     }

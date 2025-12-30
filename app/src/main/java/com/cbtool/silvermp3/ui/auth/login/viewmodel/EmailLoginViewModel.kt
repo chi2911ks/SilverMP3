@@ -9,19 +9,18 @@ import com.cbtool.silvermp3.data.repository.auth.EmailAuthRepository
 import kotlinx.coroutines.launch
 
 
-class EmailLoginViewModel(private val emailAuthRepository: EmailAuthRepository): ViewModel() {
+class EmailLoginViewModel(private val emailAuthRepository: EmailAuthRepository) : ViewModel() {
     private val _loginState = MutableLiveData<LoginState>()
     val loginState: LiveData<LoginState> = _loginState
 
-    fun login(email: String, password: String){
+    fun login(email: String, password: String) {
         _loginState.value = LoginState.Loading
         viewModelScope.launch {
-            emailAuthRepository.loginAccount(email, password){
+            emailAuthRepository.loginAccount(email, password) {
                 _loginState.value = it
             }
         }
     }
-
 
 
 }

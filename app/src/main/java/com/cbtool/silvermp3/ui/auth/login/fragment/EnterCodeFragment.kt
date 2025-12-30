@@ -33,10 +33,12 @@ class EnterCodeFragment : Fragment() {
             numberPhone = it.getString(ARG_NUMBER_PHONE).toString()
         }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -53,23 +55,28 @@ class EnterCodeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.d("ABC", "phoneAuthViewModel: $phoneAuthViewModel")
         phoneAuthViewModel.authState.observe(viewLifecycleOwner) {
-            when(it){
+            when (it) {
                 is PhoneAuthState.CodeSent -> {
                     loadingDialog.dismiss()
                     startResendTimer()
                 }
+
                 is PhoneAuthState.Loading -> {
                     loadingDialog.show()
                 }
+
                 is PhoneAuthState.Verified -> {
                     loadingDialog.dismiss()
                     phoneAuthViewModel.addUser()
-                    Toast.makeText(requireContext(), "Xác nhận thành công!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Xác nhận thành công!", Toast.LENGTH_SHORT)
+                        .show()
                     requireActivity().startNewActivity(MainActivity::class.java, true)
                 }
+
                 is PhoneAuthState.Error -> {
                     loadingDialog.dismiss()
                 }
+
                 PhoneAuthState.Idle -> {}
             }
         }
@@ -78,7 +85,8 @@ class EnterCodeFragment : Fragment() {
         binding.nextBtn.setOnClickListener {
             val code = otpInput()
             if (code.length != 6) {
-                Toast.makeText(requireContext(), "Vui lòng nhập mã 6 chữ số!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Vui lòng nhập mã 6 chữ số!", Toast.LENGTH_SHORT)
+                    .show()
                 return@setOnClickListener
             }
             phoneAuthViewModel.verifyCode(code)
@@ -113,6 +121,7 @@ class EnterCodeFragment : Fragment() {
             }
         }
     }
+
     private fun otpInput(): String {
         val code = StringBuilder().apply {
             for (et in listEditTextOtp) {
@@ -121,6 +130,7 @@ class EnterCodeFragment : Fragment() {
         }.toString()
         return code.trim()
     }
+
     @SuppressLint("UseCompatLoadingForColorStateLists")
     private fun startResendTimer() {
         binding.tvResend.isEnabled = false
@@ -130,12 +140,14 @@ class EnterCodeFragment : Fragment() {
                 val s = millisUntilFinished / 1000
                 binding.tvResend.text = "Gửi lại mã ($s s)"
             }
+
             override fun onFinish() {
                 binding.tvResend.text = "Gửi lại mã"
                 binding.tvResend.isEnabled = true
             }
         }.start()
     }
+
     companion object {
         private const val ARG_NUMBER_PHONE = "number_phone"
 

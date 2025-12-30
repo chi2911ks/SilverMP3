@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.cbtool.silvermp3.data.model.Song
 import com.cbtool.silvermp3.interfaces.UserFavouriteRepository
 
-class PlayerViewModel(private val userFavouriteRepository: UserFavouriteRepository): ViewModel() {
+class PlayerViewModel(private val userFavouriteRepository: UserFavouriteRepository) : ViewModel() {
     private val _songs = MutableLiveData<List<Song>>()
     val songs: LiveData<List<Song>> = _songs
 
@@ -16,20 +16,24 @@ class PlayerViewModel(private val userFavouriteRepository: UserFavouriteReposito
     val currentDuration: LiveData<Int> = _currentDuration
     private val _isFavourite = MutableLiveData<Boolean>()
     val isFavourite: MutableLiveData<Boolean> = _isFavourite
-    fun setSongs(song: Song){
+    fun setSongs(song: Song) {
         _songs.value = listOf(song)
     }
-    fun setCurrentSong(song: Song){
+
+    fun setCurrentSong(song: Song) {
         _currentSong.value = song
     }
-    fun setCurrentDuration(duration: Int){
+
+    fun setCurrentDuration(duration: Int) {
         _currentDuration.value = duration
     }
+
     fun toggleFavourite(song: Song) {
         userFavouriteRepository.toggleFavourite(song)
         _isFavourite.value = userFavouriteRepository.isFavourite(song.id)
     }
-    fun checkFavourite(id: String){
+
+    fun checkFavourite(id: String) {
         _isFavourite.value = userFavouriteRepository.isFavourite(id)
     }
 }
