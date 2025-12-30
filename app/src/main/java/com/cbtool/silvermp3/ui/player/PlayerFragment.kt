@@ -75,8 +75,22 @@ class PlayerFragment : Fragment(), FragmentUIConfig {
             binding.shuffleBtn -> shuffleClick()
             binding.repeatBtn -> repeatClick()
             binding.playBtn -> playClick()
-            binding.previousBtn -> controller?.seekToPrevious()
-            binding.nextBtn -> controller?.seekToNext()
+            binding.previousBtn -> {
+                controller?.apply {
+                    if (hasPreviousMediaItem()) {
+                        seekToPreviousMediaItem()
+                    }
+                }
+
+            }
+            binding.nextBtn -> {
+                controller?.apply {
+                    if (hasNextMediaItem()) {
+                        seekToNextMediaItem()
+                    }
+                }
+
+            }
         }
 
     }
@@ -173,7 +187,6 @@ class PlayerFragment : Fragment(), FragmentUIConfig {
                     .setTitle(song.title)
                     .setArtist(song.artistName)
                     .setArtworkUri(song.coverUrl.toUri())
-
                     .build()
             ).build()
     }
@@ -188,6 +201,7 @@ class PlayerFragment : Fragment(), FragmentUIConfig {
     }
 
     fun ready() {
+        Log.d("Media", "ready")
         controller!!.apply {
             val duration = duration / 1000L
             binding.seekBar.max = duration.toInt()
@@ -214,8 +228,10 @@ class PlayerFragment : Fragment(), FragmentUIConfig {
             it.forEach { song ->
                 playlists[song.id] = song
             }
+            Log.d("Media", it[0].toString())
             controller?.apply {
                 if (playerViewModel.currentSong.value != null && controller?.currentMediaItem?.mediaId == playerViewModel.currentSong.value!!.id) return@observe
+
                 setMediaItems(it.map { song -> setMediaItem(song) })
                 prepare()
                 play()

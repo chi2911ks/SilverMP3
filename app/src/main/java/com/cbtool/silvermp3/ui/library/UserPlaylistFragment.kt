@@ -59,7 +59,7 @@ class UserPlaylistFragment : Fragment() {
                 .show(requireActivity().supportFragmentManager, "PlaylistOptionsSheet")
         }
         val songAdapter = SongAdapter(onItemClick = { song ->
-            songs.remove(song)
+            songs.subList(0, songs.indexOf(song)).clear()
             songs.add(0, song)
             playerViewModel.setSongs(songs)
 
