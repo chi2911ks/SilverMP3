@@ -8,15 +8,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cbtool.silvermp3.MainActivity
+import com.cbtool.silvermp3.R
 import com.cbtool.silvermp3.adapter.LibraryAdapter
 import com.cbtool.silvermp3.interfaces.OnClickPlaylist
 import com.cbtool.silvermp3.data.model.Playlist
 import com.cbtool.silvermp3.databinding.FragmentLibraryBinding
+import com.cbtool.silvermp3.interfaces.FragmentUIConfig
 import com.cbtool.silvermp3.ui.custom.CreatePlaylistDialog
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 
-class LibraryFragment : Fragment() {
+class LibraryFragment : Fragment(), FragmentUIConfig {
     private var _binding: FragmentLibraryBinding? = null
     private val binding get() = _binding!!
     private val libraryViewModel: LibraryViewModel by activityViewModel()
@@ -35,7 +37,6 @@ class LibraryFragment : Fragment() {
     }
 
     fun init() {
-        (activity as MainActivity).setSelectedItemId()
         binding.playListsRc.layoutManager = LinearLayoutManager(requireContext())
         val adapter = LibraryAdapter(object : OnClickPlaylist {
             override fun onClickPlaylist(playlist: Playlist) {
@@ -64,6 +65,8 @@ class LibraryFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    override fun getNavigationItemId(): Int = R.id.library
 
     companion object {
         @JvmStatic

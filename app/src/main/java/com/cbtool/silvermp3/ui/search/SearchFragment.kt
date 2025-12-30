@@ -8,11 +8,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.cbtool.silvermp3.MainActivity
+import com.cbtool.silvermp3.R
 import com.cbtool.silvermp3.adapter.GenreAdapter
 import com.cbtool.silvermp3.databinding.FragmentSearchBinding
+import com.cbtool.silvermp3.interfaces.FragmentUIConfig
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
-class SearchFragment : Fragment() {
+class SearchFragment : Fragment(), FragmentUIConfig {
 
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
@@ -31,14 +33,12 @@ class SearchFragment : Fragment() {
         init()
     }
 
+    override fun getNavigationItemId() = R.id.search
     fun init() {
         val adapter = GenreAdapter {
             (activity as MainActivity).navigateTo(GenreFragment.newInstance(it.name))
         }
-
-
         binding.genresRc.adapter = adapter
-        (activity as MainActivity).setSelectedItemId()
         if (searchViewModel.genres.value.isNullOrEmpty()) {
             searchViewModel.getGenres()
         }

@@ -4,6 +4,7 @@ import com.cbtool.silvermp3.data.model.Genre
 import com.cbtool.silvermp3.interfaces.GenresRepository
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
+import kotlinx.coroutines.tasks.await
 
 class GenresRepositoryImpl : GenresRepository {
     private val db = Firebase.firestore
@@ -13,23 +14,13 @@ class GenresRepositoryImpl : GenresRepository {
         collectionRef.document(genre.name.lowercase()).set(genre)
     }
 
-    override fun getGenres(onResult: (List<Genre>) -> Unit) {
-        collectionRef
-            .get()
-            .addOnCompleteListener { snapshots ->
-                if (snapshots.isSuccessful) {
-                    val genres = snapshots.result?.documents?.mapNotNull {
-                        it.toObject(Genre::class.java)
-                    } ?: emptyList()
-                    onResult(genres)
-                } else {
-                    onResult(emptyList())
-                }
-
-            }
-            .addOnFailureListener {
-                onResult(emptyList())
-            }
-
+    override suspend fun getGenres(): List<Genre> {
+        return try {
+            collectionRef
+                .get().await().toObjects(Genre::class.java)
+        } catch (e: Exception) {
+             emptyList()
+        }
     }
+
 }

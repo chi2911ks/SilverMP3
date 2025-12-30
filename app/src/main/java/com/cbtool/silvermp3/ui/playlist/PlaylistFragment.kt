@@ -12,10 +12,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.cbtool.silvermp3.MainActivity
+import com.cbtool.silvermp3.R
 import com.cbtool.silvermp3.adapter.SongAdapter
 import com.cbtool.silvermp3.data.model.Playlist
 import com.cbtool.silvermp3.databinding.FragmentPlayListBinding
-import com.cbtool.silvermp3.ui.custom.PlaylistOptionsSheet
+import com.cbtool.silvermp3.interfaces.FragmentUIConfig
 import com.cbtool.silvermp3.ui.custom.SongOptionsSheet
 import com.cbtool.silvermp3.ui.player.PlayerFragment
 import com.cbtool.silvermp3.ui.player.PlayerViewModel
@@ -95,6 +96,8 @@ class PlaylistFragment : Fragment() {
 
 
     }
+
+
 
     companion object {
         const val ARG_PLAYLIST = "PLAYLIST"

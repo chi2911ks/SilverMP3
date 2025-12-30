@@ -14,10 +14,8 @@ class PlaylistRepositoryImpl: PlaylistRepository {
     private val collection = db.collection(collectionName)
     override suspend fun getPlaylists(): List<Playlist> {
         return try {
-            val snapshot = collection.get().await()
-            snapshot.documents.mapNotNull {
-                it.toObject(Playlist::class.java)
-            }
+            collection.get().await().toObjects(Playlist::class.java)
+
         } catch (e: Exception) {
             Log.w(TAG, "Error getting documents.", e)
             emptyList()
@@ -26,8 +24,7 @@ class PlaylistRepositoryImpl: PlaylistRepository {
 
     override suspend fun getDetailPlaylist(playlistId: String): Playlist {
         return try {
-            val snapshot = collection.document(playlistId).get().await()
-            snapshot.toObject(Playlist::class.java) ?: Playlist()
+            collection.document(playlistId).get().await().toObject(Playlist::class.java) ?: Playlist()
         } catch (e: Exception) {
             Log.w(TAG, "Error getting documents.", e)
             Playlist()
@@ -36,10 +33,8 @@ class PlaylistRepositoryImpl: PlaylistRepository {
 
     override suspend fun getSongs(playlistId: String): List<Song> {
         return try {
-            val snapshot = collection.document(playlistId).collection("songs").get().await()
-            snapshot.documents.mapNotNull {
-                it.toObject(Song::class.java)
-            }
+            collection.document(playlistId).collection("songs").get().await().toObjects(Song::class.java)
+
         } catch (e: Exception) {
             Log.w(TAG, "Error getting documents.", e)
             emptyList()

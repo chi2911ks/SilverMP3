@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Playlist(
-    val id: String = "",
+    var id: String = "",
     val title: String = "",
     val description: String = "",
     val coverUrl: String = "",

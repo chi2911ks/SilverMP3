@@ -43,28 +43,13 @@ class UserFavouriteRepositoryImpl : UserFavouriteRepository {
         Log.d(TAG, "getSongs() started")
         return try {
             val snapshot = collectionRef.get()
-                .await()
-                .documents.mapNotNull { it.toObject(Song::class.java) }
+                .await().toObjects(Song::class.java)
+
             Log.w(TAG, "OK")
             snapshot
         } catch (e: Exception) {
             Log.w(TAG, "Error getting documents.", e)
             emptyList()
-        }
-    }
-
-    fun getSongsRealtime(onResult: (List<Song>) -> Unit) {
-        collectionRef.addSnapshotListener { snapshot, e ->
-            if (e != null) {
-                Log.w(TAG, "Listen failed.", e)
-                return@addSnapshotListener
-            }
-
-            val songs = snapshot?.documents?.mapNotNull {
-                it.toObject(Song::class.java)
-            } ?: emptyList()
-
-            onResult(songs)
         }
     }
 

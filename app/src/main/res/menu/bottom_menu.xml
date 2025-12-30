@@ -15,7 +15,7 @@
         android:title="Thư viện"
         android:icon="@drawable/ic_library" />
     <item
-        android:id="@+id/now_playing"
+        android:id="@+id/player"
         android:title="Đang phát"
         android:icon="@drawable/ic_play_circle" />
 </menu>

@@ -34,7 +34,6 @@ class FavouriteFragment : Fragment() {
     }
 
     fun init() {
-        (activity as MainActivity).setSelectedItemId()
         Log.d("FavouriteFragment", "init: getSongs")
         favouriteViewModel.getSongs()
         binding.backBtn.setOnClickListener {

@@ -17,16 +17,20 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.cbtool.silvermp3.MainActivity
+import com.cbtool.silvermp3.R
 import com.cbtool.silvermp3.SilverApplication
 import com.cbtool.silvermp3.data.model.Song
 import com.cbtool.silvermp3.databinding.FragmentPlayerBinding
+import com.cbtool.silvermp3.interfaces.FragmentUIConfig
 import com.cbtool.silvermp3.ui.library.LibraryViewModel
 import com.cbtool.silvermp3.utils.TimeHelper.formatDuration
 import com.cbtool.silvermp3.utils.slideUpAndShow
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 
-class PlayerFragment : Fragment() {
+class PlayerFragment : Fragment(), FragmentUIConfig {
+
+
     private var _binding: FragmentPlayerBinding? = null
     private val binding get() = _binding!!
 
@@ -40,7 +44,8 @@ class PlayerFragment : Fragment() {
 
     private var songs: HashMap<String, Song> = hashMapOf()
 
-
+    override fun shouldShowBottomBar() = false
+    override fun getNavigationItemId() = R.id.player
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -204,8 +209,6 @@ class PlayerFragment : Fragment() {
         viewModel.isFavourite.observe(viewLifecycleOwner) {
             binding.favouriteBtn.isSelected = it
         }
-
-        (activity as MainActivity).setSelectedItemId()
         viewModel.currentSong.observe(viewLifecycleOwner) { song ->
             binding.playBtn.isSelected = controller?.isPlaying == true
             loadDetailSong(song)

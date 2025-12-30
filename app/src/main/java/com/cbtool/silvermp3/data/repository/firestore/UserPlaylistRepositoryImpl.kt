@@ -92,8 +92,8 @@ class UserPlaylistRepositoryImpl : UserPlaylistRepository {
     override suspend fun getPlaylists(): List<Playlist> {
 
         return try {
-            playlistsRef.orderBy("createdAt").get().await()
-                .map { it.toObject(Playlist::class.java) }
+            playlistsRef.orderBy("createdAt").get().await().toObjects(Playlist::class.java)
+
         } catch (e: Exception) {
             Log.w(TAG, "Error getting documents.", e)
             emptyList()
@@ -119,8 +119,7 @@ class UserPlaylistRepositoryImpl : UserPlaylistRepository {
                 .collection("songs")
                 .orderBy("addedAt")
                 .get()
-                .await()
-                .documents.mapNotNull { it.toObject(Song::class.java) }
+                .await().toObjects(Song::class.java)
         } catch (e: Exception) {
             Log.w(TAG, "Error getting documents.", e)
             emptyList()
@@ -130,7 +129,9 @@ class UserPlaylistRepositoryImpl : UserPlaylistRepository {
     override suspend fun getPlaylistsContainingSong(songId: String): List<String> {
         val reverseIndexRef = userRef.collection("songsInPlaylists").document(songId)
         return try {
-            return reverseIndexRef.get().await().get("playlists") as? List<String> ?: emptyList()
+            val playlists = reverseIndexRef.get().await().get("playlists") as? List<*>
+            return playlists?.filterIsInstance<String>() ?: emptyList()
+
         } catch (e: Exception) {
             Log.e("Firestore", "❌ Lỗi khi kiểm tra playlists chứa songId=$songId: ${e.message}")
             emptyList()

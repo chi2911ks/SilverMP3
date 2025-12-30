@@ -8,11 +8,13 @@ import android.os.Looper
 import android.util.Log
 import android.view.View
 import androidx.activity.addCallback
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.Player
 import androidx.media3.session.MediaController
 import com.bumptech.glide.Glide
@@ -20,6 +22,7 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.cbtool.silvermp3.data.model.Song
 import com.cbtool.silvermp3.databinding.ActivityMainBinding
+import com.cbtool.silvermp3.interfaces.FragmentUIConfig
 import com.cbtool.silvermp3.ui.OnBoardingActivity
 import com.cbtool.silvermp3.ui.home.HomeFragment
 import com.cbtool.silvermp3.ui.library.LibraryFragment
@@ -31,6 +34,8 @@ import com.cbtool.silvermp3.utils.createNicePaletteBackground
 import com.cbtool.silvermp3.utils.navigateTo
 import com.cbtool.silvermp3.utils.startNewActivity
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -40,13 +45,17 @@ class MainActivity : AppCompatActivity() {
     private val mediaController get() = (application as SilverApplication).mediaController
     private val playerViewModel: PlayerViewModel by viewModel()
     private val libraryViewModel: LibraryViewModel by viewModel()
+    private var nullFragmentCount = 0 // Biến đếm số lần fragment là null
     fun getController(): MediaController? = mediaController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        enableEdgeToEdge()
+
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { view, insets ->
-            val statusBarInsets = insets.getInsets(WindowInsetsCompat.Type.statusBars())
-            view.setPadding(0, statusBarInsets.top, 0, 0) // chỉ chừa khoảng top
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            // Áp dụng padding top cho Status Bar và padding bottom cho Navigation Bar
+            view.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
             insets
         }
         if (auth.currentUser == null) {
@@ -60,7 +69,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.home -> navigateTo(HomeFragment())
                 R.id.search -> navigateTo(SearchFragment())
                 R.id.library -> navigateTo(LibraryFragment())
-                R.id.now_playing -> navigateTo(PlayerFragment())
+                R.id.player -> navigateTo(PlayerFragment())
 
             }
             true
@@ -75,48 +84,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun setSelectedItemId() {
-        val currentFragment = getCurrentFragment()
-        when (currentFragment) {
-            is HomeFragment -> {
-                binding.bottomNavigationView.selectedItemId = R.id.home
-                binding.bottomAppBar.isVisible = true
-                binding.miniUIPlayer.isVisible = mediaController?.isPlaying == true
-            }
+        val fragment = getCurrentFragment()
+        if (fragment == null) {
+            finish()
+        }
+        if (fragment is FragmentUIConfig) {
+            binding.bottomNavigationView.selectedItemId = fragment.getNavigationItemId()
+            binding.bottomAppBar.isVisible = fragment.shouldShowBottomBar()
 
-            is SearchFragment -> {
-                binding.bottomNavigationView.selectedItemId = R.id.search
-                binding.bottomAppBar.isVisible = true
-                binding.miniUIPlayer.isVisible = mediaController?.isPlaying == true
-            }
-
-            is LibraryFragment -> {
-                binding.bottomNavigationView.selectedItemId = R.id.library
-                binding.bottomAppBar.isVisible = true
-                binding.miniUIPlayer.isVisible = mediaController?.isPlaying == true
-            }
-
-            is PlayerFragment -> {
-                binding.bottomAppBar.isVisible = false
-                binding.miniUIPlayer.isVisible = false
-            }
-
-            else -> {
-                // Optional: Handle any other fragments or null case
-                binding.bottomAppBar.isVisible = true
-                binding.miniUIPlayer.isVisible = mediaController?.isPlaying == true
-            }
+            // MiniPlayer chỉ hiện khi không phải PlayerFragment và đang có nhạc
+            val isPlaying = (application as SilverApplication).mediaController?.isPlaying == true
+            binding.miniUIPlayer.isVisible = fragment.shouldShowBottomBar() && isPlaying
         }
     }
 
     fun init() {
-        addListener()
-        onBackPressedDispatcher.addCallback(this) {
-            if (supportFragmentManager.backStackEntryCount > 0) {
-                supportFragmentManager.popBackStack()
-                setSelectedItemId()
-            } else {
-                finish()
-            }
+        observeMediaController()
+        supportFragmentManager.addOnBackStackChangedListener {
+            setSelectedItemId()
         }
         binding.miniUIPlayer.setOnClickListener(onClick)
         binding.favouriteBtn.setOnClickListener(onClick)
@@ -180,35 +165,36 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun addListener() {
-        val controller = mediaController
-        if (controller == null) {
-            Log.w("MainActivityChi", "MediaController chưa sẵn sàng → chờ init lại sau 300ms")
-            Handler(Looper.getMainLooper()).postDelayed({
-                addListener()
-            }, 300)
-            return
-        }
+    private fun observeMediaController() {
+        val app = (application as SilverApplication)
 
-        mediaController?.apply {
-            addListener(object : Player.Listener {
-                override fun onIsPlayingChanged(isPlaying: Boolean) {
-                    showMiniUi(isPlaying)
+        lifecycleScope.launch {
+            // Quan sát Flow, khi nào có controller (khác null) thì thực hiện logic
+            app.controllerFlow.collectLatest { controller ->
+                if (controller != null) {
+                    Log.d("MainActivity", "Controller nhận được, đang đăng ký listener")
+                    setupMediaListener(controller)
                 }
-
-                override fun onPlaybackStateChanged(playbackState: Int) {
-                    when (playbackState) {
-                        Player.STATE_ENDED -> {}
-                        Player.STATE_IDLE -> {}
-                        Player.STATE_BUFFERING -> {}
-                        Player.STATE_READY -> binding.progressBar.max = (duration / 1000).toInt()
-                    }
-
-                }
-            })
-
+            }
         }
+    }
 
+    // Tách riêng logic đăng ký listener
+    private fun setupMediaListener(controller: MediaController) {
+        controller.addListener(object : Player.Listener {
+            override fun onIsPlayingChanged(isPlaying: Boolean) {
+                showMiniUi(isPlaying)
+            }
+
+            override fun onPlaybackStateChanged(playbackState: Int) {
+                if (playbackState == Player.STATE_READY) {
+                    binding.progressBar.max = (controller.duration / 1000).toInt()
+                }
+            }
+        })
+
+        // Cập nhật UI ngay lập tức nếu đang có nhạc chạy sẵn
+        showMiniUi(controller.isPlaying)
     }
 
     fun showMiniUi(isPlaying: Boolean) {

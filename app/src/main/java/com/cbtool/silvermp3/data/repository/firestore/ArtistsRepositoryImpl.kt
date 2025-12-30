@@ -5,6 +5,7 @@ import com.cbtool.silvermp3.data.model.Artist
 import com.cbtool.silvermp3.interfaces.ArtistsRepository
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
+import kotlinx.coroutines.tasks.await
 
 
 class ArtistsRepositoryImpl : ArtistsRepository {
@@ -18,24 +19,14 @@ class ArtistsRepositoryImpl : ArtistsRepository {
         document.set(artist)
     }
 
-    override fun getAll(onResult: (List<Artist>) -> Unit) {
-        collectionRef.get()
-            .addOnCompleteListener { snapshot ->
-                if (snapshot.isSuccessful) {
-                    val artists = snapshot.result.documents.mapNotNull { document ->
-                        val artist = document.toObject(Artist::class.java)
-                        artist?.apply { id = document.id }
-                    }
-                    onResult(artists)
-                } else {
-                    onResult(emptyList())
-                    Log.w(TAG, "Error getting documents.", snapshot.exception)
-                }
-            }
-            .addOnFailureListener {
-                onResult(emptyList())
-                Log.w(TAG, "Error getting documents.", it)
-            }
+     override suspend fun getArtist(): List<Artist> {
+         return try {
+             collectionRef.get().await().toObjects(Artist::class.java)
+         } catch (e: Exception) {
+             Log.w(TAG, "Error getting documents.", e)
+             emptyList()
+
+         }
     }
 
     companion object {

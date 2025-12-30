@@ -13,13 +13,14 @@ import com.cbtool.silvermp3.R
 import com.cbtool.silvermp3.adapter.PlaylistAdapter
 import com.cbtool.silvermp3.adapter.SongAdapter
 import com.cbtool.silvermp3.databinding.FragmentHomeBinding
+import com.cbtool.silvermp3.interfaces.FragmentUIConfig
 import com.cbtool.silvermp3.ui.custom.SongOptionsSheet
 import com.cbtool.silvermp3.ui.player.PlayerFragment
 import com.cbtool.silvermp3.ui.player.PlayerViewModel
 import com.cbtool.silvermp3.ui.playlist.PlaylistFragment
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), FragmentUIConfig {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -45,7 +46,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun init() {
-        (activity as MainActivity).setSelectedItemId()
         val songAdapter = SongAdapter(onItemClick = { song ->
             playerViewModel.setSongs(song)
             (activity as MainActivity).navigateTo(PlayerFragment.newInstance())
@@ -99,6 +99,8 @@ class HomeFragment : Fragment() {
         viewModel.loadSongs()
         viewModel.loadPlaylists()
     }
+
+    override fun getNavigationItemId(): Int = R.id.home
 
     companion object {
         @JvmStatic
