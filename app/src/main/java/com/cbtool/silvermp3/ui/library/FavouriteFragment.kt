@@ -45,7 +45,8 @@ class FavouriteFragment : Fragment() {
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         val adapter = SongAdapter(
             onItemClick = { song ->
-                playerViewModel.setSongs(song)
+                playerViewModel.setSongs(listOf(song))
+
                 (activity as MainActivity).navigateTo(PlayerFragment.newInstance())
             },
             moreClick = { song ->

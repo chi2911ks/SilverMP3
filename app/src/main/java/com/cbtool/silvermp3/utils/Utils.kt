@@ -3,7 +3,6 @@ package com.cbtool.silvermp3.utils
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
-import android.graphics.drawable.GradientDrawable
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
@@ -42,4 +41,12 @@ fun loadImagePalette(
             override fun onLoadCleared(placeholder: Drawable?) {
             }
         })
+}
+
+fun glideCustom(context: Context, view: ImageView, url: String, roundingRadius: Int = 10) {
+    Glide
+        .with(context)
+        .load(url)
+        .transform(CenterCrop(), RoundedCorners(roundingRadius))
+        .into(view)
 }

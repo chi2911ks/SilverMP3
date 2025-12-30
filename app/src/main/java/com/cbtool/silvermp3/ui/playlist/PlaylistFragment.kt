@@ -12,14 +12,14 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.cbtool.silvermp3.MainActivity
-import com.cbtool.silvermp3.R
 import com.cbtool.silvermp3.adapter.SongAdapter
 import com.cbtool.silvermp3.data.model.Playlist
+import com.cbtool.silvermp3.data.model.Song
 import com.cbtool.silvermp3.databinding.FragmentPlayListBinding
-import com.cbtool.silvermp3.interfaces.FragmentUIConfig
 import com.cbtool.silvermp3.ui.custom.SongOptionsSheet
 import com.cbtool.silvermp3.ui.player.PlayerFragment
 import com.cbtool.silvermp3.ui.player.PlayerViewModel
+import com.cbtool.silvermp3.utils.glideCustom
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class PlaylistFragment : Fragment() {
@@ -28,6 +28,7 @@ class PlaylistFragment : Fragment() {
     private lateinit var playlist: Playlist
     private val playlistViewModel: PlaylistViewModel by activityViewModel()
     private val playerViewModel: PlayerViewModel by activityViewModel()
+    private val songs: MutableList<Song> = mutableListOf()
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,11 +66,8 @@ class PlaylistFragment : Fragment() {
             it.apply {
                 binding.tvTitle.text = title
                 binding.tvDescription.text = description
-                Glide
-                    .with(requireContext())
-                    .load(coverUrl)
-                    .transform(CenterCrop(), RoundedCorners(10))
-                    .into(binding.imageView)
+                glideCustom(requireContext(), binding.imageView, coverUrl)
+
             }
         }
 
@@ -77,7 +75,10 @@ class PlaylistFragment : Fragment() {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
         val songAdapter = SongAdapter(onItemClick = { song ->
-            playerViewModel.setSongs(song)
+            songs.remove(song)
+            songs.add(0, song)
+            playerViewModel.setSongs(songs)
+
             (activity as MainActivity).navigateTo(PlayerFragment.newInstance())
 
         }, moreClick = { song ->
@@ -91,12 +92,13 @@ class PlaylistFragment : Fragment() {
             it.apply {
                 binding.tvCount.text = "$size bài hát"
                 songAdapter.submitList(it)
+                songs.clear()
+                songs.addAll(it)
             }
         }
 
 
     }
-
 
 
     companion object {

@@ -47,7 +47,7 @@ class HomeFragment : Fragment(), FragmentUIConfig {
 
     private fun init() {
         val songAdapter = SongAdapter(onItemClick = { song ->
-            playerViewModel.setSongs(song)
+            playerViewModel.setSongs(listOf(song))
             (activity as MainActivity).navigateTo(PlayerFragment.newInstance())
         }, moreClick = { song ->
             val bottomSheet = SongOptionsSheet.newInstance(song)

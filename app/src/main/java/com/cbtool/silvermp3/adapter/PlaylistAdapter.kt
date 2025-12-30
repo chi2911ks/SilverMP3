@@ -11,6 +11,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.cbtool.silvermp3.data.model.Playlist
 import com.cbtool.silvermp3.databinding.ItemPlaylistBinding
+import com.cbtool.silvermp3.utils.glideCustom
 
 class PlaylistAdapter(
     private val onItemClick: (Playlist) -> Unit
@@ -63,11 +64,8 @@ class PlaylistAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(playlist: Playlist) {
             binding.titlePlaylist.text = playlist.title
-            Glide
-                .with(context)
-                .load(playlist.coverUrl)
-                .transform(CenterCrop(), RoundedCorners(10))
-                .into(binding.coverImage)
+            glideCustom(context, binding.coverImage, playlist.coverUrl)
+
         }
     }
 }

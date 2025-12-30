@@ -1,20 +1,15 @@
 package com.cbtool.silvermp3.adapter
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 
-import androidx.compose.ui.geometry.CornerRadius
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.cbtool.silvermp3.data.model.Country
 import androidx.recyclerview.widget.ListAdapter
 import com.cbtool.silvermp3.data.model.Song
 import com.cbtool.silvermp3.databinding.ItemSongBinding // Ví dụ binding của item
+import com.cbtool.silvermp3.utils.glideCustom
 
 class SongAdapter(
     private val onItemClick: (Song) -> Unit, private val moreClick: (Song) -> Unit
@@ -65,8 +60,7 @@ class SongAdapter(
             song.apply {
                 binding.tvTitle.text = title
                 binding.tvArtist.text = artistName
-                Glide.with(context).load(coverUrl).transform(CenterCrop(), RoundedCorners(10))
-                    .into(binding.imageCover)
+                glideCustom(context, binding.imageCover, coverUrl, 10)
                 binding.moreBtn.setOnClickListener {
                     moreClick(song)
                 }

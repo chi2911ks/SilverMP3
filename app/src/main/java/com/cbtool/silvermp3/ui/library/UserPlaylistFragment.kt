@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.cbtool.silvermp3.MainActivity
 import com.cbtool.silvermp3.adapter.SongAdapter
 import com.cbtool.silvermp3.data.model.Playlist
+import com.cbtool.silvermp3.data.model.Song
 import com.cbtool.silvermp3.databinding.FragmentPlayListBinding
 import com.cbtool.silvermp3.ui.custom.PlaylistOptionsSheet
 import com.cbtool.silvermp3.ui.custom.SongOptionsSheet
@@ -25,6 +26,7 @@ class UserPlaylistFragment : Fragment() {
     private lateinit var playlist: Playlist
     private val playlistViewModel: UserPlaylistViewModel by activityViewModel()
     private val playerViewModel: PlayerViewModel by activityViewModel()
+    private val songs: MutableList<Song> = mutableListOf()
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,7 +59,10 @@ class UserPlaylistFragment : Fragment() {
                 .show(requireActivity().supportFragmentManager, "PlaylistOptionsSheet")
         }
         val songAdapter = SongAdapter(onItemClick = { song ->
-            playerViewModel.setSongs(song)
+            songs.remove(song)
+            songs.add(0, song)
+            playerViewModel.setSongs(songs)
+
             (activity as MainActivity).navigateTo(PlayerFragment.newInstance())
 
         }, moreClick = { song ->
@@ -71,12 +76,15 @@ class UserPlaylistFragment : Fragment() {
             it.apply {
                 binding.tvCount.text = "$size bài hát"
                 songAdapter.submitList(it)
+                songs.clear()
+                songs.addAll(it)
             }
         }
         playlistViewModel.playlist.observe(viewLifecycleOwner) {
             it.apply {
                 binding.tvTitle.text = title
                 binding.tvDescription.text = description
+
             }
         }
     }

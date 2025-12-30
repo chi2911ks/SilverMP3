@@ -10,6 +10,8 @@ import android.view.View
 import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
@@ -17,6 +19,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.Player
 import androidx.media3.session.MediaController
+import androidx.palette.graphics.Palette
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
@@ -45,7 +48,6 @@ class MainActivity : AppCompatActivity() {
     private val mediaController get() = (application as SilverApplication).mediaController
     private val playerViewModel: PlayerViewModel by viewModel()
     private val libraryViewModel: LibraryViewModel by viewModel()
-    private var nullFragmentCount = 0 // Biến đếm số lần fragment là null
     fun getController(): MediaController? = mediaController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -156,6 +158,7 @@ class MainActivity : AppCompatActivity() {
                         binding.imageMiniCover.setImageBitmap(resource)
                         val gradient = applicationContext.createNicePaletteBackground(resource)
                         binding.miniUIPlayer.background = gradient
+
                     }
 
                     override fun onLoadCleared(placeholder: Drawable?) {}

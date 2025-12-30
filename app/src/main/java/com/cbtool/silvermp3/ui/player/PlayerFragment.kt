@@ -13,18 +13,14 @@ import androidx.fragment.app.Fragment
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.Player
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.cbtool.silvermp3.MainActivity
 import com.cbtool.silvermp3.R
-import com.cbtool.silvermp3.SilverApplication
 import com.cbtool.silvermp3.data.model.Song
 import com.cbtool.silvermp3.databinding.FragmentPlayerBinding
 import com.cbtool.silvermp3.interfaces.FragmentUIConfig
 import com.cbtool.silvermp3.ui.library.LibraryViewModel
 import com.cbtool.silvermp3.utils.TimeHelper.formatDuration
-import com.cbtool.silvermp3.utils.slideUpAndShow
+import com.cbtool.silvermp3.utils.glideCustom
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 
@@ -37,12 +33,12 @@ class PlayerFragment : Fragment(), FragmentUIConfig {
     private val _controller by lazy { (activity as MainActivity).getController() }
     private val controller get() = _controller
 
-    private val viewModel: PlayerViewModel by activityViewModel()
+    private val playerViewModel: PlayerViewModel by activityViewModel()
     private val libraryViewModel: LibraryViewModel by activityViewModel()
 
     private val handler = Handler(Looper.getMainLooper())
 
-    private var songs: HashMap<String, Song> = hashMapOf()
+    private var playlists: MutableMap<String, Song> = mutableMapOf()
 
     override fun shouldShowBottomBar() = false
     override fun getNavigationItemId() = R.id.player
@@ -57,8 +53,6 @@ class PlayerFragment : Fragment(), FragmentUIConfig {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        this.slideUpAndShow()
-
         init()
         binding.backBtn.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
@@ -67,12 +61,14 @@ class PlayerFragment : Fragment(), FragmentUIConfig {
         binding.shuffleBtn.setOnClickListener(onClickListener)
         binding.repeatBtn.setOnClickListener(onClickListener)
         binding.playBtn.setOnClickListener(onClickListener)
+        binding.previousBtn.setOnClickListener(onClickListener)
+        binding.nextBtn.setOnClickListener(onClickListener)
     }
 
     private val onClickListener = View.OnClickListener {
         when (it) {
             binding.favouriteBtn -> {
-                viewModel.toggleFavourite(viewModel.currentSong.value!!)
+                playerViewModel.toggleFavourite(playerViewModel.currentSong.value!!)
                 libraryViewModel.refreshFavouriteCount()
             }
 
@@ -90,15 +86,18 @@ class PlayerFragment : Fragment(), FragmentUIConfig {
             addListener(object : Player.Listener {
                 override fun onIsPlayingChanged(isPlaying: Boolean) {
                     binding.playBtn.isSelected = isPlaying
-//                    (activity as MainActivity).showMiniUi(isPlaying)
                 }
 
                 override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
-                    val id = mediaItem?.mediaId
-                    val song = songs[id]
-                    song?.apply {
-                        viewModel.setCurrentSong(this)
-                        loadDetailSong(this)
+                    mediaItem?.apply {
+                        loadDetailSong(
+                            mediaId,
+                            mediaMetadata.title.toString(),
+                            mediaMetadata.artist.toString(),
+                            mediaMetadata.artworkUri.toString()
+                        )
+                        if (playlists.containsKey(mediaId)) playerViewModel.setCurrentSong(playlists[mediaId]?: Song())
+
                     }
 
 
@@ -106,12 +105,7 @@ class PlayerFragment : Fragment(), FragmentUIConfig {
 
                 override fun onPlaybackStateChanged(playbackState: Int) {
                     when (playbackState) {
-                        Player.STATE_ENDED -> {}
-
-                        Player.STATE_IDLE -> {}
-                        Player.STATE_BUFFERING -> {}
                         Player.STATE_READY -> ready()
-
                     }
 
                 }
@@ -128,7 +122,7 @@ class PlayerFragment : Fragment(), FragmentUIConfig {
                 binding.startTime.text = formatDuration(currentPositionInSeconds)
                 binding.seekBar.progress = currentPositionInSeconds.toInt()
                 handler.postDelayed(this, 500)
-                viewModel.setCurrentDuration(currentPositionInSeconds.toInt())
+                playerViewModel.setCurrentDuration(currentPositionInSeconds.toInt())
             }
         }
     }
@@ -173,25 +167,24 @@ class PlayerFragment : Fragment(), FragmentUIConfig {
         return MediaItem.Builder()
             .setMediaId(song.id)
             .setUri(song.audioUrl)
+
             .setMediaMetadata(
                 MediaMetadata.Builder()
                     .setTitle(song.title)
                     .setArtist(song.artistName)
                     .setArtworkUri(song.coverUrl.toUri())
+
                     .build()
             ).build()
     }
 
-    fun loadDetailSong(song: Song) {
+    fun loadDetailSong(id: String, title: String, artistName: String, coverUrl: String) {
         if (!isAdded || context == null) return
-        binding.titleTv.text = song.title
-        binding.artistTv.text = song.artistName
-        Glide
-            .with(this)
-            .load(song.coverUrl)
-            .transform(CenterCrop(), RoundedCorners(50))
-            .into(binding.coverImage)
-        viewModel.checkFavourite(song.id)
+        binding.titleTv.text = title
+        binding.artistTv.text = artistName
+        glideCustom(requireContext(), binding.coverImage, coverUrl, 50)
+
+        playerViewModel.checkFavourite(id)
     }
 
     fun ready() {
@@ -206,29 +199,31 @@ class PlayerFragment : Fragment(), FragmentUIConfig {
     fun init() {
         addListener()
         initSeekBar()
-        viewModel.isFavourite.observe(viewLifecycleOwner) {
+        playerViewModel.isFavourite.observe(viewLifecycleOwner) {
             binding.favouriteBtn.isSelected = it
         }
-        viewModel.currentSong.observe(viewLifecycleOwner) { song ->
-            binding.playBtn.isSelected = controller?.isPlaying == true
-            loadDetailSong(song)
-            ready()
-        }
-        viewModel.songs.observe(viewLifecycleOwner) {
-            val items = mutableListOf<MediaItem>()
-            it.forEach { song ->
-                songs.put(song.id, song)
-                items.add(setMediaItem(song))
+        playerViewModel.currentSong.observe(viewLifecycleOwner){
+            it.apply {
+                binding.playBtn.isSelected = controller?.isPlaying == true
+                loadDetailSong(id, title, artistName, coverUrl)
+                ready()
             }
-            controller?.let { p ->
-                if (controller?.currentMediaItem?.mediaId == items[0].mediaId) return@observe
-                p.setMediaItems(items)
-                p.prepare()
-                p.play()
+        }
+        playerViewModel.songs.observe(viewLifecycleOwner) {
+            playerViewModel.setCurrentSong(it[0])
+            it.forEach { song ->
+                playlists[song.id] = song
+            }
+            controller?.apply {
+                if (playerViewModel.currentSong.value != null && controller?.currentMediaItem?.mediaId == playerViewModel.currentSong.value!!.id) return@observe
+                setMediaItems(it.map { song -> setMediaItem(song) })
+                prepare()
+                play()
             } ?: run {
                 Log.d("Media", "MediaController chưa sẵn sàng")
             }
         }
+
     }
 
 
@@ -256,12 +251,11 @@ class PlayerFragment : Fragment(), FragmentUIConfig {
 
     override fun onDestroy() {
         super.onDestroy()
+//        _binding = null
+        stopSeekBarUpdate()
     }
 
     companion object {
-        @JvmStatic
-        val instance: PlayerFragment by lazy { PlayerFragment() }
-
         @JvmStatic
         fun newInstance() = PlayerFragment()
     }
