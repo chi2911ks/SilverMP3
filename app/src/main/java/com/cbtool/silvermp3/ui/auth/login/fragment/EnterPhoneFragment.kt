@@ -8,16 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
-import com.cbtool.silvermp3.R
-import com.cbtool.silvermp3.data.state.PhoneAuthState
-import com.cbtool.silvermp3.databinding.FragmentEmailRegisterBinding
+import com.cbtool.silvermp3.ui.auth.PhoneAuthState
 import com.cbtool.silvermp3.databinding.FragmentEnterPhoneBinding
 import com.cbtool.silvermp3.ui.auth.login.LoginActivity
 import com.cbtool.silvermp3.ui.auth.login.viewmodel.PhoneAuthViewModel
 import com.cbtool.silvermp3.ui.auth.register.RegisterActivity
 import com.cbtool.silvermp3.ui.custom.LoadingDialog
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.getValue
 import kotlin.toString
 

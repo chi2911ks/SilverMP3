@@ -4,7 +4,7 @@ import android.app.Activity
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.cbtool.silvermp3.data.state.PhoneAuthState
+import com.cbtool.silvermp3.ui.auth.PhoneAuthState
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException

@@ -12,7 +12,7 @@ import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.ClearCredentialException
 import androidx.credentials.exceptions.NoCredentialException
 import com.cbtool.silvermp3.R
-import com.cbtool.silvermp3.data.state.LoginState
+import com.cbtool.silvermp3.ui.auth.LoginState
 
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential

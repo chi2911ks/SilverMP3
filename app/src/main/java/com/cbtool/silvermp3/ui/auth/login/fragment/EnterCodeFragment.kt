@@ -12,7 +12,7 @@ import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.cbtool.silvermp3.MainActivity
-import com.cbtool.silvermp3.data.state.PhoneAuthState
+import com.cbtool.silvermp3.ui.auth.PhoneAuthState
 import com.cbtool.silvermp3.databinding.FragmentEnterCodeBinding
 import com.cbtool.silvermp3.ui.auth.login.viewmodel.PhoneAuthViewModel
 import com.cbtool.silvermp3.ui.custom.LoadingDialog

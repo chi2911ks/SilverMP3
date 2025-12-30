@@ -1,4 +1,4 @@
-package com.cbtool.silvermp3.data.state
+package com.cbtool.silvermp3.ui.auth
 
 sealed class LoginState {
     object Idle : LoginState()

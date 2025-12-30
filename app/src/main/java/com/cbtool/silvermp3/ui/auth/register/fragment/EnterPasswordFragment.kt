@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.cbtool.silvermp3.MainActivity
-import com.cbtool.silvermp3.data.state.LoginState
+import com.cbtool.silvermp3.ui.auth.LoginState
 import com.cbtool.silvermp3.databinding.FragmentEnterPasswordBinding
 import com.cbtool.silvermp3.ui.auth.register.viewmodel.EmailRegisterViewModel
 import com.cbtool.silvermp3.utils.startNewActivity

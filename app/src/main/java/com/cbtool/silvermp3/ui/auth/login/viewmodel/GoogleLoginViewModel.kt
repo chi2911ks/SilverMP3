@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cbtool.silvermp3.data.state.LoginState
+import com.cbtool.silvermp3.ui.auth.LoginState
 import com.cbtool.silvermp3.data.repository.auth.GoogleAuthRepository
 import com.cbtool.silvermp3.data.repository.firestore.UsersRepositoryImpl
 import kotlinx.coroutines.launch

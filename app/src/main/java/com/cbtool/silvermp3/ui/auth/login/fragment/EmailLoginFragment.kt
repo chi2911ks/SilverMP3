@@ -9,10 +9,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import com.cbtool.silvermp3.MainActivity
-import com.cbtool.silvermp3.R
-import com.cbtool.silvermp3.data.state.LoginState
+import com.cbtool.silvermp3.ui.auth.LoginState
 import com.cbtool.silvermp3.databinding.FragmentEmailLoginBinding
-import com.cbtool.silvermp3.databinding.FragmentEnterPhoneBinding
 import com.cbtool.silvermp3.ui.auth.login.LoginActivity
 import com.cbtool.silvermp3.ui.auth.login.viewmodel.EmailLoginViewModel
 import com.cbtool.silvermp3.ui.custom.LoadingDialog

@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.cbtool.silvermp3.MainActivity
-import com.cbtool.silvermp3.data.state.LoginState
+import com.cbtool.silvermp3.ui.auth.LoginState
 import com.cbtool.silvermp3.databinding.FragmentRegisterMethodBinding
 import com.cbtool.silvermp3.ui.OnBoardingActivity
 import com.cbtool.silvermp3.ui.auth.login.LoginActivity

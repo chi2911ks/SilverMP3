@@ -1,7 +1,7 @@
 package com.cbtool.silvermp3.data.repository.auth
 
 import android.util.Log
-import com.cbtool.silvermp3.data.state.LoginState
+import com.cbtool.silvermp3.ui.auth.LoginState
 
 class EmailAuthRepository : BaseAuthRepository() {
 

@@ -1,21 +1,18 @@
 package com.cbtool.silvermp3.ui.auth.login.fragment
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.cbtool.silvermp3.MainActivity
-import com.cbtool.silvermp3.data.state.LoginState
+import com.cbtool.silvermp3.ui.auth.LoginState
 import com.cbtool.silvermp3.databinding.FragmentLoginMethodBinding
 import com.cbtool.silvermp3.ui.OnBoardingActivity
 import com.cbtool.silvermp3.ui.auth.login.LoginActivity
 import com.cbtool.silvermp3.ui.auth.login.viewmodel.GoogleLoginViewModel
 import com.cbtool.silvermp3.ui.auth.register.RegisterActivity
-import com.cbtool.silvermp3.ui.auth.register.fragment.RegisterMethodFragment
 import com.cbtool.silvermp3.utils.startNewActivity
 
 import org.koin.androidx.viewmodel.ext.android.getViewModel
