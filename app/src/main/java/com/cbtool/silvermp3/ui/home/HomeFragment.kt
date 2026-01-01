@@ -6,10 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.cbtool.silvermp3.MainActivity
 import com.cbtool.silvermp3.R
+import com.cbtool.silvermp3.adapter.ArtistAdapter
 import com.cbtool.silvermp3.adapter.PlaylistAdapter
 import com.cbtool.silvermp3.adapter.SongAdapter
 import com.cbtool.silvermp3.databinding.FragmentHomeBinding
@@ -56,18 +58,32 @@ class HomeFragment : Fragment(), FragmentUIConfig {
         val playlistAdapter = PlaylistAdapter {
             (activity as MainActivity).navigateTo(PlaylistFragment.newInstance(it))
         }
+        val artistAdapter = ArtistAdapter {
+
+        }
+        binding.rvSongs.isNestedScrollingEnabled = false
+        binding.rvPlaylists.isNestedScrollingEnabled = false
+        binding.rvArtists.isNestedScrollingEnabled = false
         binding.rvSongs.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.rvPlaylists.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.rvArtists.layoutManager = GridLayoutManager(requireContext(), 3)
         binding.rvSongs.adapter = songAdapter
         binding.rvPlaylists.adapter = playlistAdapter
+        binding.rvArtists.adapter = artistAdapter
         viewModel.songs.observe(viewLifecycleOwner) { songAdapter.submitList(it) }
         viewModel.playlists.observe(viewLifecycleOwner) {
             playlistAdapter.submitList(it)
         }
+        viewModel.artists.observe(viewLifecycleOwner) {
+            artistAdapter.submitList(it)
+        }
         if (viewModel.songs.value.isNullOrEmpty()) {
             viewModel.loadSongs()
+        }
+        if (viewModel.artists.value.isNullOrEmpty()){
+            viewModel.loadArtists()
         }
         if (viewModel.playlists.value.isNullOrEmpty()) {
             viewModel.loadPlaylists()

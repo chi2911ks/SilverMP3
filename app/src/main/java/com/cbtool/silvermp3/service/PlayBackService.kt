@@ -46,11 +46,7 @@ class PlayBackService: MediaSessionService() {
 //        player = ExoPlayer.Builder(this).build()
         mediaSession = MediaSession.Builder(this, player).build()
 
-        player.addListener(object : Player.Listener {
-            override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
 
-            }
-        })
 
     }
 

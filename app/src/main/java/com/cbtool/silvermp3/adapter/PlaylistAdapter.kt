@@ -17,7 +17,7 @@ class PlaylistAdapter(
     private val onItemClick: (Playlist) -> Unit
 ) :
     ListAdapter<Playlist, PlaylistAdapter.PlaylistViewHolder>(PlaylistDiffCallback()) {
-    private lateinit var context: Context
+
 
     class PlaylistDiffCallback() : DiffUtil.ItemCallback<Playlist>() {
         override fun areItemsTheSame(
@@ -39,7 +39,7 @@ class PlaylistAdapter(
         parent: ViewGroup,
         viewType: Int
     ): PlaylistViewHolder {
-        context = parent.context
+
         return PlaylistViewHolder(
             ItemPlaylistBinding.inflate(
                 LayoutInflater.from(parent.context),
@@ -64,7 +64,7 @@ class PlaylistAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(playlist: Playlist) {
             binding.titlePlaylist.text = playlist.title
-            glideCustom(context, binding.coverImage, playlist.coverUrl)
+            glideCustom(itemView.context, binding.coverImage, playlist.coverUrl)
 
         }
     }

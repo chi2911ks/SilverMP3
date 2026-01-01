@@ -39,9 +39,16 @@ class PlayerFragment : Fragment(), FragmentUIConfig {
     private val handler = Handler(Looper.getMainLooper())
 
     private var playlists: MutableMap<String, Song> = mutableMapOf()
+    private var currentIndex: Int = 0
 
     override fun shouldShowBottomBar() = false
     override fun getNavigationItemId() = R.id.player
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.apply {
+            currentIndex = getInt(ARG_INDEX)
+        }
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -95,38 +102,32 @@ class PlayerFragment : Fragment(), FragmentUIConfig {
 
     }
 
-    fun addListener() {
-        controller?.apply {
-            addListener(object : Player.Listener {
-                override fun onIsPlayingChanged(isPlaying: Boolean) {
-                    binding.playBtn.isSelected = isPlaying
-                }
 
-                override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
-                    mediaItem?.apply {
-                        loadDetailSong(
-                            mediaId,
-                            mediaMetadata.title.toString(),
-                            mediaMetadata.artist.toString(),
-                            mediaMetadata.artworkUri.toString()
-                        )
-                        if (playlists.containsKey(mediaId)) playerViewModel.setCurrentSong(playlists[mediaId]?: Song())
+    private val playerListener = object : Player.Listener {
 
-                    }
-
-
-                }
-
-                override fun onPlaybackStateChanged(playbackState: Int) {
-                    when (playbackState) {
-                        Player.STATE_READY -> ready()
-                    }
-
-                }
-            })
-
+        override fun onIsPlayingChanged(isPlaying: Boolean) {
+            binding.playBtn.isSelected = isPlaying
         }
 
+        override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
+            mediaItem?.apply {
+                loadDetailSong(
+                    mediaId,
+                    mediaMetadata.title.toString(),
+                    mediaMetadata.artist.toString(),
+                    mediaMetadata.artworkUri.toString()
+                )
+                if (playlists.containsKey(mediaId)) {
+                    playerViewModel.setCurrentSong(playlists[mediaId] ?: Song())
+                }
+            }
+        }
+
+        override fun onPlaybackStateChanged(playbackState: Int) {
+            if (playbackState == Player.STATE_READY) {
+                ready()
+            }
+        }
     }
 
     private val updateSeekBarRunnable = object : Runnable {
@@ -181,7 +182,6 @@ class PlayerFragment : Fragment(), FragmentUIConfig {
         return MediaItem.Builder()
             .setMediaId(song.id)
             .setUri(song.audioUrl)
-
             .setMediaMetadata(
                 MediaMetadata.Builder()
                     .setTitle(song.title)
@@ -196,7 +196,6 @@ class PlayerFragment : Fragment(), FragmentUIConfig {
         binding.titleTv.text = title
         binding.artistTv.text = artistName
         glideCustom(requireContext(), binding.coverImage, coverUrl, 50)
-
         playerViewModel.checkFavourite(id)
     }
 
@@ -211,7 +210,7 @@ class PlayerFragment : Fragment(), FragmentUIConfig {
     }
 
     fun init() {
-        addListener()
+        controller?.addListener(playerListener)
         initSeekBar()
         playerViewModel.isFavourite.observe(viewLifecycleOwner) {
             binding.favouriteBtn.isSelected = it
@@ -233,6 +232,7 @@ class PlayerFragment : Fragment(), FragmentUIConfig {
                 if (playerViewModel.currentSong.value != null && controller?.currentMediaItem?.mediaId == playerViewModel.currentSong.value!!.id) return@observe
 
                 setMediaItems(it.map { song -> setMediaItem(song) })
+                seekTo(currentIndex, 0)
                 prepare()
                 play()
             } ?: run {
@@ -241,8 +241,6 @@ class PlayerFragment : Fragment(), FragmentUIConfig {
         }
 
     }
-
-
     fun shuffleClick() {
         binding.shuffleBtn.isSelected = !binding.shuffleBtn.isSelected
         controller?.shuffleModeEnabled = binding.shuffleBtn.isSelected
@@ -267,12 +265,20 @@ class PlayerFragment : Fragment(), FragmentUIConfig {
 
     override fun onDestroy() {
         super.onDestroy()
-//        _binding = null
+        _binding = null
+        controller?.removeListener(playerListener)
         stopSeekBarUpdate()
     }
 
     companion object {
+        const val TAG = "PlayerFragment"
+        private const val ARG_INDEX = "INDEX"
         @JvmStatic
-        fun newInstance() = PlayerFragment()
+        fun newInstance(index: Int=0) = PlayerFragment().apply {
+            arguments = Bundle().apply {
+                putInt(ARG_INDEX, index)
+            }
+        }
+
     }
 }

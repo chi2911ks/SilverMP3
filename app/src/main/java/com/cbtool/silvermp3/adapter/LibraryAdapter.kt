@@ -16,7 +16,7 @@ import com.cbtool.silvermp3.interfaces.OnClickPlaylist
 class LibraryAdapter(
     private val onItemClick: OnClickPlaylist
 ) : ListAdapter<LibraryItem, LibraryAdapter.ViewHolder>(LibraryDiffCallback()) {
-    private lateinit var context: Context
+
 
     class LibraryDiffCallback : DiffUtil.ItemCallback<LibraryItem>() {
         override fun areItemsTheSame(oldItem: LibraryItem, newItem: LibraryItem): Boolean {
@@ -49,7 +49,7 @@ class LibraryAdapter(
         parent: ViewGroup,
         viewType: Int
     ): ViewHolder {
-        context = parent.context
+
         return ViewHolder(
             ItemPlaylistLibraryBinding.inflate(
                 LayoutInflater.from(parent.context),
@@ -79,7 +79,7 @@ class LibraryAdapter(
         @SuppressLint("UseCompatLoadingForDrawables")
         fun bindPlaylistItem(playlist: Playlist) {
             if (playlist.coverUrl.isEmpty())
-                binding.imageCover.background = context.getDrawable(R.drawable.bg_playlist)
+                binding.imageCover.background = itemView.context.getDrawable(R.drawable.bg_playlist)
 
             binding.tvTitle.text = playlist.title
             itemView.setOnClickListener {
@@ -90,7 +90,7 @@ class LibraryAdapter(
 
         @SuppressLint("UseCompatLoadingForDrawables")
         fun bindFavouriteItem(count: Int) {
-            binding.imageCover.background = context.getDrawable(R.drawable.bg_favourite)
+            binding.imageCover.background = itemView.context.getDrawable(R.drawable.bg_favourite)
             binding.tv.text = "Danh sách phát - $count bài hát"
             itemView.setOnClickListener {
                 onItemClick.onClickFavourite()

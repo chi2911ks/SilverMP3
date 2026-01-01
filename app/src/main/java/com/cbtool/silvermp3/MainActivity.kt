@@ -86,6 +86,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun setSelectedItemId() {
+        val isPlaying = (application as SilverApplication).mediaController?.isPlaying == true
         val fragment = getCurrentFragment()
         if (fragment == null) {
             finish()
@@ -93,10 +94,11 @@ class MainActivity : AppCompatActivity() {
         if (fragment is FragmentUIConfig) {
             binding.bottomNavigationView.selectedItemId = fragment.getNavigationItemId()
             binding.bottomAppBar.isVisible = fragment.shouldShowBottomBar()
-
             // MiniPlayer chỉ hiện khi không phải PlayerFragment và đang có nhạc
-            val isPlaying = (application as SilverApplication).mediaController?.isPlaying == true
             binding.miniUIPlayer.isVisible = fragment.shouldShowBottomBar() && isPlaying
+        }else{
+            binding.bottomAppBar.isVisible = true
+            binding.miniUIPlayer.isVisible = isPlaying
         }
     }
 

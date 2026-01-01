@@ -8,8 +8,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cbtool.silvermp3.MainActivity
+import com.cbtool.silvermp3.R
 import com.cbtool.silvermp3.adapter.SongAdapter
+import com.cbtool.silvermp3.data.model.Song
 import com.cbtool.silvermp3.databinding.FragmentFavouriteBinding
+import com.cbtool.silvermp3.interfaces.FragmentUIConfig
 import com.cbtool.silvermp3.ui.custom.SongOptionsSheet
 import com.cbtool.silvermp3.ui.player.PlayerFragment
 import com.cbtool.silvermp3.ui.player.PlayerViewModel
@@ -20,6 +23,7 @@ class FavouriteFragment : Fragment() {
     private val binding get() = _binding!!
     private val favouriteViewModel: FavouriteViewModel by activityViewModel()
     private val playerViewModel: PlayerViewModel by activityViewModel()
+    private val songs: MutableList<Song> = mutableListOf()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,9 +49,8 @@ class FavouriteFragment : Fragment() {
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         val adapter = SongAdapter(
             onItemClick = { song ->
-                playerViewModel.setSongs(listOf(song))
-
-                (activity as MainActivity).navigateTo(PlayerFragment.newInstance())
+                playerViewModel.setSongs(songs)
+                (activity as MainActivity).navigateTo(PlayerFragment.newInstance(songs.indexOf(song)))
             },
             moreClick = { song ->
                 val bottomSheet = SongOptionsSheet.newInstance(song, "favourites")
@@ -57,6 +60,8 @@ class FavouriteFragment : Fragment() {
         favouriteViewModel.song.observe(viewLifecycleOwner) {
             binding.tvCount.text = "${it.size} bài hát"
             adapter.submitList(it)
+            songs.clear()
+            songs.addAll(it)
         }
 
 

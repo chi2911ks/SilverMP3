@@ -14,8 +14,6 @@ import com.cbtool.silvermp3.utils.glideCustom
 class SongAdapter(
     private val onItemClick: (Song) -> Unit, private val moreClick: (Song) -> Unit
 ) : ListAdapter<Song, SongAdapter.ViewHolder>(SongDiffCallback()) {
-    private lateinit var context: Context
-
     // DiffUtil giúp so sánh danh sách cũ và mới để chỉ update những item thay đổi
     class SongDiffCallback : DiffUtil.ItemCallback<Song>() {
         override fun areItemsTheSame(oldItem: Song, newItem: Song): Boolean {
@@ -33,7 +31,7 @@ class SongAdapter(
     override fun onCreateViewHolder(
         parent: ViewGroup, viewType: Int
     ): ViewHolder {
-        context = parent.context
+
         return ViewHolder(
             ItemSongBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
@@ -60,7 +58,7 @@ class SongAdapter(
             song.apply {
                 binding.tvTitle.text = title
                 binding.tvArtist.text = artistName
-                glideCustom(context, binding.imageCover, coverUrl, 10)
+                glideCustom(itemView.context, binding.imageCover, coverUrl, 10)
                 binding.moreBtn.setOnClickListener {
                     moreClick(song)
                 }

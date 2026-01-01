@@ -42,10 +42,12 @@
 
         <ImageView
             android:id="@+id/coverImage"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
-
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_marginTop="100dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginHorizontal="20dp"
+            app:layout_constraintBottom_toTopOf="@+id/titleTv"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -54,42 +56,42 @@
             android:id="@+id/titleTv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="35dp"
             android:ellipsize="end"
+            android:gravity="center"
             android:maxLines="1"
             android:text="Neon Dream"
             android:textSize="25sp"
             android:textStyle="bold"
-            android:gravity="center"
+            app:layout_constraintBottom_toTopOf="@+id/artistTv"
             app:layout_constraintEnd_toEndOf="@+id/coverImage"
-            app:layout_constraintStart_toStartOf="@+id/coverImage"
-            app:layout_constraintTop_toBottomOf="@+id/coverImage" />
+            app:layout_constraintStart_toStartOf="@+id/coverImage" />
 
         <TextView
             android:id="@+id/artistTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
             android:text="Electric Pulse"
             android:textColor="@android:color/darker_gray"
+            app:layout_constraintBottom_toTopOf="@+id/seekBar"
             app:layout_constraintEnd_toEndOf="@+id/titleTv"
-            app:layout_constraintStart_toStartOf="@+id/titleTv"
-            app:layout_constraintTop_toBottomOf="@+id/titleTv" />
+            app:layout_constraintStart_toStartOf="@+id/titleTv" />
 
         <SeekBar
             android:id="@+id/seekBar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:progressTint="@color/white"
-            android:progressBackgroundTint="@color/dark_gray"
+            android:layout_marginBottom="20dp"
             android:paddingVertical="5dp"
             android:paddingStart="0dp"
             android:paddingEnd="0dp"
+            android:progressBackgroundTint="@color/dark_gray"
+            android:progressTint="@color/white"
             android:thumb="@null"
-            android:layout_marginTop="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/playBtn"
             app:layout_constraintEnd_toEndOf="@+id/coverImage"
-            app:layout_constraintStart_toStartOf="@+id/coverImage"
-            app:layout_constraintTop_toBottomOf="@+id/artistTv" />
+            app:layout_constraintStart_toStartOf="@+id/coverImage" />
         <TextView
             android:id="@+id/startTime"
             android:layout_width="wrap_content"
@@ -116,6 +118,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/previousBtn"
             app:layout_constraintEnd_toStartOf="@+id/previousBtn"
             app:layout_constraintTop_toTopOf="@+id/previousBtn" />
+
         <ImageButton
             android:id="@+id/previousBtn"
             android:layout_width="35dp"
@@ -126,17 +129,17 @@
             app:layout_constraintBottom_toBottomOf="@+id/playBtn"
             app:layout_constraintEnd_toStartOf="@+id/playBtn"
             app:layout_constraintTop_toTopOf="@+id/playBtn" />
+
         <ImageButton
             android:id="@+id/playBtn"
             android:layout_width="70dp"
             android:layout_height="70dp"
+            android:layout_marginBottom="50dp"
             android:background="@drawable/button_blur"
             android:src="@drawable/play_icon_selector"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/shareBtn"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/seekBar"
-            app:layout_constraintVertical_bias="0.2" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <ImageButton
             android:id="@+id/nextBtn"
@@ -166,32 +169,34 @@
             android:layout_height="40dp"
             android:background="@drawable/button_blur"
             android:src="@drawable/favorite_icon_selector"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/previousBtn"
-            app:layout_constraintStart_toEndOf="@+id/shuffleBtn"
-            app:layout_constraintTop_toBottomOf="@+id/playBtn" />
+            app:layout_constraintBottom_toBottomOf="@+id/shareBtn"
+            app:layout_constraintEnd_toEndOf="@+id/shuffleBtn"
+            app:layout_constraintStart_toStartOf="@+id/shuffleBtn" />
 
         <ImageButton
             android:id="@+id/shareBtn"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:layout_marginBottom="20dp"
             android:background="@drawable/button_blur"
             android:src="@drawable/media3_icon_share"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/playBtn"
-            app:layout_constraintStart_toStartOf="@+id/playBtn"
-            app:layout_constraintTop_toBottomOf="@+id/playBtn" />
+            app:layout_constraintStart_toStartOf="@+id/playBtn" />
 
         <ImageButton
             android:id="@+id/downloadBtn"
             android:layout_width="40dp"
             android:layout_height="40dp"
+
             android:background="@drawable/button_blur"
             android:src="@drawable/ic_download"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/repeatBtn"
-            app:layout_constraintStart_toEndOf="@+id/nextBtn"
-            app:layout_constraintTop_toBottomOf="@+id/playBtn" />
+            app:layout_constraintBottom_toBottomOf="@+id/shareBtn"
+            app:layout_constraintEnd_toEndOf="@+id/repeatBtn"
+            app:layout_constraintStart_toStartOf="@+id/repeatBtn" />
+
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

@@ -21,7 +21,7 @@ import com.cbtool.silvermp3.utils.loadImagePalette
 
 class GenreAdapter(private val onClickListener: (Genre) -> Unit) :
     ListAdapter<Genre, GenreAdapter.GenreViewHolder>(GenreDiffCallback()) {
-    private lateinit var context: Context
+
 
     class GenreDiffCallback : DiffUtil.ItemCallback<Genre>() {
         override fun areItemsTheSame(
@@ -44,7 +44,7 @@ class GenreAdapter(private val onClickListener: (Genre) -> Unit) :
         parent: ViewGroup,
         viewType: Int
     ): GenreViewHolder {
-        context = parent.context
+
         return GenreViewHolder(
             ItemGenreBinding.inflate(
                 LayoutInflater.from(parent.context),
@@ -69,7 +69,7 @@ class GenreAdapter(private val onClickListener: (Genre) -> Unit) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(genre: Genre) {
             binding.tvTitle.text = genre.name
-            loadImagePalette(context, binding.imgCover, genre.imageURL) {
+            loadImagePalette(itemView.context, binding.imgCover, genre.imageURL) {
                 binding.cardView.setCardBackgroundColor(it)
             }
 

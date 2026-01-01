@@ -17,12 +17,12 @@ class AddPlaylistAdapter(
     private val songInPlaylists: List<String>,
     private val onItemClick: OnClickAddPlaylist
 ) : RecyclerView.Adapter<AddPlaylistAdapter.ViewHolder>() {
-    private lateinit var context: Context
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): ViewHolder {
-        context = parent.context
+
         return ViewHolder(
             ItemAddPlaylistBinding.inflate(
                 LayoutInflater.from(parent.context),
@@ -54,7 +54,7 @@ class AddPlaylistAdapter(
         @SuppressLint("UseCompatLoadingForDrawables")
         fun bindPlaylistItem(playlist: Playlist) {
             if (playlist.coverUrl.isEmpty())
-                binding.imageCover.background = context.getDrawable(R.drawable.bg_playlist)
+                binding.imageCover.background = itemView.context.getDrawable(R.drawable.bg_playlist)
             binding.addBtn.isSelected = songInPlaylists.contains(playlist.id)
             binding.tvName.text = playlist.title
             fun click() {
@@ -68,7 +68,7 @@ class AddPlaylistAdapter(
 
         @SuppressLint("UseCompatLoadingForDrawables")
         fun bindFavouriteItem(count: Int) {
-            binding.imageCover.background = context.getDrawable(R.drawable.bg_favourite)
+            binding.imageCover.background = itemView.context.getDrawable(R.drawable.bg_favourite)
             binding.tvName.text = "Bài hát đã thích"
             binding.addBtn.isSelected = songInPlaylists.contains("favourites")
             fun click() {

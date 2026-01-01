@@ -4,12 +4,14 @@ package com.cbtool.silvermp3.di
 import com.cbtool.silvermp3.data.repository.auth.EmailAuthRepository
 import com.cbtool.silvermp3.data.repository.auth.GoogleAuthRepository
 import com.cbtool.silvermp3.data.repository.auth.PhoneAuthRepository
+import com.cbtool.silvermp3.data.repository.firestore.ArtistsRepositoryImpl
 import com.cbtool.silvermp3.data.repository.firestore.GenresRepositoryImpl
 import com.cbtool.silvermp3.data.repository.firestore.PlaylistRepositoryImpl
 import com.cbtool.silvermp3.data.repository.firestore.SongsRepositoryImpl
 import com.cbtool.silvermp3.data.repository.firestore.UserFavouriteRepositoryImpl
 import com.cbtool.silvermp3.data.repository.firestore.UserPlaylistRepositoryImpl
 import com.cbtool.silvermp3.data.repository.firestore.UsersRepositoryImpl
+import com.cbtool.silvermp3.interfaces.ArtistsRepository
 import com.cbtool.silvermp3.interfaces.GenresRepository
 import com.cbtool.silvermp3.interfaces.PlaylistRepository
 import com.cbtool.silvermp3.interfaces.SongRepository
@@ -46,14 +48,14 @@ val appModule = module {
     singleOf(::UserPlaylistRepositoryImpl) {bind<UserPlaylistRepository>()}
     singleOf(::UserFavouriteRepositoryImpl) {bind<UserFavouriteRepository>()}
     singleOf(::PlaylistRepositoryImpl) {bind<PlaylistRepository>()}
-
+    singleOf(::ArtistsRepositoryImpl) {bind<ArtistsRepository>()}
 
 
     viewModel { EmailLoginViewModel(get())  }
     viewModel { EmailRegisterViewModel(get(), get()) }
     viewModel { GoogleLoginViewModel(get(), get()) }
     viewModel { PhoneAuthViewModel(get(), get()) }
-    viewModel { HomeViewModel(get(), get()) }
+    viewModel { HomeViewModel(get(), get(), get()) }
     viewModel { SearchViewModel(get()) }
     viewModel { PlayerViewModel(get()) }
     viewModel { LibraryViewModel(get(), get()) }

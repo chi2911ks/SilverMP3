@@ -29,6 +29,16 @@ class ArtistsRepositoryImpl : ArtistsRepository {
          }
     }
 
+    override suspend fun getPopularArtists(): List<Artist> {
+        return try {
+            collectionRef.limit(6).get().await().toObjects(Artist::class.java)
+        } catch (e: Exception) {
+            Log.w(TAG, "Error getting documents.", e)
+            emptyList()
+
+        }
+    }
+
     companion object {
         const val TAG = "ArtistsRepository"
 

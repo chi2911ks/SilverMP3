@@ -8,9 +8,6 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.cbtool.silvermp3.MainActivity
 import com.cbtool.silvermp3.adapter.SongAdapter
 import com.cbtool.silvermp3.data.model.Playlist
@@ -75,11 +72,8 @@ class PlaylistFragment : Fragment() {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
         val songAdapter = SongAdapter(onItemClick = { song ->
-            songs.subList(0, songs.indexOf(song)).clear()
-            songs.add(0, song)
             playerViewModel.setSongs(songs)
-
-            (activity as MainActivity).navigateTo(PlayerFragment.newInstance())
+            (activity as MainActivity).navigateTo(PlayerFragment.newInstance(songs.indexOf(song)))
 
         }, moreClick = { song ->
             val bottomSheet = SongOptionsSheet.newInstance(song, playlist.id)
