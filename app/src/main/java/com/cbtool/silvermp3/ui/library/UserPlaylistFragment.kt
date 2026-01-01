@@ -17,6 +17,7 @@ import com.cbtool.silvermp3.databinding.FragmentPlayListBinding
 import com.cbtool.silvermp3.interfaces.FragmentUIConfig
 import com.cbtool.silvermp3.ui.custom.PlaylistOptionsSheet
 import com.cbtool.silvermp3.ui.custom.SongOptionsSheet
+import com.cbtool.silvermp3.ui.player.PlaybackState
 import com.cbtool.silvermp3.ui.player.PlayerFragment
 import com.cbtool.silvermp3.ui.player.PlayerViewModel
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
@@ -61,7 +62,8 @@ class UserPlaylistFragment : Fragment() {
         }
         val songAdapter = SongAdapter(onItemClick = { song ->
             playerViewModel.setSongs(songs)
-            (activity as MainActivity).navigateTo(PlayerFragment.newInstance(songs.indexOf(song)))
+            PlaybackState.currentIndex = songs.indexOf(song)
+            (activity as MainActivity).navigateTo(PlayerFragment.newInstance())
 
         }, moreClick = { song ->
             val bottomSheet = SongOptionsSheet.newInstance(song, playlist.id)

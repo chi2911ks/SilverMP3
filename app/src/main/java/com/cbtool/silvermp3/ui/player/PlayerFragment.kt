@@ -39,15 +39,13 @@ class PlayerFragment : Fragment(), FragmentUIConfig {
     private val handler = Handler(Looper.getMainLooper())
 
     private var playlists: MutableMap<String, Song> = mutableMapOf()
-    private var currentIndex: Int = 0
+//    private var playlists: MutableList<Song> = mutableListOf<Song>()
 
     override fun shouldShowBottomBar() = false
     override fun getNavigationItemId() = R.id.player
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.apply {
-            currentIndex = getInt(ARG_INDEX)
-        }
+
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -117,10 +115,17 @@ class PlayerFragment : Fragment(), FragmentUIConfig {
                     mediaMetadata.artist.toString(),
                     mediaMetadata.artworkUri.toString()
                 )
+
                 if (playlists.containsKey(mediaId)) {
-                    playerViewModel.setCurrentSong(playlists[mediaId] ?: Song())
+                        playerViewModel.setCurrentSong(playlists[mediaId]?:Song())
+
                 }
             }
+        }
+
+        override fun onMediaMetadataChanged(mediaMetadata: MediaMetadata) {
+            super.onMediaMetadataChanged(mediaMetadata)
+            PlaybackState.currentIndex = controller!!.currentMediaItemIndex
         }
 
         override fun onPlaybackStateChanged(playbackState: Int) {
@@ -137,7 +142,6 @@ class PlayerFragment : Fragment(), FragmentUIConfig {
                 binding.startTime.text = formatDuration(currentPositionInSeconds)
                 binding.seekBar.progress = currentPositionInSeconds.toInt()
                 handler.postDelayed(this, 500)
-                playerViewModel.setCurrentDuration(currentPositionInSeconds.toInt())
             }
         }
     }
@@ -223,21 +227,20 @@ class PlayerFragment : Fragment(), FragmentUIConfig {
             }
         }
         playerViewModel.songs.observe(viewLifecycleOwner) {
-            playerViewModel.setCurrentSong(it[0])
-            it.forEach { song ->
+            playerViewModel.setCurrentSong(it[PlaybackState.currentIndex])
+            it.forEachIndexed { index, song ->
                 playlists[song.id] = song
             }
             Log.d("Media", it[0].toString())
-            controller?.apply {
-                if (playerViewModel.currentSong.value != null && controller?.currentMediaItem?.mediaId == playerViewModel.currentSong.value!!.id) return@observe
-
-                setMediaItems(it.map { song -> setMediaItem(song) })
-                seekTo(currentIndex, 0)
-                prepare()
-                play()
-            } ?: run {
-                Log.d("Media", "MediaController chưa sẵn sàng")
+            if (playerViewModel.currentSong.value == null || controller?.currentMediaItem?.mediaId != playerViewModel.currentSong.value!!.id){
+                controller?.apply {
+                    setMediaItems(it.map { song -> setMediaItem(song) })
+                    seekTo(PlaybackState.currentIndex, 0)
+                    prepare()
+                    play()
+                }
             }
+
         }
 
     }
@@ -272,13 +275,10 @@ class PlayerFragment : Fragment(), FragmentUIConfig {
 
     companion object {
         const val TAG = "PlayerFragment"
-        private const val ARG_INDEX = "INDEX"
+
         @JvmStatic
-        fun newInstance(index: Int=0) = PlayerFragment().apply {
-            arguments = Bundle().apply {
-                putInt(ARG_INDEX, index)
-            }
-        }
+        fun newInstance() = PlayerFragment()
+
 
     }
 }

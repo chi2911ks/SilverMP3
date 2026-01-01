@@ -17,6 +17,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.media3.common.MediaMetadata
 import androidx.media3.common.Player
 import androidx.media3.session.MediaController
 import androidx.palette.graphics.Palette
@@ -37,7 +38,10 @@ import com.cbtool.silvermp3.utils.createNicePaletteBackground
 import com.cbtool.silvermp3.utils.navigateTo
 import com.cbtool.silvermp3.utils.startNewActivity
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -48,6 +52,8 @@ class MainActivity : AppCompatActivity() {
     private val mediaController get() = (application as SilverApplication).mediaController
     private val playerViewModel: PlayerViewModel by viewModel()
     private val libraryViewModel: LibraryViewModel by viewModel()
+    private var progressJob: Job? = null
+
     fun getController(): MediaController? = mediaController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,9 +86,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         mediaController?.release()
-
+        progressJob?.cancel()
+        super.onDestroy()
     }
 
     fun setSelectedItemId() {
@@ -110,12 +116,6 @@ class MainActivity : AppCompatActivity() {
         binding.miniUIPlayer.setOnClickListener(onClick)
         binding.favouriteBtn.setOnClickListener(onClick)
         binding.miniPlayBtn.setOnClickListener(onClick)
-        playerViewModel.currentSong.observe(this) {
-            loadUISong(song = it)
-        }
-        playerViewModel.currentDuration.observe(this) {
-            binding.progressBar.progress = it
-        }
         playerViewModel.isFavourite.observe(this) {
             binding.favouriteBtn.isSelected = it
         }
@@ -145,31 +145,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadUISong(song: Song) {
-        song.apply {
-            binding.tvMiniArtist.text = artistName
-            binding.tvMiniTitle.text = title
-            Glide.with(this@MainActivity)
-                .asBitmap()
-                .load(song.coverUrl)
-                .into(object : CustomTarget<Bitmap>() {
-                    override fun onResourceReady(
-                        resource: Bitmap,
-                        transition: Transition<in Bitmap>?
-                    ) {
-                        binding.imageMiniCover.setImageBitmap(resource)
-                        val gradient = applicationContext.createNicePaletteBackground(resource)
-                        binding.miniUIPlayer.background = gradient
-
-                    }
-
-                    override fun onLoadCleared(placeholder: Drawable?) {}
-                })
-            binding.miniPlayBtn.isSelected = mediaController?.isPlaying == true
-        }
-
-    }
-
     private fun observeMediaController() {
         val app = (application as SilverApplication)
 
@@ -189,8 +164,37 @@ class MainActivity : AppCompatActivity() {
         controller.addListener(object : Player.Listener {
             override fun onIsPlayingChanged(isPlaying: Boolean) {
                 showMiniUi(isPlaying)
+
+                if (isPlaying) {
+                    startProgress(controller)
+                } else {
+                    progressJob?.cancel()
+                }
             }
 
+
+            override fun onMediaMetadataChanged(mediaMetadata: MediaMetadata) {
+                super.onMediaMetadataChanged(mediaMetadata)
+                binding.tvMiniArtist.text = mediaMetadata.artist.toString()
+                binding.tvMiniTitle.text = mediaMetadata.title.toString()
+                Glide.with(this@MainActivity)
+                    .asBitmap()
+                    .load(mediaMetadata.artworkUri.toString())
+                    .into(object : CustomTarget<Bitmap>() {
+                        override fun onResourceReady(
+                            resource: Bitmap,
+                            transition: Transition<in Bitmap>?
+                        ) {
+                            binding.imageMiniCover.setImageBitmap(resource)
+                            val gradient = applicationContext.createNicePaletteBackground(resource)
+                            binding.miniUIPlayer.background = gradient
+
+                        }
+
+                        override fun onLoadCleared(placeholder: Drawable?) {}
+                    })
+                binding.miniPlayBtn.isSelected = mediaController?.isPlaying == true
+            }
             override fun onPlaybackStateChanged(playbackState: Int) {
                 if (playbackState == Player.STATE_READY) {
                     binding.progressBar.max = (controller.duration / 1000).toInt()
@@ -201,6 +205,18 @@ class MainActivity : AppCompatActivity() {
         // Cập nhật UI ngay lập tức nếu đang có nhạc chạy sẵn
         showMiniUi(controller.isPlaying)
     }
+    private fun startProgress(controller: MediaController) {
+        progressJob?.cancel()
+
+        progressJob = lifecycleScope.launch {
+            while (isActive) {
+                binding.progressBar.progress =
+                    (controller.currentPosition / 1000).toInt()
+                delay(1000)
+            }
+        }
+    }
+
 
     fun showMiniUi(isPlaying: Boolean) {
         binding.miniPlayBtn.isSelected = isPlaying
