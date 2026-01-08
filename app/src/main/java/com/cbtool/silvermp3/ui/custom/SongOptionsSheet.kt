@@ -102,6 +102,7 @@ class SongOptionsSheet : BottomSheetDialogFragment() {
                 } else {
                     libraryViewModel.removeSongFromPlaylist(it, song.id)
                     playListViewModel.getSongs(it)
+
                 }
                 dismiss()
 

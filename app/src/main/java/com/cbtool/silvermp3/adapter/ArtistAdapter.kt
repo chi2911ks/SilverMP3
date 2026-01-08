@@ -58,7 +58,7 @@ class ArtistAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(artist: Artist) {
             binding.nameArtist.text = artist.name
-            glideCustom(itemView.context, binding.imageArtist, artist.photoUrl)
+            glideCustom(itemView.context, binding.imageArtist, artist.photoUrl, 16)
         }
     }
 

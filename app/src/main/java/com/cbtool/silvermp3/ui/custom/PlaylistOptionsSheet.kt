@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.cbtool.silvermp3.data.model.Playlist
 import com.cbtool.silvermp3.databinding.SheetPlaylistOptionsBinding
+import com.cbtool.silvermp3.ui.library.LibraryViewModel
 
 import com.cbtool.silvermp3.ui.library.UserPlaylistViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -17,7 +18,7 @@ class PlaylistOptionsSheet : BottomSheetDialogFragment() {
     private var _binding: SheetPlaylistOptionsBinding? = null
     private val binding get() = _binding!!
     private val playlistViewModel: UserPlaylistViewModel by activityViewModel()
-
+    private val libraryViewModel: LibraryViewModel by activityViewModel()
     private var playlist: Playlist? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +51,7 @@ class PlaylistOptionsSheet : BottomSheetDialogFragment() {
         binding.tvTitle.text = playlist!!.title
         binding.deleteBtn.setOnClickListener {
             playlistViewModel.deletePlaylist(playlist!!.id)
+            libraryViewModel.getPlaylists()
             requireActivity().onBackPressedDispatcher.onBackPressed()
             dismiss()
         }

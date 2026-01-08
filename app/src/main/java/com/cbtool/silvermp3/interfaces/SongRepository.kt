@@ -6,5 +6,6 @@ interface SongRepository {
     fun add(song: Song)
     suspend fun getSongs(): List<Song>
     suspend fun getSongSuggest(count: Int = 5): List<Song>
-
+    suspend fun getSongByGenre(genre: String): List<Song>
+    suspend fun getSongByArtist(artistId: String): List<Song>
 }

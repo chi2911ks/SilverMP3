@@ -31,6 +31,8 @@ import com.cbtool.silvermp3.ui.OnBoardingActivity
 import com.cbtool.silvermp3.ui.home.HomeFragment
 import com.cbtool.silvermp3.ui.library.LibraryFragment
 import com.cbtool.silvermp3.ui.library.LibraryViewModel
+import com.cbtool.silvermp3.ui.player.PlaybackPersistence
+import com.cbtool.silvermp3.ui.player.PlaybackState
 import com.cbtool.silvermp3.ui.player.PlayerFragment
 import com.cbtool.silvermp3.ui.player.PlayerViewModel
 import com.cbtool.silvermp3.ui.search.SearchFragment
@@ -53,7 +55,7 @@ class MainActivity : AppCompatActivity() {
     private val playerViewModel: PlayerViewModel by viewModel()
     private val libraryViewModel: LibraryViewModel by viewModel()
     private var progressJob: Job? = null
-
+    private val playbackPersistence by lazy { PlaybackPersistence(this) }
     fun getController(): MediaController? = mediaController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,6 +70,7 @@ class MainActivity : AppCompatActivity() {
         }
         if (auth.currentUser == null) {
             startNewActivity(OnBoardingActivity::class.java, true)
+            return
         }
         if (savedInstanceState == null) {
             navigateTo(HomeFragment())
@@ -77,7 +80,11 @@ class MainActivity : AppCompatActivity() {
                 R.id.home -> navigateTo(HomeFragment())
                 R.id.search -> navigateTo(SearchFragment())
                 R.id.library -> navigateTo(LibraryFragment())
-                R.id.player -> navigateTo(PlayerFragment())
+                R.id.player -> {
+                    if (mediaController?.isPlaying == true){
+                    navigateTo(PlayerFragment())}
+
+                }
 
             }
             true
@@ -88,6 +95,7 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         mediaController?.release()
         progressJob?.cancel()
+        playbackPersistence.clearState()
         super.onDestroy()
     }
 
@@ -175,6 +183,8 @@ class MainActivity : AppCompatActivity() {
 
             override fun onMediaMetadataChanged(mediaMetadata: MediaMetadata) {
                 super.onMediaMetadataChanged(mediaMetadata)
+//                playbackPersistence.setLastIndex(controller.currentMediaItemIndex)
+                PlaybackState.currentIndex = controller.currentMediaItemIndex
                 binding.tvMiniArtist.text = mediaMetadata.artist.toString()
                 binding.tvMiniTitle.text = mediaMetadata.title.toString()
                 Glide.with(this@MainActivity)
@@ -220,7 +230,7 @@ class MainActivity : AppCompatActivity() {
 
     fun showMiniUi(isPlaying: Boolean) {
         binding.miniPlayBtn.isSelected = isPlaying
-        if (isPlaying && getCurrentFragment() is HomeFragment) {
+        if (isPlaying && getCurrentFragment() !is PlayerFragment) {
             binding.miniUIPlayer.isVisible = true
         }
     }

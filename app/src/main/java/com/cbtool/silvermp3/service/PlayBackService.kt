@@ -15,6 +15,7 @@ import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
 import com.cbtool.silvermp3.data.local.MediaCacheManager
+import com.cbtool.silvermp3.ui.player.PlaybackPersistence
 
 
 class PlayBackService: MediaSessionService() {
@@ -55,6 +56,10 @@ class PlayBackService: MediaSessionService() {
 
     override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession? = mediaSession
     override fun onTaskRemoved(rootIntent: Intent?) {
+        val playbackPersistence = PlaybackPersistence(this)
+
+        // 2. Xóa trạng thái lưu trữ
+        playbackPersistence.clearState()
         stopForeground(STOP_FOREGROUND_REMOVE)
         stopSelf()
         super.onTaskRemoved(rootIntent)

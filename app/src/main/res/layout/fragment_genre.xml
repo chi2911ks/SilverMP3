@@ -20,11 +20,32 @@
         android:id="@+id/nameTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:text="K-Pop"
-        android:textSize="20sp"
+        android:textSize="40sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/backBtn"
         app:layout_constraintTop_toBottomOf="@+id/backBtn" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
+        android:id="@+id/songsRc"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nameTv"
+        tools:listitem="@layout/item_song"/>
+
+    <ProgressBar
+        android:id="@+id/processSong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:indeterminateTint="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/songsRc"
+        app:layout_constraintEnd_toEndOf="@+id/songsRc"
+        app:layout_constraintStart_toStartOf="@+id/songsRc"
+        app:layout_constraintTop_toTopOf="@+id/songsRc" />
 </androidx.constraintlayout.widget.ConstraintLayout>

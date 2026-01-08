@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.cbtool.silvermp3.data.model.Playlist
 import com.cbtool.silvermp3.databinding.SheetPlaylistDetailBinding
+import com.cbtool.silvermp3.ui.library.LibraryViewModel
 import com.cbtool.silvermp3.ui.library.UserPlaylistViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
@@ -17,6 +18,7 @@ class DetailPlaylistSheet : BottomSheetDialogFragment() {
     private val binding get() = _binding!!
     private var playlist: Playlist? = null
     private val playlistViewModel: UserPlaylistViewModel by activityViewModel()
+    private val libraryViewModel: LibraryViewModel by activityViewModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -58,6 +60,7 @@ class DetailPlaylistSheet : BottomSheetDialogFragment() {
                     binding.descTv.text.toString()
                 )
                 playlistViewModel.getPlaylist(id)
+                libraryViewModel.getPlaylists()
             }
 
             dismiss()

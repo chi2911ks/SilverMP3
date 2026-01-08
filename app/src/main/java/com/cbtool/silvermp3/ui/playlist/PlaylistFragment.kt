@@ -14,6 +14,7 @@ import com.cbtool.silvermp3.data.model.Playlist
 import com.cbtool.silvermp3.data.model.Song
 import com.cbtool.silvermp3.databinding.FragmentPlayListBinding
 import com.cbtool.silvermp3.ui.custom.SongOptionsSheet
+import com.cbtool.silvermp3.ui.player.PlaybackPersistence
 import com.cbtool.silvermp3.ui.player.PlaybackState
 import com.cbtool.silvermp3.ui.player.PlayerFragment
 import com.cbtool.silvermp3.ui.player.PlayerViewModel
@@ -27,6 +28,7 @@ class PlaylistFragment : Fragment() {
     private val playlistViewModel: PlaylistViewModel by activityViewModel()
     private val playerViewModel: PlayerViewModel by activityViewModel()
     private val songs: MutableList<Song> = mutableListOf()
+    private val playbackPersistence by lazy { PlaybackPersistence(requireContext()) }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {

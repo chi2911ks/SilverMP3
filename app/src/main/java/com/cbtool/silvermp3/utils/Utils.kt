@@ -1,5 +1,6 @@
 package com.cbtool.silvermp3.utils
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
@@ -49,4 +50,11 @@ fun glideCustom(context: Context, view: ImageView, url: String, roundingRadius: 
         .load(url)
         .transform(CenterCrop(), RoundedCorners(roundingRadius))
         .into(view)
+}
+@SuppressLint("DefaultLocale")
+fun formatDuration(seconds: Long): String {
+    if (seconds < 0) return "00:00"
+    val minutes = seconds / 60
+    val remainingSeconds = seconds % 60
+    return String.format("%02d:%02d", minutes, remainingSeconds)
 }

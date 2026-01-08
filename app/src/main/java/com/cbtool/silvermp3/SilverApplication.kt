@@ -7,6 +7,7 @@ import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
 import com.cbtool.silvermp3.di.appModule
 import com.cbtool.silvermp3.service.PlayBackService
+import com.cbtool.silvermp3.ui.player.PlaybackPersistence
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,6 +24,7 @@ class SilverApplication : Application() {
 
     // Giữ biến cũ nếu bạn vẫn muốn truy cập trực tiếp (optional)
     val mediaController get() = _controllerFlow.value
+
 
     private suspend fun initMediaController() {
         val sessionToken = SessionToken(this, ComponentName(this, PlayBackService::class.java))
@@ -44,4 +46,6 @@ class SilverApplication : Application() {
             modules(appModule)
         }
     }
+
+
 }

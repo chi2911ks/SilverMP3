@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    tools:context=".ui.profile.ProfileFragment">
+
+    <!-- Header Toolbar -->
+    <ImageButton
+        android:id="@+id/backBtn"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Back"
+        android:padding="12dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/outline_arrow_back_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/white" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hồ sơ cá nhân"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/backBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/backBtn" />
+
+    <!-- Card thông tin user -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        app:cardBackgroundColor="#1E1E1E"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/avatarImg"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:layout_marginBottom="16dp"
+                android:background="@color/grey_600"
+                android:padding="1dp"
+                android:scaleType="centerCrop"
+                app:shapeAppearanceOverlay="@style/CircleImage"
+                app:strokeColor="@color/white"
+                app:strokeWidth="2dp"
+                android:src="@drawable/ic_profile" />
+
+            <TextView
+                android:id="@+id/nameTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/emailTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text=""
+                android:textColor="@android:color/darker_gray"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Khu vực nút bấm -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardProfile">
+
+<!--        <com.google.android.material.button.MaterialButton-->
+<!--            android:id="@+id/settingsBtn"-->
+<!--            style="@style/Widget.MaterialComponents.Button.TextButton"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="65dp"-->
+<!--            android:backgroundTint="@color/dark"-->
+<!--            android:gravity="start|center_vertical"-->
+<!--            android:paddingStart="20dp"-->
+<!--            android:text="Cài đặt"-->
+<!--            android:textAllCaps="false"-->
+<!--            android:textColor="@color/white"-->
+<!--            android:textSize="16sp"-->
+<!--            app:rippleColor="@color/ripple_light"-->
+<!--            app:cornerRadius="12dp"-->
+<!--            app:icon="@drawable/ic_settings"-->
+<!--            app:iconPadding="20dp"-->
+<!--            app:iconSize="24dp"-->
+<!--            app:iconTint="@color/white" />-->
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="12dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/logoutBtn"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:backgroundTint="@color/dark"
+            android:gravity="start|center_vertical"
+            app:rippleColor="@color/ripple_light"
+            android:paddingStart="20dp"
+            android:text="Đăng xuất"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:cornerRadius="12dp"
+            app:icon="@drawable/ic_logout"
+            app:iconPadding="20dp"
+            app:iconSize="24dp"
+            app:iconTint="@color/white" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="12dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/deleteAccountBtn"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:backgroundTint="#261818"
+            android:gravity="start|center_vertical"
+            android:paddingStart="20dp"
+            android:text="Xoá tài khoản"
+            android:textAllCaps="false"
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="16sp"
+            app:cornerRadius="12dp"
+            app:icon="@drawable/delete_svg"
+            app:iconPadding="20dp"
+            app:iconSize="24dp"
+            app:iconTint="@android:color/holo_red_dark"
+            app:strokeColor="@android:color/holo_red_dark"
+            app:rippleColor="@color/ripple_light"
+            app:strokeWidth="1dp" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

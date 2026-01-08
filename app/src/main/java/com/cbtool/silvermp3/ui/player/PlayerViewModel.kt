@@ -12,8 +12,7 @@ class PlayerViewModel(private val userFavouriteRepository: UserFavouriteReposito
 
     private val _currentSong = MutableLiveData<Song>()
     val currentSong: LiveData<Song> = _currentSong
-    private val _currentDuration = MutableLiveData<Int>()
-    val currentDuration: LiveData<Int> = _currentDuration
+
     private val _isFavourite = MutableLiveData<Boolean>()
     val isFavourite: MutableLiveData<Boolean> = _isFavourite
     fun setSongs(song: List<Song>) {
@@ -24,9 +23,6 @@ class PlayerViewModel(private val userFavouriteRepository: UserFavouriteReposito
         _currentSong.value = song
     }
 
-    fun setCurrentDuration(duration: Int) {
-        _currentDuration.value = duration
-    }
 
     fun toggleFavourite(song: Song) {
         userFavouriteRepository.toggleFavourite(song)

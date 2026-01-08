@@ -18,7 +18,10 @@ class UserFavouriteRepositoryImpl : UserFavouriteRepository {
     private val favouriteSongsCache = mutableSetOf<String>()
 
     init {
-        observeFavouriteSongs()
+        if (Firebase.auth.currentUser != null) {
+            observeFavouriteSongs()
+        }
+
     }
 
     override fun addSong(song: Song) {

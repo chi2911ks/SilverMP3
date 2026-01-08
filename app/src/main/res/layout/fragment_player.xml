@@ -43,7 +43,7 @@
         <ImageView
             android:id="@+id/coverImage"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="350dp"
             android:layout_marginTop="100dp"
             android:layout_marginBottom="20dp"
             android:layout_marginHorizontal="20dp"
@@ -177,7 +177,7 @@
             android:id="@+id/shareBtn"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="40dp"
             android:background="@drawable/button_blur"
             android:src="@drawable/media3_icon_share"
             app:layout_constraintBottom_toBottomOf="parent"

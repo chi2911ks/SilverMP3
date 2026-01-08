@@ -21,6 +21,7 @@ import com.cbtool.silvermp3.ui.player.PlaybackState
 import com.cbtool.silvermp3.ui.player.PlayerFragment
 import com.cbtool.silvermp3.ui.player.PlayerViewModel
 import com.cbtool.silvermp3.ui.playlist.PlaylistFragment
+import com.cbtool.silvermp3.ui.profile.ProfileFragment
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class HomeFragment : Fragment(), FragmentUIConfig {
@@ -49,6 +50,9 @@ class HomeFragment : Fragment(), FragmentUIConfig {
     }
 
     private fun init() {
+        binding.profileBtn.setOnClickListener {
+            (activity as MainActivity).navigateTo(ProfileFragment.newInstance())
+        }
         val songAdapter = SongAdapter(onItemClick = { song ->
             playerViewModel.setSongs(listOf(song))
             PlaybackState.currentIndex = 0

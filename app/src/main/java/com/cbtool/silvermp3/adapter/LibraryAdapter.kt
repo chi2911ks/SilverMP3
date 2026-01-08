@@ -1,7 +1,6 @@
 package com.cbtool.silvermp3.adapter
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -82,6 +81,7 @@ class LibraryAdapter(
                 binding.imageCover.background = itemView.context.getDrawable(R.drawable.bg_playlist)
 
             binding.tvTitle.text = playlist.title
+
             itemView.setOnClickListener {
                 onItemClick.onClickPlaylist(playlist)
             }
@@ -92,6 +92,7 @@ class LibraryAdapter(
         fun bindFavouriteItem(count: Int) {
             binding.imageCover.background = itemView.context.getDrawable(R.drawable.bg_favourite)
             binding.tv.text = "Danh sách phát - $count bài hát"
+
             itemView.setOnClickListener {
                 onItemClick.onClickFavourite()
             }

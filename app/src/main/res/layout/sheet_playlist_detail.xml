@@ -55,6 +55,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
+            android:textColor="@color/white"
+
             android:textColorHint="@color/grey_600"
             android:hint="Thêm tên danh sách phát"
             android:background="@drawable/edit_text_bg"/>
@@ -63,6 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
+            android:textColor="@color/white"
             android:textColorHint="@color/grey_600"
             android:hint="Thêm phần mô tả"
             android:background="@drawable/edit_text_bg"/>

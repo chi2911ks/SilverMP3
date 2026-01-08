@@ -1,133 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.home.HomeFragment">
 
-    <!-- THÊM CÁI NÀY: NestedScrollView để cuộn toàn bộ màn hình -->
-    <androidx.core.widget.NestedScrollView
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="?attr/actionBarSize"
-        android:fillViewport="true">
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        app:elevation="0dp">
 
-        <!-- ĐỔI height thành wrap_content -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp">
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="12dp"
+            app:layout_scrollFlags="scroll|enterAlways">
 
             <TextView
                 android:id="@+id/textView9"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sliver MP3"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/moreBtn"
+                android:text="Silver MP3"
+                android:textColor="@color/white"
+                android:textSize="26sp"
+                android:fontFamily="sans-serif-black"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/moreBtn" />
-
-            <ImageButton
-                android:id="@+id/moreBtn"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:background="@drawable/button_blur"
-                android:src="@drawable/ic_profile"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ProgressBar
-                android:id="@+id/processSong"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:indeterminateTint="@color/white"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
-                app:layout_constraintEnd_toEndOf="@+id/linearLayout"
-                app:layout_constraintStart_toStartOf="@+id/linearLayout"
-                app:layout_constraintTop_toTopOf="@+id/linearLayout" />
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/profileBtn"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:padding="2dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_profile"
+                app:strokeWidth="1.5dp"
+
+                app:shapeAppearanceOverlay="@style/CircleImage"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
             <LinearLayout
-                android:id="@+id/linearLayout"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:orientation="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView9">
+                android:paddingBottom="100dp">
+                <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:paddingHorizontal="10dp">
 
                 <TextView
                     android:id="@+id/header_title_rcv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
                     android:text="Bắt đầu nghe"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    />
 
-                <!-- Lưu ý: Nếu list này cuộn dọc, hãy set nestedScrollingEnabled="false" trong code -->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvSongs"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/linearLayout2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout">
-
-                <TextView
-                    android:id="@+id/header_title_rcv2"
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="Đề xuất hôm nay"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:layout_below="@id/header_title_rcv"
+                    android:layout_marginTop="12dp"
+                    android:nestedScrollingEnabled="false"
+                     />
+            </RelativeLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvPlaylists"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/linearLayout3"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
-
-                <TextView
-                    android:id="@+id/header_title_rcv3"
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="Nghệ sĩ phổ biến"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:layout_marginTop="28dp"
+                    android:orientation="vertical">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvArtists"
+                    <TextView
+                        android:id="@+id/header_title_rcv2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="10dp"
+                        android:text="Đề xuất hôm nay"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                         />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvPlaylists"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:clipToPadding="false"
+                        android:paddingHorizontal="10dp"
+                        android:nestedScrollingEnabled="false" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="28dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/header_title_rcv3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="10dp"
+                        android:text="Nghệ sĩ phổ biến"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                         />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvArtists"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:clipToPadding="false"
+                        android:paddingHorizontal="10dp"
+                        android:nestedScrollingEnabled="false" />
+                </LinearLayout>
+
             </LinearLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    </androidx.core.widget.NestedScrollView>
+    <ProgressBar
+        android:id="@+id/processSong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
 
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

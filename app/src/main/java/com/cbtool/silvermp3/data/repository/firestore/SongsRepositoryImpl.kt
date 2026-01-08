@@ -45,6 +45,31 @@ class SongsRepositoryImpl : SongRepository {
         }
     }
 
+    override suspend fun getSongByGenre(genre: String): List<Song> {
+        return try {
+            val snapshot = collection
+                .whereArrayContains("genres", genre)
+                .get()
+                .await()
+            snapshot.toObjects(Song::class.java)
+        } catch (e: Exception) {
+            emptyList()
+        }
+
+
+    }
+
+    override suspend fun getSongByArtist(artistId: String): List<Song> {
+        return try {
+            val snapshot = collection
+                .whereEqualTo("artistId", artistId).get().await()
+            snapshot.toObjects(Song::class.java)
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
+
+
     companion object {
         const val TAG = "SongRepository"
 
