@@ -26,6 +26,18 @@ class EnterCodeFragment : Fragment() {
     private val binding get() = _binding!!
     private val phoneAuthViewModel by lazy { getActivityViewModel<PhoneAuthViewModel>() }
     private lateinit var listEditTextOtp: List<EditText>
+    private val countDownTimer: CountDownTimer = object : CountDownTimer(30000, 1000) {
+        @SuppressLint("SetTextI18n")
+        override fun onTick(millisUntilFinished: Long) {
+            val s = millisUntilFinished / 1000
+            binding.tvResend.text = "Gửi lại mã ($s s)"
+        }
+
+        override fun onFinish() {
+            binding.tvResend.text = "Gửi lại mã"
+            binding.tvResend.isEnabled = true
+        }
+    }
     private val loadingDialog by lazy { LoadingDialog(requireContext()) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,10 +46,7 @@ class EnterCodeFragment : Fragment() {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,6 +58,8 @@ class EnterCodeFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
+        _binding = null
+        countDownTimer.cancel()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -134,18 +145,7 @@ class EnterCodeFragment : Fragment() {
     @SuppressLint("UseCompatLoadingForColorStateLists")
     private fun startResendTimer() {
         binding.tvResend.isEnabled = false
-        object : CountDownTimer(30000, 1000) {
-            @SuppressLint("SetTextI18n")
-            override fun onTick(millisUntilFinished: Long) {
-                val s = millisUntilFinished / 1000
-                binding.tvResend.text = "Gửi lại mã ($s s)"
-            }
-
-            override fun onFinish() {
-                binding.tvResend.text = "Gửi lại mã"
-                binding.tvResend.isEnabled = true
-            }
-        }.start()
+        countDownTimer.start()
     }
 
     companion object {

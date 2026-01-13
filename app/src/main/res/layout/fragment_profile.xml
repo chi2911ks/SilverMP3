@@ -121,7 +121,7 @@
             android:layout_height="12dp" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/logoutBtn"
+            android:id="@+id/settingsBtn"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="match_parent"
             android:layout_height="65dp"
@@ -129,12 +129,12 @@
             android:gravity="start|center_vertical"
             app:rippleColor="@color/ripple_light"
             android:paddingStart="20dp"
-            android:text="Đăng xuất"
+            android:text="Cài đặt"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="16sp"
             app:cornerRadius="12dp"
-            app:icon="@drawable/ic_logout"
+            app:icon="@drawable/ic_settings"
             app:iconPadding="20dp"
             app:iconSize="24dp"
             app:iconTint="@color/white" />
@@ -144,19 +144,19 @@
             android:layout_height="12dp" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/deleteAccountBtn"
+            android:id="@+id/logoutBtn"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="match_parent"
             android:layout_height="65dp"
             android:backgroundTint="#261818"
             android:gravity="start|center_vertical"
             android:paddingStart="20dp"
-            android:text="Xoá tài khoản"
+            android:text="Đăng xuất"
             android:textAllCaps="false"
             android:textColor="@android:color/holo_red_dark"
             android:textSize="16sp"
             app:cornerRadius="12dp"
-            app:icon="@drawable/delete_svg"
+            app:icon="@drawable/ic_logout"
             app:iconPadding="20dp"
             app:iconSize="24dp"
             app:iconTint="@android:color/holo_red_dark"

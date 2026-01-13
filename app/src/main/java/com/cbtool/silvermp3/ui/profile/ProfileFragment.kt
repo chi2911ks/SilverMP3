@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import androidx.core.net.toUri
 import com.cbtool.silvermp3.R
 import com.cbtool.silvermp3.databinding.FragmentProfileBinding
+import com.cbtool.silvermp3.ui.OnBoardingActivity
 import com.cbtool.silvermp3.utils.glideCustom
+import com.cbtool.silvermp3.utils.startNewActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 // TODO: Rename parameter arguments, choose names that match
@@ -52,10 +54,10 @@ class ProfileFragment : Fragment() {
 
         }
         binding.logoutBtn.setOnClickListener {
-            profileViewModel.logout()
-        }
-        binding.deleteAccountBtn.setOnClickListener {
-            profileViewModel.deleteUser()
+            profileViewModel.logout{
+                requireActivity().startNewActivity(OnBoardingActivity::class.java, true)
+            }
+
         }
 
     }

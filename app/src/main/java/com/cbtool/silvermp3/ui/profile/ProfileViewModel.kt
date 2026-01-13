@@ -12,19 +12,26 @@ import kotlinx.coroutines.launch
 
 class ProfileViewModel(
     private val userRepo: UsersRepositoryImpl,
+
 ) : ViewModel() {
     private val _user = MutableLiveData<User>()
     val user: LiveData<User> = _user
+    private val auth = Firebase.auth
     fun getCurrentUser() {
         viewModelScope.launch {
             _user.value = userRepo.getUser()
         }
 
     }
-    fun logout() {
-        Firebase.auth.signOut()
+
+    fun logout(result: () -> Unit) {
+        auth.signOut()
+        result.invoke()
     }
+
     fun deleteUser() {
-        userRepo.delete()
+        viewModelScope.launch {
+            userRepo.delete()
+        }
     }
 }

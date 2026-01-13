@@ -72,9 +72,8 @@ class MainActivity : AppCompatActivity() {
             startNewActivity(OnBoardingActivity::class.java, true)
             return
         }
-        if (savedInstanceState == null) {
-            navigateTo(HomeFragment())
-        }
+        navigateTo(HomeFragment())
+
         binding.bottomNavigationView.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.home -> navigateTo(HomeFragment())
