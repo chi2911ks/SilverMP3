@@ -2,7 +2,7 @@
 ---
 
 ## 📺 Video Demo
-[Xem file trên Google Drive](https://drive.google.com/file/d/178amsAOGWTIa2ScNKdSoAn8MARMqWVSw/view)
+> [Xem video demo tại đây](https://drive.google.com/file/d/178amsAOGWTIa2ScNKdSoAn8MARMqWVSw/view)
 
 ---
 
