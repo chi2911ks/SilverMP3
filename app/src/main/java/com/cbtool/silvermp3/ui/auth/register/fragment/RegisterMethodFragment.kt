@@ -62,8 +62,6 @@ class RegisterMethodFragment : Fragment() {
         binding.googleBtn.setOnClickListener {
             googleLoginViewModel.login()
         }
-
-
     }
 
     override fun onDestroyView() {

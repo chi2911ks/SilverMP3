@@ -223,10 +223,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        mediaController.release()
+        if (::mediaController.isInitialized){
+            mediaController.release()
+            mediaController.removeListener(playerListener)
+        }
+
         progressJob?.cancel()
         progressJob = null
-        mediaController.removeListener(playerListener)
+
         super.onDestroy()
     }
 }

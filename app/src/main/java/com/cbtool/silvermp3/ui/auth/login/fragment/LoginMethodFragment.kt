@@ -70,7 +70,9 @@ class LoginMethodFragment : Fragment() {
         binding.registerBtn.setOnClickListener {
             requireActivity().startNewActivity(RegisterActivity::class.java, true)
         }
-
+        binding.fbLoginBtn.setOnClickListener {
+            Toast.makeText(requireContext(), "Chức năng chưa phát triển!", Toast.LENGTH_SHORT).show()
+        }
 
     }
 

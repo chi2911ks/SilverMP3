@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cbtool.silvermp3.MainActivity
@@ -37,6 +38,9 @@ class LibraryFragment : Fragment(), FragmentUIConfig {
     }
 
     fun init() {
+        binding.searchBtn.setOnClickListener {
+            Toast.makeText(requireContext(), "Chức năng chưa phát triển!", Toast.LENGTH_SHORT).show()
+        }
         binding.playListsRc.layoutManager = LinearLayoutManager(requireContext())
         val adapter = LibraryAdapter(object : OnClickPlaylist {
             override fun onClickPlaylist(playlist: Playlist) {

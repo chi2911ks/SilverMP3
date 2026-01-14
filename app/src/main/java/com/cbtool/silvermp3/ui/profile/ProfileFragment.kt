@@ -1,12 +1,11 @@
 package com.cbtool.silvermp3.ui.profile
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.net.toUri
-import com.cbtool.silvermp3.R
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.cbtool.silvermp3.databinding.FragmentProfileBinding
 import com.cbtool.silvermp3.ui.OnBoardingActivity
 import com.cbtool.silvermp3.utils.glideCustom
@@ -44,6 +43,9 @@ class ProfileFragment : Fragment() {
         profileViewModel.getCurrentUser()
         binding.backBtn.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
+        binding.settingsBtn.setOnClickListener {
+            Toast.makeText(requireContext(), "Chức năng chưa phát triển!", Toast.LENGTH_SHORT).show()
         }
         profileViewModel.user.observe(viewLifecycleOwner) { it->
             binding.nameTv.text = it.name.ifEmpty { "Không có tên" }

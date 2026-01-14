@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -65,7 +66,7 @@ class HomeFragment : Fragment(), FragmentUIConfig {
             (activity as MainActivity).navigateTo(PlaylistFragment.newInstance(it))
         }
         val artistAdapter = ArtistAdapter {
-
+            Toast.makeText(requireContext(), "Chức năng chưa phát triển!", Toast.LENGTH_SHORT).show()
         }
         binding.rvSongs.isNestedScrollingEnabled = false
         binding.rvPlaylists.isNestedScrollingEnabled = false

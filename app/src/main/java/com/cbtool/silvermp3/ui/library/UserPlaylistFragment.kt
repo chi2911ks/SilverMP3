@@ -123,7 +123,7 @@ class UserPlaylistFragment : Fragment() {
             } else {
                 binding.playBtn.isSelected = true
                 val lastIndex = PlaybackState.currentIndex
-                if (lastIndex != 0) {
+                if (lastIndex != 0 && PlaybackState.currentSourcePlaying.containsKey(playlist.id)) {
                     controller?.play()
                 } else {
                     PlaybackState.currentIndex = 0
