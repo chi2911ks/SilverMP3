@@ -5,7 +5,7 @@
 ---
 
 ## 📺 Video Demo
-> [Xem video demo tại đây](link_video_cua_ban)
+https://raw.githubusercontent.com/chi2911ks/SilverMP3/refs/heads/master/demo/demo.mp4
 
 ---
 
