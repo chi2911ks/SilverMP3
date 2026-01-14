@@ -1,15 +1,8 @@
-# 🎵 SilverMP3 - Android Music Streaming Application
-
-**SilverMP3** là một ứng dụng nghe nhạc trực tuyến hiện đại dành cho nền tảng Android. Ứng dụng được xây dựng với kiến trúc MVVM chuẩn, giao diện bắt mắt và tích hợp các công nghệ mới nhất từ Google và cộng đồng mã nguồn mở.
-
+# 🎵 SilverMP3
 ---
 
 ## 📺 Video Demo
-<div align="center">
-  <video src="https://raw.githubusercontent.com/chi2911ks/SilverMP3/refs/heads/master/demo/demo.mp4" width="400" controls>
-    Trình duyệt của bạn không hỗ trợ xem video.
-  </video>
-</div>
+
 ---
 
 ## ✨ Tính Năng Nổi Bật

@@ -71,5 +71,5 @@ val appModule = module {
     viewModel { UserPlaylistViewModel(get()) }
     viewModel { PlaylistViewModel(get()) }
     viewModel { GenreViewModel(get()) }
-    viewModel { ProfileViewModel(get()) }
+    viewModel { ProfileViewModel(androidApplication(), get()) }
 }

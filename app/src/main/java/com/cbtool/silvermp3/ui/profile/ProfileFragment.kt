@@ -12,14 +12,12 @@ import com.cbtool.silvermp3.utils.glideCustom
 import com.cbtool.silvermp3.utils.startNewActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-
 class ProfileFragment : Fragment() {
 
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
     private val profileViewModel: ProfileViewModel by viewModel()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -39,15 +37,17 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         init()
     }
+
     fun init() {
         profileViewModel.getCurrentUser()
         binding.backBtn.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
         binding.settingsBtn.setOnClickListener {
-            Toast.makeText(requireContext(), "Chức năng chưa phát triển!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Chức năng chưa phát triển!", Toast.LENGTH_SHORT)
+                .show()
         }
-        profileViewModel.user.observe(viewLifecycleOwner) { it->
+        profileViewModel.user.observe(viewLifecycleOwner) { it ->
             binding.nameTv.text = it.name.ifEmpty { "Không có tên" }
             binding.emailTv.text = it.email.ifEmpty { it.numberPhone }
             if (it.avatarURL != null && it.avatarURL != "" && it.avatarURL != "null") {
@@ -56,17 +56,20 @@ class ProfileFragment : Fragment() {
 
         }
         binding.logoutBtn.setOnClickListener {
-            profileViewModel.logout{
+            profileViewModel.logout {
+                Toast.makeText(requireContext(), "Đăng xuất thành công!", Toast.LENGTH_SHORT).show()
                 requireActivity().startNewActivity(OnBoardingActivity::class.java, true)
             }
 
         }
 
     }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
     }
+
     companion object {
         @JvmStatic
         fun newInstance() =

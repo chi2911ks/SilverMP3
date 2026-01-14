@@ -223,9 +223,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
+        Log.d("MainActivity", "onDestroy: mediaController huỷ")
         if (::mediaController.isInitialized){
-            mediaController.release()
             mediaController.removeListener(playerListener)
+            mediaController.release()
         }
 
         progressJob?.cancel()

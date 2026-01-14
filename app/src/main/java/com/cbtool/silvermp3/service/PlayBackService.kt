@@ -22,12 +22,12 @@ class PlayBackService: MediaSessionService() {
 
     private lateinit var player: ExoPlayer
     private lateinit var mediaSession: MediaSession
-
+    private lateinit var playerListener: Player.Listener
 
     @OptIn(UnstableApi::class)
     override fun onCreate() {
         super.onCreate()
-// Tạo DataSource để tải dữ liệu từ Internet
+        // Tạo DataSource để tải dữ liệu từ Internet
         val httpDataSourceFactory = DefaultHttpDataSource.Factory()
             .setAllowCrossProtocolRedirects(true)
 
@@ -46,7 +46,26 @@ class PlayBackService: MediaSessionService() {
             .build()
 //        player = ExoPlayer.Builder(this).build()
         mediaSession = MediaSession.Builder(this, player).build()
+        playerListener = object : Player.Listener {
+            override fun onPlaybackStateChanged(playbackState: Int) {
+                // Nếu player kết thúc tự nhiên (STATE_ENDED)
+                // Hoặc player đang IDLE (sau khi stop() được gọi) VÀ không sẵn sàng phát
+                if (playbackState == Player.STATE_ENDED || (playbackState == Player.STATE_IDLE && !player.playWhenReady)) {
+                    stopSelf() // Tự dừng service
+                }
+            }
 
+            override fun onIsPlayingChanged(isPlaying: Boolean) {
+                // Nếu player không còn phát nữa và không sẵn sàng phát
+                // Đây cũng là một tín hiệu tốt để dừng service, ví dụ khi tạm dừng lâu
+                if (!isPlaying && player.playbackState == Player.STATE_IDLE && !player.playWhenReady) {
+                    // Nếu bạn muốn dừng service ngay cả khi tạm dừng, hãy cân nhắc thêm delay
+                    // để tránh dừng service quá nhanh nếu người dùng chỉ tạm dừng trong thời gian ngắn.
+                    // Ví dụ: Handler().postDelayed({ if (!player.isPlaying) stopSelf() }, 5000)
+                }
+            }
+        }
+        player.addListener(playerListener)
 
 
     }
@@ -56,10 +75,6 @@ class PlayBackService: MediaSessionService() {
 
     override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession? = mediaSession
     override fun onTaskRemoved(rootIntent: Intent?) {
-        val playbackPersistence = PlaybackPersistence(this)
-
-        // 2. Xóa trạng thái lưu trữ
-        playbackPersistence.clearState()
         stopForeground(STOP_FOREGROUND_REMOVE)
         stopSelf()
         super.onTaskRemoved(rootIntent)
@@ -67,11 +82,9 @@ class PlayBackService: MediaSessionService() {
 
 
     override fun onDestroy() {
-        mediaSession.run {
-            player.release()
-            release()
-            mediaSession.release()
-        }
+        player.removeListener(playerListener)
+        player.release()
+        mediaSession.release()
         super.onDestroy()
     }
     companion object {
