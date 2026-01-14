@@ -6,7 +6,6 @@
 
 ## 📺 Video Demo
 https://raw.githubusercontent.com/chi2911ks/SilverMP3/refs/heads/master/demo/demo.mp4
-
 ---
 
 ## ✨ Tính Năng Nổi Bật
