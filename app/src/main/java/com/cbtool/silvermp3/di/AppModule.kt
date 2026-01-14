@@ -1,6 +1,7 @@
 package com.cbtool.silvermp3.di
 
 
+import com.cbtool.silvermp3.MainViewModel
 import com.cbtool.silvermp3.data.repository.auth.EmailAuthRepository
 import com.cbtool.silvermp3.data.repository.auth.GoogleAuthRepository
 import com.cbtool.silvermp3.data.repository.auth.PhoneAuthRepository
@@ -32,6 +33,7 @@ import com.cbtool.silvermp3.ui.playlist.PlaylistViewModel
 import com.cbtool.silvermp3.ui.profile.ProfileViewModel
 import com.cbtool.silvermp3.ui.search.GenreViewModel
 import com.cbtool.silvermp3.ui.search.SearchViewModel
+import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.singleOf
@@ -39,6 +41,9 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val appModule = module {
+    single { MainViewModel(androidApplication()) }
+
+
     single { EmailAuthRepository() }
     single { PhoneAuthRepository() }
     single { GoogleAuthRepository(androidContext()) }

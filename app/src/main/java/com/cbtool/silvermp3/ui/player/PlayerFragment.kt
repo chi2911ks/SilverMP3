@@ -14,7 +14,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.Player
 import androidx.media3.session.MediaController
-import com.cbtool.silvermp3.MainActivity
+import com.cbtool.silvermp3.MainViewModel
 import com.cbtool.silvermp3.R
 import com.cbtool.silvermp3.data.model.Song
 import com.cbtool.silvermp3.databinding.FragmentPlayerBinding
@@ -24,6 +24,7 @@ import com.cbtool.silvermp3.utils.formatDuration
 import com.cbtool.silvermp3.utils.glideCustom
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
@@ -35,15 +36,13 @@ class PlayerFragment : Fragment(), FragmentUIConfig {
     private var _binding: FragmentPlayerBinding? = null
     private val binding get() = _binding!!
 
-    private val _controller by lazy { (activity as MainActivity).getController() }
-    private val controller get() = _controller
+    private val mainViewModel: MainViewModel by activityViewModel()
+    private var controller: MediaController? = null
 
     private val playerViewModel: PlayerViewModel by activityViewModel()
     private val libraryViewModel: LibraryViewModel by activityViewModel()
     private var progressJob: Job? = null
-
     private var playlists: MutableMap<String, Song> = mutableMapOf()
-//    private val playbackPersistence by lazy { PlaybackPersistence(requireContext()) }
 
     override fun shouldShowBottomBar() = false
     override fun getNavigationItemId() = R.id.player
@@ -63,7 +62,14 @@ class PlayerFragment : Fragment(), FragmentUIConfig {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        init()
+        viewLifecycleOwner.lifecycleScope.launch {
+            mainViewModel.controller.collectLatest { control ->
+                if (control != null) {
+                    controller = control
+                    init()
+                }
+            }
+        }
         binding.backBtn.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
@@ -74,7 +80,9 @@ class PlayerFragment : Fragment(), FragmentUIConfig {
         binding.previousBtn.setOnClickListener(onClickListener)
         binding.nextBtn.setOnClickListener(onClickListener)
     }
+    private fun observeController() {
 
+    }
     private fun startProgress(controller: MediaController) {
         progressJob?.cancel()
 
@@ -221,8 +229,12 @@ class PlayerFragment : Fragment(), FragmentUIConfig {
     }
 
     fun init() {
-        if (controller?.isConnected == false){
-            Toast.makeText(requireContext(), "Chưa kết nối được MediaController!", Toast.LENGTH_SHORT).show()
+        if (controller?.isConnected == false) {
+            Toast.makeText(
+                requireContext(),
+                "Chưa kết nối được MediaController!",
+                Toast.LENGTH_SHORT
+            ).show()
             return
         }
 

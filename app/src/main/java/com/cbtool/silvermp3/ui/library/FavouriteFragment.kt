@@ -6,9 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.Player
+import androidx.media3.session.MediaController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cbtool.silvermp3.MainActivity
+import com.cbtool.silvermp3.MainViewModel
 import com.cbtool.silvermp3.adapter.SongAdapter
 import com.cbtool.silvermp3.data.model.Song
 import com.cbtool.silvermp3.databinding.FragmentFavouriteBinding
@@ -17,6 +20,8 @@ import com.cbtool.silvermp3.ui.player.PlaybackPersistence
 import com.cbtool.silvermp3.ui.player.PlaybackState
 import com.cbtool.silvermp3.ui.player.PlayerFragment
 import com.cbtool.silvermp3.ui.player.PlayerViewModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class FavouriteFragment : Fragment() {
@@ -25,9 +30,9 @@ class FavouriteFragment : Fragment() {
     private val favouriteViewModel: FavouriteViewModel by activityViewModel()
     private val playerViewModel: PlayerViewModel by activityViewModel()
     private val songs: MutableList<Song> = mutableListOf()
-    private val _controller by lazy { (activity as MainActivity).getController() }
-    private val controller get() = _controller
-    private val playbackPersistence by lazy { PlaybackPersistence(requireContext()) }
+
+    private val mainViewModel: MainViewModel by activityViewModel()
+    private var controller: MediaController? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,7 +43,14 @@ class FavouriteFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        init()
+        viewLifecycleOwner.lifecycleScope.launch {
+            mainViewModel.controller.collectLatest { control ->
+                if (control != null) {
+                    controller = control
+                    init()
+                }
+            }
+        }
     }
 
     fun init() {

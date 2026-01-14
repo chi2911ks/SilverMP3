@@ -8,9 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.Player
+import androidx.media3.session.MediaController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cbtool.silvermp3.MainActivity
+import com.cbtool.silvermp3.MainViewModel
 import com.cbtool.silvermp3.adapter.SongAdapter
 import com.cbtool.silvermp3.data.model.Playlist
 import com.cbtool.silvermp3.data.model.Song
@@ -22,6 +25,8 @@ import com.cbtool.silvermp3.ui.player.PlaybackPersistence
 import com.cbtool.silvermp3.ui.player.PlaybackState
 import com.cbtool.silvermp3.ui.player.PlayerFragment
 import com.cbtool.silvermp3.ui.player.PlayerViewModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import kotlin.collections.hashMapOf
 
@@ -32,8 +37,10 @@ class UserPlaylistFragment : Fragment() {
     private val playlistViewModel: UserPlaylistViewModel by activityViewModel()
     private val playerViewModel: PlayerViewModel by activityViewModel()
     private val songs: MutableList<Song> = mutableListOf()
-    private val playbackPersistence by lazy { PlaybackPersistence(requireContext()) }
-    private val controller by lazy { (activity as MainActivity).getController() }
+
+    //    private val playbackPersistence by lazy { PlaybackPersistence(requireContext()) }
+    private val mainViewModel: MainViewModel by activityViewModel()
+    private var controller: MediaController? = null
 
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -53,14 +60,25 @@ class UserPlaylistFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        val lastSource = playbackPersistence.getLastSource()
+        viewLifecycleOwner.lifecycleScope.launch {
+            mainViewModel.controller.collectLatest { control ->
+                if (control != null) {
+                    controller = control
+                    init()
+                }
+            }
+        }
+
+    }
+    fun init(){
         controller?.removeListener(playerListener)
         controller?.addListener(playerListener)
         playlist.apply {
             binding.tvTitle.text = title
             binding.tvDescription.text = description
             playlistViewModel.getSongs(id)
-            binding.playBtn.isSelected = controller?.isPlaying == true && PlaybackState.currentSourcePlaying[id] == true
+            binding.playBtn.isSelected =
+                controller?.isPlaying == true && PlaybackState.currentSourcePlaying[id] == true
         }
         binding.backBtn.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
@@ -107,23 +125,22 @@ class UserPlaylistFragment : Fragment() {
                 val lastIndex = PlaybackState.currentIndex
                 if (lastIndex != 0) {
                     controller?.play()
-                }else{
+                } else {
                     PlaybackState.currentIndex = 0
                     playerViewModel.setSongs(songs)
                     (activity as MainActivity).navigateTo(PlayerFragment.newInstance())
                 }
 
             }
-            PlaybackState.currentSourcePlaying = hashMapOf(playlist.id to binding.playBtn.isSelected)
+            PlaybackState.currentSourcePlaying =
+                hashMapOf(playlist.id to binding.playBtn.isSelected)
         }
-
     }
 
     private val playerListener = object : Player.Listener {
         override fun onIsPlayingChanged(isPlaying: Boolean) {
             if (PlaybackState.currentSourcePlaying.containsKey(playlist.id)) {
-                if (_binding != null)
-                {
+                if (_binding != null) {
                     binding.playBtn.isSelected = isPlaying
                 }
                 PlaybackState.currentSourcePlaying = hashMapOf(playlist.id to isPlaying)
@@ -132,6 +149,7 @@ class UserPlaylistFragment : Fragment() {
 
 
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
