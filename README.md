@@ -5,7 +5,11 @@
 ---
 
 ## 📺 Video Demo
-https://github.com/chi2911ks/SilverMP3/raw/master/demo/demo.mp4
+<div align="center">
+  <video src="https://raw.githubusercontent.com/chi2911ks/SilverMP3/refs/heads/master/demo/demo.mp4" width="400" controls>
+    Trình duyệt của bạn không hỗ trợ xem video.
+  </video>
+</div>
 ---
 
 ## ✨ Tính Năng Nổi Bật
