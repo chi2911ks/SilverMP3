@@ -2,7 +2,7 @@
 ---
 
 ## 📺 Video Demo
-[![Preview](https://img.icons8.com/color/96/google-drive--v1.png)](https://drive.google.com/file/d/178amsAOGWTIa2ScNKdSoAn8MARMqWVSw/view)
+[Xem file trên Google Drive](https://drive.google.com/file/d/178amsAOGWTIa2ScNKdSoAn8MARMqWVSw/view)
 
 ---
 
