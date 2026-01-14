@@ -5,7 +5,6 @@
 ---
 
 ## 📺 Video Hướng Dẫn / Demo
-*(Vui lòng thêm link video của bạn vào đây)*
 > [Xem video hướng dẫn tại đây](link_video_cua_ban)
 
 ---
@@ -25,10 +24,10 @@
 ## 🛠 Công Nghệ Sử Dụng
 
 - **Ngôn ngữ:** Kotlin.
-- **UI Framework:** XML (ViewBinding) kết hợp với **Jetpack Compose**.
+- **UI Framework:** XML (ViewBinding)
 - **Media:** AndroidX Media3 (ExoPlayer, Session, UI).
 - **Backend:** Firebase Authentication, Cloud Firestore.
-- **Dependency Injection:** Koin (Android, Coroutines, WorkManager).
+- **Dependency Injection:** Koin (Android, Coroutines).
 - **Image Loading:** Glide (phiên bản 5.0.5).
 - **Khác:** Coroutines, Flow, Palette, Material Design 3.
 
