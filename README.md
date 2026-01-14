@@ -1,69 +1,73 @@
-# 🎵 SilverMP3
+# 🎵 SilverMP3 - Android Music Streaming Application
+
+**SilverMP3** is a modern music streaming application for Android. The app is built using a standard MVVM architecture, featuring a sleek UI and integrating the latest technologies from Google and the open-source community.
+
 ---
 
 ## 📺 Video Demo
-> [Xem video demo tại đây](https://drive.google.com/file/d/178amsAOGWTIa2ScNKdSoAn8MARMqWVSw/view)
+
+> [Xem video Demo tại đây](https://drive.google.com/file/d/178amsAOGWTIa2ScNKdSoAn8MARMqWVSw/view)
 
 ---
 
-## ✨ Tính Năng Nổi Bật
+## ✨ Key Features
 
-- **Phát nhạc chất lượng cao:** Sử dụng bộ thư viện **Media3 ExoPlayer** mới nhất để tối ưu hóa việc phát nhạc và xử lý luồng dữ liệu.
-- **Chạy nền & Thông báo:** Tích hợp **MediaSessionService** cho phép điều khiển nhạc qua thanh thông báo và tiếp tục phát khi ứng dụng ở chế độ nền.
-- **Giao diện thích ứng (Dynamic UI):** Tự động trích xuất màu sắc từ ảnh bìa (Artwork) bài hát bằng **Palette API** để tạo hiệu ứng nền Gradient đẹp mắt.
-- **Xác thực đa phương thức:** Hỗ trợ đăng nhập qua **Email**, **Số điện thoại (OTP)** và **Google Auth** thông qua Firebase.
-- **Quản lý Playlist:** Người dùng có thể tạo, chỉnh sửa và thêm bài hát vào danh sách phát cá nhân.
-- **Yêu thích & Thư viện:** Lưu trữ các bài hát yêu thích đồng bộ theo thời gian thực với Cloud Firestore.
-- **Kiến trúc hiện đại:** Sử dụng **Koin** để quản lý Dependency Injection, giúp mã nguồn sạch và dễ bảo trì.
+- **High-Quality Playback:** Utilizes the latest **Media3 ExoPlayer** library to optimize music playback and data streaming.
+- **Background Play & Notifications:** Integrated with **MediaSessionService**, allowing music to continue playing in the background with controls available in the notification shade.
+- **Dynamic UI:** Automatically extracts colors from song artwork using the **Palette API** to create beautiful dynamic gradient backgrounds.
+- **Multi-Method Authentication:** Supports login via **Email**, **Phone (OTP)**, and **Google Auth** through Firebase.
+- **Playlist Management:** Users can create, edit, and add songs to personal playlists.
+- **Favorites & Library:** Save favorite songs with real-time synchronization using **Cloud Firestore**.
+- **Modern Architecture:** Uses **Koin** for Dependency Injection, ensuring clean, testable, and maintainable code.
 
 ---
 
-## 🛠 Công Nghệ Sử Dụng
+## 🛠 Tech Stack
 
-- **Ngôn ngữ:** Kotlin.
+- **Language:** Kotlin
 - **UI Framework:** XML (ViewBinding)
 - **Media:** AndroidX Media3 (ExoPlayer, Session, UI).
 - **Backend:** Firebase Authentication, Cloud Firestore.
 - **Dependency Injection:** Koin (Android, Coroutines).
-- **Image Loading:** Glide (phiên bản 5.0.5).
-- **Khác:** Coroutines, Flow, Palette, Material Design 3.
+- **Image Loading:** Glide (v5.0.5).
+- **Asynchronous Processing:** Coroutines & Flow.
 
 ---
 
-## 🚀 Hướng Dẫn Cài Đặt
+## 🚀 Getting Started
 
-### 1. Cấu hình Firebase
-- Tạo một dự án mới trên [Firebase Console](https://console.firebase.google.com/).
-- Thêm ứng dụng Android với Package Name: `com.cbtool.silvermp3`.
-- Tải tệp `google-services.json` và đặt vào thư mục `app/` của dự án.
-- Kích hoạt **Authentication** (Email, Google, Phone) và **Cloud Firestore**.
+### 1. Firebase Configuration
+- Create a new project on the [Firebase Console](https://console.firebase.google.com/).
+- Add an Android app with the Package Name: `com.cbtool.silvermp3`.
+- Download the `google-services.json` file and place it in the `app/` directory.
+- Enable **Authentication** (Email, Google, Phone) and **Cloud Firestore**.
 
-### 2. Yêu cầu hệ thống
-- Android Studio Ladybug hoặc phiên bản mới hơn.
-- Android SDK tối thiểu: **API 24 (Android 7.0)**.
-- Android SDK biên dịch: **API 36**.
+### 2. System Requirements
+- Android Studio Ladybug or newer.
+- Minimum SDK: **API 24 (Android 7.0)**.
+- Target/Compile SDK: **API 36**.
 
 ### 3. Build & Run
-- Mở project trong Android Studio.
-- Đợi quá trình Gradle Sync hoàn tất.
-- Nhấn nút **Run** để chạy trên máy ảo hoặc thiết bị thật.
+- Open the project in Android Studio.
+- Wait for Gradle Sync to complete.
+- Click **Run** to install on an emulator or physical device.
 
 ---
 
-## 📂 Cấu Trúc Thư Mục Chính
+## 📂 Project Structure
 
-- `com.cbtool.silvermp3.service`: Chứa `PlayBackService` xử lý logic phát nhạc chính.
-- `com.cbtool.silvermp3.ui`: Chứa các màn hình (Home, Player, Library, Search) và các ViewModel tương ứng.
-- `com.cbtool.silvermp3.data`: Quản lý các Model (Song, Artist, Playlist) và Repository tương tác với Firestore.
-- `com.cbtool.silvermp3.di`: Cấu hình các module Koin cho dự án.
-- `com.cbtool.silvermp3.utils`: Các hàm tiện ích mở rộng cho ứng dụng.
-
----
-
-## 📄 Giấy phép
-
-Dự án này được phát triển phục vụ mục đích học tập.
+- `com.cbtool.silvermp3.service`: Contains `PlayBackService` for core playback logic.
+- `com.cbtool.silvermp3.ui`: Contains Fragments and ViewModels for all screens (Home, Player, Library, Search).
+- `com.cbtool.silvermp3.data`: Manages Models (Song, Artist, Playlist) and Repositories for Firestore interaction.
+- `com.cbtool.silvermp3.di`: Koin module configurations.
+- `com.cbtool.silvermp3.utils`: Extension functions and helper utilities.
 
 ---
 
-**SilverMP3** - *Trải nghiệm âm nhạc không giới hạn!* 🎧
+## 📄 License
+
+This project is developed for educational purposes.
+
+---
+
+**SilverMP3** - *Unlimited music experience!* 🎧
