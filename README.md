@@ -4,8 +4,8 @@
 
 ---
 
-## 📺 Video Hướng Dẫn / Demo
-> [Xem video hướng dẫn tại đây](link_video_cua_ban)
+## 📺 Video Demo
+> [Xem video demo tại đây](link_video_cua_ban)
 
 ---
 
